@@ -12,7 +12,6 @@ opentelemetry_sdk = { workspace = true, features = ["metrics", "experimental_met
 response-debug-context = { workspace = true }
 serde = { workspace = true }
 schemars = { workspace = true }
-ts-rs = { workspace = true }
 build-info = { workspace = true }
 analytics = { workspace = true }
 

@@ -154,7 +154,7 @@ def generate_protocol(
         if package_contract is None and not allow_build:
             raise RuntimeError(
                 "Protocol artifacts are missing, stale or incomplete. "
-                "Run `pnpm protocol:generate` explicitly, or supply a matching "
+                "Run `just generate-protocol` explicitly, or supply a matching "
                 "prepared package through ASH_PROTOCOL_PACKAGE. "
                 "Frontend preparation does not run Cargo."
             )

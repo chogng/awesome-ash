@@ -1,11 +1,10 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 use std::path::PathBuf;
 
 /// Lifecycle state of the directory's source index, independent of embedding work.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodebaseStateDto {
     Empty,
@@ -16,7 +15,7 @@ pub enum CodebaseStateDto {
 }
 
 /// Background lifecycle of the bound embedding index.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodebaseEmbeddingStateDto {
     Idle,
@@ -28,7 +27,7 @@ pub enum CodebaseEmbeddingStateDto {
 }
 
 /// A configured model is not proof that its runtime or its vector index is usable.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -42,9 +41,7 @@ pub enum CodebaseEmbeddingStatusDto {
     /// A runtime is bound; only Ready with the current source generation has current vectors.
     Active {
         state: CodebaseEmbeddingStateDto,
-        #[ts(type = "number")]
         target_generation: u64,
-        #[ts(type = "number | null")]
         published_generation: Option<u64>,
         total_chunk_count: usize,
         processed_chunk_count: usize,
@@ -55,13 +52,12 @@ pub enum CodebaseEmbeddingStatusDto {
 }
 
 /// Source counters and independent embedding readiness for the active directory.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseStatusResult {
     pub source_state: CodebaseStateDto,
     pub embedding: CodebaseEmbeddingStatusDto,
     pub root_id: String,
-    #[ts(type = "number")]
     pub generation: u64,
     pub indexed_file_count: usize,
     pub indexed_chunk_count: usize,
@@ -73,7 +69,7 @@ pub struct CodebaseStatusResult {
 }
 
 /// Performs one bounded lookup against the active Codebase.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSearchParams {
     #[schemars(length(min = 1, max = 8192))]
@@ -83,7 +79,7 @@ pub struct CodebaseSearchParams {
 }
 
 /// Exact UTF-8 byte and zero-based line coverage of one indexed chunk.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseChunkSpanDto {
     pub start_byte: usize,
@@ -93,7 +89,7 @@ pub struct CodebaseChunkSpanDto {
 }
 
 /// One revision-bound match from the active Codebase.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSearchHitDto {
     pub path: PathBuf,
@@ -107,7 +103,7 @@ pub struct CodebaseSearchHitDto {
 }
 
 /// Bounded codebase matches paired with the generation that served them.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSearchResult {
     pub status: CodebaseStatusResult,
@@ -115,7 +111,7 @@ pub struct CodebaseSearchResult {
 }
 
 /// Performs one bounded retrieval across every source enabled for the directory.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseRetrievalParams {
     #[schemars(length(min = 1, max = 8192))]
@@ -125,7 +121,7 @@ pub struct CodebaseRetrievalParams {
 }
 
 /// Non-fatal loss reported while preserving usable retrieval results.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum CodebaseRetrievalDegradationDto {
     CodebaseIncomplete,
@@ -135,7 +131,7 @@ pub enum CodebaseRetrievalDegradationDto {
 }
 
 /// One deduplicated, current-source-verified retrieval hit.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseRetrievalHitDto {
     pub path: PathBuf,
@@ -148,7 +144,7 @@ pub struct CodebaseRetrievalHitDto {
 }
 
 /// Fused code excerpts and explicit degradation facts paired with local index status.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseRetrievalResult {
     pub status: CodebaseStatusResult,
@@ -157,7 +153,7 @@ pub struct CodebaseRetrievalResult {
 }
 
 /// User-visible codebase deployment choice.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodebaseDeploymentModeDto {
     LocalOnly,
@@ -165,7 +161,7 @@ pub enum CodebaseDeploymentModeDto {
 }
 
 /// Durable publication/deletion phase of the selected cloud deployment.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CloudCodebaseStateDto {
     LocalOnly,
@@ -178,7 +174,7 @@ pub enum CloudCodebaseStateDto {
 }
 
 /// directory-relative source selection covered by a preview or grant.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum CloudCodebaseSelectionDto {
@@ -187,7 +183,7 @@ pub enum CloudCodebaseSelectionDto {
 }
 
 /// Non-secret remote provider namespace chosen by the user.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebaseDestinationDto {
@@ -197,7 +193,7 @@ pub struct CloudCodebaseDestinationDto {
 }
 
 /// Root-bound cloud source-egress grant projected through the App Server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebaseGrantDto {
@@ -206,37 +202,33 @@ pub struct CloudCodebaseGrantDto {
     pub destination: CloudCodebaseDestinationDto,
     pub selection: CloudCodebaseSelectionDto,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub max_egress_bytes: u64,
 }
 
 /// Computes the current source-content egress shape without persisting consent or networking.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebasePreviewParams {
     pub selection: CloudCodebaseSelectionDto,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub max_egress_bytes: u64,
 }
 
 /// Bounded local preview of the directory-produced chunks eligible for publication.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebasePreviewResult {
-    #[ts(type = "number")]
     pub local_generation: u64,
     pub file_count: usize,
     pub chunk_count: usize,
     pub upload_unit_count: usize,
-    #[ts(type = "number")]
     pub egress_bytes: u64,
     pub within_limit: bool,
 }
 
 /// Persists one explicit cloud destination, selection, and byte ceiling.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebaseAuthorizeParams {
@@ -244,16 +236,14 @@ pub struct CloudCodebaseAuthorizeParams {
 }
 
 /// Current cloud deployment and local/remote generation relationship.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CloudCodebaseStatusResult {
     pub deployment_mode: CodebaseDeploymentModeDto,
     pub state: CloudCodebaseStateDto,
     pub root_id: String,
     pub grant: Option<CloudCodebaseGrantDto>,
-    #[ts(type = "number")]
     pub local_generation: u64,
-    #[ts(type = "number | null")]
     pub synced_local_generation: Option<u64>,
     pub remote_generation: Option<String>,
 }

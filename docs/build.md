@@ -1,6 +1,6 @@
 # 构建与开发
 
-本文说明环境准备、产品构建、验证和缓存清理。Electron、Browser、Stanza 的启动模式、热更新和前端测试见 [前端开发](frontend.md)；产品关系见 [产品线](product-lines.md)。
+当前原生桌面从 `app/Cargo.toml` 构建。运行 `just build-ash` 构建，运行 `just ash` 打开窗口。共享后端与终端继续使用 Cargo 和 Just。旧工作台的 pnpm、Electron、Vite 命令及验收记录仅供历史查阅。
 
 ## 构建入口
 
@@ -10,8 +10,6 @@
 | ------------- | ------------------------------------------------------------------------------------------------------------- |
 | Rust          | [`rust-toolchain.toml`](../rust-toolchain.toml)                                                               |
 | Git           | [共享 Git 最低版本要求](../crates/git/README.md#git-版本要求)                                                 |
-| Node.js       | [`.nvmrc`](../.nvmrc)；pnpm 使用 [`package.json`](../package.json) 中的 `devEngines.runtime` 自动获取固定版本 |
-| pnpm          | 根 [`package.json`](../package.json) 的 `packageManager`，安装方法见[初始化](#初始化)                         |
 | Python        | [`scripts/pyproject.toml`](../scripts/pyproject.toml) 的 `requires-python`，建议 3.12                         |
 | uv            | [`scripts/pyproject.toml`](../scripts/pyproject.toml) 的 `tool.uv.required-version`                           |
 | Just          | [`.just-version`](../.just-version)，安装对应版本并确保 `just` 在 PATH 中                                     |
@@ -50,9 +48,9 @@ Windows x64 的 Cargo 链接默认使用 Rust 工具链自带的 `rust-lld`；MS
 
 ### 初始化
 
-1. 使用 [pnpm 独立安装方式](https://pnpm.io/installation/)，安装根 [`package.json`](../package.json) 的 `packageManager` 指定版本。仓库安装检查要求版本一致。
-2. 执行 `pnpm install`，安装 Node workspace 依赖。
-3. 执行 `just install`，先检查 Rust 和当前平台的符号工具，再获取 Cargo 依赖并通过 uv 同步 `scripts/uv.lock` 中固定的 Ruff 和 codespell 到 `scripts/.venv`。Windows 缺少 PowerShell 7 时，此步骤会安装它；随后重启终端和编辑器以更新 PATH。
+执行 `just install`。它检查 Rust 与符号工具，获取 Cargo 依赖，并使用 `scripts/uv.lock` 准备 Ruff 和 codespell。Windows 如缺 PowerShell 7，初始化会通过 winget 安装。
+
+原生桌面可直接运行 `cargo build --locked --manifest-path app/Cargo.toml`。本地开发入口使用 Just 和 Cargo。
 
 可单独运行 `just check-build-tools` 检查工具路径和可执行性；全量 `just test-python build` 和默认 Python 测试入口会在任何测试开始前执行同一预检，一次列出全部缺失或不可用的工具。Windows 自动发现 PATH、标准 LLVM 安装目录及 `vswhere` 返回的 Visual Studio LLVM 目录，按宿主架构选择工具，无需为了交叉编译改用目标架构工具。自定义 LLVM 可设置 `ASH_LLVM_BIN` 指向其 `bin`。Linux 符号测试需要 `llvm-nm`、`llvm-objcopy`、`llvm-strip`、`llvm-dwarfdump`、`llvm-symbolizer`（Debian/Ubuntu 可安装 `llvm`）；macOS 使用 Xcode 命令行工具，并检查 LLDB 的 Python 支持。
 

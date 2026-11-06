@@ -1,26 +1,23 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
 /// The broker supplies this identity from the admitted invocation, never from extension input.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionClientRequestParams {
     #[schemars(length(min = 1, max = 256))]
     pub extension_id: String,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub activation_generation: u64,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub incarnation: u64,
     pub operation: external_ext_protocol::ExtensionClientOperation,
 }
 
 /// Editor intent delivered to Rust; it never grants execution authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -63,7 +60,7 @@ pub enum ExtensionHostActivationEventDto {
 }
 
 /// Debugger activation moments remain distinct so configuration discovery cannot start unrelated adapters.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostDebugActivationPhaseDto {
     Start,
@@ -73,22 +70,20 @@ pub enum ExtensionHostDebugActivationPhaseDto {
 }
 
 /// Activates one exact admitted package generation when its declaration matches the event.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostActivateParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub initialization: Option<external_ext_protocol::ExtensionHostInitialization>,
     #[schemars(length(min = 1, max = 256))]
     pub extension_id: String,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub activation_generation: u64,
     pub event: ExtensionHostActivationEventDto,
 }
 
 /// Declared command metadata available before a process exists, not a provider registration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostCommandContributionDto {
     #[schemars(length(min = 1, max = 256))]
@@ -98,7 +93,7 @@ pub struct ExtensionHostCommandContributionDto {
 }
 
 /// Immutable manifest facts for an authorized extension waiting for its first matching event.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostActivationDto {
     #[schemars(length(max = 128))]
@@ -108,7 +103,7 @@ pub struct ExtensionHostActivationDto {
 }
 
 /// Starts a connection-owned extension fleet with explicit environment overrides.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostStartParams {
     #[schemars(length(max = 128))]
@@ -116,14 +111,14 @@ pub struct ExtensionHostStartParams {
 }
 
 /// Requests a complete reconciliation of the executable Editor Extension fleet.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostReconcileParams {
     pub mode: ExtensionHostReconcileModeDto,
 }
 
 /// Selects whether reconciliation refreshes authority or retries failed runtimes as well.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostReconcileModeDto {
     Refresh,
@@ -131,18 +126,17 @@ pub enum ExtensionHostReconcileModeDto {
 }
 
 /// Immutable projection of one complete executable Editor Extension fleet generation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostSnapshotDto {
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub generation: u64,
     #[schemars(length(max = 128))]
     pub extensions: Vec<ExtensionHostExtensionDto>,
 }
 
 /// One exact package contribution and its current process lifecycle.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostExtensionDto {
     #[schemars(length(min = 1, max = 256))]
@@ -154,13 +148,10 @@ pub struct ExtensionHostExtensionDto {
     #[schemars(range(min = 1))]
     pub runtime_api_version: u16,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub activation_generation: u64,
-    #[ts(type = "number | null")]
     pub incarnation: Option<u64>,
     pub lifecycle: ExtensionHostLifecycleDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub activation: Option<ExtensionHostActivationDto>,
     pub failure: Option<ExtensionHostFailureDto>,
     #[schemars(length(max = 262_144))]
@@ -172,24 +163,21 @@ pub struct ExtensionHostExtensionDto {
 }
 
 /// One process-fenced extension Output mutation in supervisor arrival order.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostOutputEventDto {
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub sequence: u64,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub incarnation: u64,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub activation_generation: u64,
     #[serde(flatten)]
     pub operation: ExtensionHostOutputOperationDto,
 }
 
 /// Presentation class of an extension-created Output channel.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostOutputChannelKindDto {
     Output,
@@ -197,7 +185,7 @@ pub enum ExtensionHostOutputChannelKindDto {
 }
 
 /// Structured severity of an extension Output entry.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostOutputSeverityDto {
     Trace,
@@ -209,7 +197,7 @@ pub enum ExtensionHostOutputSeverityDto {
 }
 
 /// Ordered operation in an extension-created Output channel stream.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -257,7 +245,7 @@ pub enum ExtensionHostOutputOperationDto {
 }
 
 /// Observable state of one per-extension process supervised by App Server.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostLifecycleDto {
     Dormant,
@@ -271,7 +259,7 @@ pub enum ExtensionHostLifecycleDto {
 }
 
 /// Stable failure categories shared by runtime health and invocation outcomes.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostFailureCodeDto {
     AuthorityDenied,
@@ -294,18 +282,17 @@ pub enum ExtensionHostFailureCodeDto {
 }
 
 /// Sanitized failure attached to one extension lifecycle snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostFailureDto {
     pub code: ExtensionHostFailureCodeDto,
     #[schemars(length(min = 1, max = 4096))]
     pub message: String,
-    #[ts(type = "number | null")]
     pub incarnation: Option<u64>,
 }
 
 /// One provider registration published atomically by an activated extension process.
-#[derive(Clone, Debug, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostRegistrationDescriptorDto {
     #[schemars(length(min = 1, max = 256))]
@@ -336,7 +323,7 @@ impl<'de> Deserialize<'de> for ExtensionHostRegistrationDescriptorDto {
 }
 
 /// Registration types understood by the App Server provider brokers in Host RPC v1.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -351,7 +338,6 @@ pub enum ExtensionHostRegistrationKindDto {
         container_id: Option<String>,
     },
     SourceControl {
-        #[ts(type = "number")]
         revision: u64,
         providers: Vec<Value>,
     },
@@ -367,7 +353,6 @@ pub enum ExtensionHostRegistrationKindDto {
         authority_prefix: String,
     },
     StatusBar {
-        #[ts(type = "number")]
         revision: u64,
         entries: Vec<external_ext_protocol::ExtensionStatusBarEntry>,
     },
@@ -388,7 +373,6 @@ pub enum ExtensionHostRegistrationKindDto {
         #[schemars(length(min = 1, max = 256))]
         identifier: String,
         #[schemars(range(min = 1))]
-        #[ts(type = "number")]
         registration_generation: u64,
     },
     LinkPresentationProvider {
@@ -472,7 +456,7 @@ pub enum ExtensionHostRegistrationKindDto {
 }
 
 /// URL schemes admitted by the external URI opener registration.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ExtensionHostExternalUriSchemeDto {
     Http,
@@ -480,7 +464,7 @@ pub enum ExtensionHostExternalUriSchemeDto {
 }
 
 /// Language provider operations supported by the v1 invocation broker seam.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostLanguageProviderOperationDto {
     Diagnostics,
@@ -506,7 +490,7 @@ pub enum ExtensionHostLanguageProviderOperationDto {
 }
 
 /// Starts one non-blocking provider invocation fenced to an exact runtime snapshot.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeStartParams {
     #[schemars(length(min = 1, max = 256))]
@@ -515,25 +499,20 @@ pub struct ExtensionHostInvokeStartParams {
     pub registration_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(range(min = 1))]
-    #[ts(type = "number | null")]
     pub registration_generation: Option<u64>,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub activation_generation: u64,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub incarnation: u64,
     #[schemars(length(min = 1, max = 128))]
     pub operation: String,
-    #[ts(type = "unknown")]
     pub payload: Value,
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub deadline_unix_millis: u64,
 }
 
 /// Opaque connection-owned identity allocated without waiting for the provider result.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeStartResult {
     #[schemars(length(min = 1, max = 256))]
@@ -541,7 +520,7 @@ pub struct ExtensionHostInvokeStartResult {
 }
 
 /// Reads one invocation state. A terminal read releases the connection-owned session.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeReadParams {
     #[schemars(length(min = 1, max = 256))]
@@ -549,12 +528,11 @@ pub struct ExtensionHostInvokeReadParams {
 }
 
 /// Non-blocking invocation state; completion is announced to the owning connection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "state", deny_unknown_fields)]
 pub enum ExtensionHostInvokeReadResult {
     Pending,
     Succeeded {
-        #[ts(type = "unknown")]
         payload: Value,
     },
     Failed {
@@ -568,7 +546,7 @@ pub enum ExtensionHostInvokeReadResult {
 }
 
 /// Requests cancellation of one connection-owned provider invocation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeCancelParams {
     #[schemars(length(min = 1, max = 256))]
@@ -576,18 +554,17 @@ pub struct ExtensionHostInvokeCancelParams {
     /// Abandons the result: release this session when its work ends, including a result
     /// that won the cancellation race. Omission preserves cancellation-and-read clients.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub discard_result: Option<bool>,
 }
 
 /// Whether cancellation was newly requested or the session was already terminal.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeCancelResult {
     pub disposition: ExtensionHostInvokeCancelDispositionDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostInvokeCancelDispositionDto {
     Requested,
@@ -595,7 +572,7 @@ pub enum ExtensionHostInvokeCancelDispositionDto {
 }
 
 /// Observable reason why an invocation reached the cancelled terminal state.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionHostCancellationReasonDto {
     Caller,
@@ -605,17 +582,16 @@ pub enum ExtensionHostCancellationReasonDto {
 }
 
 /// Notification that a newer complete Extension Host fleet generation is available.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostChanged {
     #[schemars(range(min = 1))]
-    #[ts(type = "number")]
     pub generation: u64,
 }
 
 /// Sent only to the invoking connection after its terminal result is stored.
 /// May precede the start response. The result remains available until read or discarded.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInvokeCompleted {
     #[schemars(length(min = 1, max = 256))]

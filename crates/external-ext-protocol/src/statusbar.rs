@@ -9,7 +9,6 @@ use crate::validation::validate_identifier;
 /// UI values only; the client owns entry accessors and command execution.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionStatusBarEntry {
     pub id: String,
@@ -18,14 +17,12 @@ pub struct ExtensionStatusBarEntry {
     pub aria_label: Option<String>,
     pub alignment: ExtensionStatusBarAlignment,
     #[cfg_attr(feature = "json-schema", schemars(with = "f64"))]
-    #[cfg_attr(feature = "export", ts(type = "number"))]
     pub priority: Number,
     pub command: Option<ExtensionStatusBarCommand>,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionStatusBarAlignment {
     Left,
@@ -34,7 +31,6 @@ pub enum ExtensionStatusBarAlignment {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionStatusBarCommand {
     pub command: String,

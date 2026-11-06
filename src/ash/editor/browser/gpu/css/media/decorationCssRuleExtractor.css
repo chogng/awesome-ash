@@ -1,6 +1,0 @@
-.stanza-decoration-style-probe {
-	position: absolute;
-	visibility: hidden;
-	pointer-events: none;
-	contain: layout style;
-}

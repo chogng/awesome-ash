@@ -7,7 +7,7 @@ If need, read the local refers: `../mxc`, `../tgrep`, `../vscode`, `../codex`, `
 | Path | Owner |
 | --- | --- |
 | `crates/` except terminal presentation | Shared backend domains and infrastructure |
-| `src/` | Electron Desktop and Browser Workbench product host |
+| `app/` | Rust desktop host |
 | `crates/tui/` | `ash code` Ratatui presentation, host-terminal and color-capability detection |
 | `cli/` | User-facing `ash` command, management operations and terminal launch |
 | `crates/app-server` | Listening entrypoints, service registries, queue execution and automation |
@@ -17,7 +17,7 @@ If need, read the local refers: `../mxc`, `../tgrep`, `../vscode`, `../codex`, `
 | `livekit-server/` | Optional local call hosting distribution |
 | `crates/arg0` | Shared internal helper dispatch |
 
-- Electron and Browser hosts must not execute, package, import or depend on the `cli/` product host, `ash-tui`, or the `ash app-server` product command, except to launch an independently installed CLI in the integrated terminal at the user's explicit request. IDE capabilities must still use the shared app-server directly.
+- Desktop and any future Web host must not execute, package, import or depend on the `cli/` product host, `ash-tui`, or the `ash app-server` product command, except to launch an independently installed CLI in the integrated terminal at the user's explicit request. IDE capabilities must still use the shared app-server directly.
 - Keep the runtime dependency direction `app-server → app-server-daemon`, never the reverse.
 
 ## Common rules
@@ -27,7 +27,6 @@ If need, read the local refers: `../mxc`, `../tgrep`, `../vscode`, `../codex`, `
 - Skill 可以基于 `AGENTS.md` 和适用的 instructions，按职责保持独立；仅在任务确实需要组合时引用其他 skill，禁止循环引用。普通文档可以引用 skill，但 skill 不得依赖普通文档提供执行规则。通用约束放在 instructions，专项执行流程放在 skill，避免重复维护。
 - Do not keep competing copies of business state; update it through its owning model or service.
 - Product consumers use domain contracts, not generated transport DTOs.
-- TypeScript frontend service construction, registration and scope ownership must follow the [Dependency Injection contract](.github/instructions/typescript-services.instructions.md#dependency-injection).
 - Do not add placeholder modules or public APIs without a caller. Export only symbols used by another module or an external contract.
 - Do not split Rust files solely to reduce line count.
 - Validate inputs at user, configuration, plugin, persistence, process, worker, IPC, RPC and network boundaries. Do not revalidate typed same-process values already normalized by their owning boundary.

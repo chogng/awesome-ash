@@ -22,11 +22,11 @@ fn directory_is_not_an_application_executable() {
 
 #[cfg(target_os = "macos")]
 #[test]
-fn bundle_launch_uses_launch_services_and_forwards_to_existing_instances() {
+fn bundle_launch_uses_launch_services_and_passes_workspace_to_the_new_instance() {
     let root = tempfile::tempdir().unwrap();
     let app = root.path().join("Ash.app");
     std::fs::create_dir_all(app.join("Contents/MacOS")).unwrap();
-    std::fs::write(app.join("Contents/MacOS/Ash"), "fixture").unwrap();
+    std::fs::write(app.join("Contents/MacOS/ash-native-desktop"), "fixture").unwrap();
     let command = launch_command(&app, root.path()).unwrap();
     assert_eq!(command.get_program(), "/usr/bin/open");
     assert_eq!(

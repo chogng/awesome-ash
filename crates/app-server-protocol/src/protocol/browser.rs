@@ -1,20 +1,19 @@
 //! Client-hosted browser operations requested by App Server.
 
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::SessionId;
 use serde::Deserialize;
 use serde::Serialize;
 
 /// Applies this browser host's current user preference without granting another connection access.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserConfigureParams {
     pub enabled: bool,
     pub cdp_enabled: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -27,7 +26,6 @@ pub enum BrowserCdpOperationDto {
         method: String,
         params: serde_json::Map<String, serde_json::Value>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         session_id: Option<String>,
     },
     ReadEvents {},
@@ -35,7 +33,7 @@ pub enum BrowserCdpOperationDto {
 }
 
 /// Replaces the audience of a user page on this connection; an empty audience revokes access.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserSharingSetParams {
     #[schemars(length(min = 1, max = 256))]
@@ -44,7 +42,7 @@ pub struct BrowserSharingSetParams {
     pub thread_ids: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserCreateParams {
     /// The durable Thread owning this request; a transport connection is not an agent identity.
@@ -53,15 +51,13 @@ pub struct BrowserCreateParams {
     #[schemars(length(min = 1, max = 8192))]
     pub url: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub canvas: Option<BrowserCanvasPresentation>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub network_token: Option<String>,
 }
 
 /// Live presentation metadata. The request's Thread identity is supplied by the host.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserCanvasPresentation {
     pub session_id: SessionId,
@@ -70,11 +66,10 @@ pub struct BrowserCanvasPresentation {
     #[schemars(length(min = 1, max = 256))]
     pub title: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub definition: Option<BrowserCanvasDefinitionId>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserCanvasDefinitionId {
     #[schemars(length(min = 1, max = 1024))]
@@ -83,7 +78,7 @@ pub struct BrowserCanvasDefinitionId {
     pub canvas_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserCanvasDefinition {
     pub id: BrowserCanvasDefinitionId,
@@ -94,7 +89,7 @@ pub struct BrowserCanvasDefinition {
     pub requires_input: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserCanvasListParams {
     pub session_id: SessionId,
@@ -102,7 +97,7 @@ pub struct BrowserCanvasListParams {
     pub thread_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserCanvasListResult {
     /// `None` means pending; an empty array is authoritative.
@@ -110,20 +105,19 @@ pub struct BrowserCanvasListResult {
     pub canvases: Option<Vec<BrowserCanvasDefinition>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserCreateResult {
     #[schemars(length(min = 1))]
     pub target_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserObserveParams {
     #[schemars(length(min = 1))]
     pub thread_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub network_token: Option<String>,
     #[schemars(length(min = 1))]
     pub target_id: String,
@@ -133,7 +127,7 @@ pub struct BrowserObserveParams {
 }
 
 /// One bounded binary payload returned by a client host before App Server resource registration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserBinaryPayload {
     #[schemars(length(min = 1))]
@@ -142,7 +136,7 @@ pub struct BrowserBinaryPayload {
     pub decoded_length: usize,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserObserveResult {
     #[schemars(length(min = 1))]
@@ -151,31 +145,28 @@ pub struct BrowserObserveResult {
     pub title: String,
     pub loading: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub accessibility_tree: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dom_snapshot: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub screenshot: Option<BrowserBinaryPayload>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserElementTargetDto {
     #[schemars(length(min = 1))]
     pub node_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum BrowserTextInputTargetDto {
     Element { target: BrowserElementTargetDto },
     FocusedElement,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -249,23 +240,21 @@ impl BrowserPerformActionDto {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserPerformParams {
     #[schemars(length(min = 1))]
     pub thread_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub network_token: Option<String>,
     /// Authorized file bytes, never paths for Chromium to open. Only used for DOM.setFileInputFiles.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(max = 16))]
     pub uploads: Option<Vec<BrowserUploadFile>>,
     pub action: BrowserPerformActionDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserUploadFile {
     #[schemars(length(min = 1, max = 255))]
@@ -274,27 +263,24 @@ pub struct BrowserUploadFile {
     pub data_base64: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserPerformResult {
     /// Main-created page identity, published to the backend ownership table before use by tools.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub created_target_id: Option<String>,
     /// Releases backend ownership for pages closed through the protocol connection.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(max = 256))]
     pub closed_target_ids: Option<Vec<String>>,
     #[schemars(length(max = 1048576))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub output: Option<String>,
     #[schemars(length(min = 1))]
     pub target_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserCloseParams {
     #[schemars(length(min = 1))]
@@ -304,7 +290,7 @@ pub struct BrowserCloseParams {
 }
 
 /// Authorizes one observed Chromium request against the live tool authority on this connection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserNetworkAuthorizeParams {
     #[schemars(length(min = 1, max = 256))]
@@ -315,20 +301,20 @@ pub struct BrowserNetworkAuthorizeParams {
     pub method: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserNetworkAuthorizeResult {
     pub allowed: bool,
 }
 
 /// Current page metadata for the requesting Thread; this is not a global browser catalog.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserListParams {
     #[schemars(length(min = 1))]
     pub thread_id: String,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserPageSummary {
     #[schemars(length(min = 1))]
@@ -339,7 +325,7 @@ pub struct BrowserPageSummary {
     pub title: String,
     pub loading: bool,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserListResult {
     #[schemars(length(max = 256))]
@@ -351,18 +337,17 @@ pub struct BrowserListResult {
 mod tests;
 
 /// A stream is scoped to its renderer connection and routed to an admitted execution target.
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserTcpParams {
     #[schemars(length(min = 1, max = 128))]
     pub stream_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     /// Repeat the same gateway selector on every operation; native endpoints accept only a consumed route.
     pub execution_target: Option<ash_protocol::SessionExecutionTarget>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserTcpOpenParams {
     #[serde(flatten)]
@@ -373,7 +358,7 @@ pub struct BrowserTcpOpenParams {
     pub port: u16,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BrowserTcpWriteParams {
     #[serde(default)]
@@ -384,7 +369,7 @@ pub struct BrowserTcpWriteParams {
     pub data_base64: String,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserTcpReadResult {
     #[schemars(length(max = 87384))]
@@ -392,7 +377,7 @@ pub struct BrowserTcpReadResult {
     pub eof: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserTcpWriteResult {
     #[schemars(range(max = 65536))]

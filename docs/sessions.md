@@ -1,5 +1,7 @@
 # Sessions：布局、工作集与 Changes
 
+> 历史参考。下文的界面布局、源码路径和窗口验收对应旧工作台。会话的后端契约见 [App Server API](app-server-api.md)，原生接入方向见 [Ash UI](desktop-architecture.md#ash-ui)。
+
 Sessions 复用 Workbench 的 Part、编辑器和 ViewContainer 基座。Creator 聚合各贡献的创作入口；Library 是统一的分类文件和素材仓库，其分类、收藏、集合和搜索属于库内浏览状态。各功能向 Sessions 布局服务提供容器 ID 和中央内容，窗口布局负责共享宿主的尺寸与显隐。DesktopLayoutController 负责会话文档恢复及 Editor／Details 行为。窗口始终保留 SessionsPart，用于 Agent 对话和会话分屏。
 
 本文概括边界。完整契约见 [LAYOUT.md](../src/ash/sessions/LAYOUT.md)，会话工作集和入口存储见 [LAYOUT_CONTROLLER.md](../src/ash/sessions/LAYOUT_CONTROLLER.md)。

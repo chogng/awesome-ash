@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::common::ClientCapabilities;
 use crate::protocol::common::ClientInfo;
 use crate::protocol::common::SchemaHash;
@@ -19,7 +18,7 @@ pub const REQUIRED_SESSION_CAPABILITIES: &[CapabilityRequirement] = &[
     CapabilityRequirement::Enabled("turns"),
 ];
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InitializeParams {
     pub client_info: ClientInfo,
@@ -27,7 +26,7 @@ pub struct InitializeParams {
     pub capabilities: ClientCapabilities,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InitializeResult {
     pub server_info: ServerInfo,
@@ -37,7 +36,7 @@ pub struct InitializeResult {
     pub slash_commands: Vec<SlashCommandDefinition>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProtocolVersion {
     pub major: u32,
@@ -51,7 +50,7 @@ impl ProtocolVersion {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CapabilityContract {
     pub version: u32,
@@ -179,11 +178,10 @@ pub fn ensure_protocol_compatible(
     Ok(())
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ServerCapabilities {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub input_completions: Option<super::input_completions::InputCompletionsCapability>,
     pub agent_interactions: bool,
     pub document_collaboration: bool,
@@ -211,7 +209,6 @@ pub struct ServerCapabilities {
     pub extension_management: bool,
     pub mcp: bool,
     #[serde(rename = "mcpOAuth")]
-    #[ts(rename = "mcpOAuth")]
     pub mcp_oauth: bool,
     pub contracts: BTreeMap<String, CapabilityContract>,
 }

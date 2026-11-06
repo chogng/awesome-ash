@@ -6,10 +6,9 @@ use crate::SkillRef;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// A provider-independent input supplied by the user for one turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -31,7 +30,6 @@ pub enum UserInput {
         content: String,
         /// Optional HTTPS link shown with the saved attachment.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         source_url: Option<String>,
     },
     /// Narrows this Turn's tool surface without granting execution authority.
@@ -61,7 +59,7 @@ pub enum UserInput {
 }
 
 /// Whether product command syntax may be interpreted in an otherwise textual Turn input.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CommandInterpretation {
     #[default]

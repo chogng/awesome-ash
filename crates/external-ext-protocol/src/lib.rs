@@ -167,16 +167,13 @@ pub struct ActivateParams {
 /// Window-owned editor facts captured before package evaluation, never execution authority.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionHostInitialization {
     /// The initiating window's UI language, absent only for older clients.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub language: Option<String>,
     /// Static translations selected by the initiating client, never shared server locale state.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub localization: Option<ExtensionLocalization>,
     pub workspace_folders: Vec<ExtensionWorkspaceFolder>,
     pub workspace_name: Option<String>,
@@ -188,7 +185,6 @@ pub struct ExtensionHostInitialization {
 /// Validated translation messages and their resource identity for one extension activation.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionLocalization {
     pub uri: String,
@@ -199,7 +195,6 @@ pub struct ExtensionLocalization {
 /// A workspace folder identity visible to one initiating editor window.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionWorkspaceFolder {
     pub uri: String,
@@ -352,7 +347,6 @@ impl<'de> Deserialize<'de> for RegistrationDescriptor {
 /// Command placement metadata; the client owns menu resolution and invocation.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionCommandMenu {
     #[cfg_attr(feature = "json-schema", schemars(length(min = 1, max = 128)))]

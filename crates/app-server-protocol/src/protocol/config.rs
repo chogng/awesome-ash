@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::environment::PermissionDto;
 use ash_file_access::DirId;
 use ash_protocol::CommandId;
@@ -12,76 +11,69 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 /// Durable directory grants managed by profile configuration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsReadParams {
     pub path: PathBuf,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsReadResult {
     pub dir: DirId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub permissions: Option<Vec<PermissionDto>>,
     /// Source grant used only to project workspace trust for a managed checkout.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub inherited_workspace_permissions: Option<Vec<PermissionDto>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsEntryDto {
     pub dir: DirId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub path: Option<PathBuf>,
     pub permissions: Vec<PermissionDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsListResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub entries: Vec<DirectoryGrantsEntryDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsSetParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub path: PathBuf,
     pub permissions: Vec<PermissionDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsForgetParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub dir: DirId,
 }
 
 /// Profile-owned time information supplied to model requests.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TimeContextConfigDto {
     pub mode: ash_protocol::TimeContextMode,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub time_zone: Option<String>,
 }
 
 /// Selects the implementation behind the shared grep capability.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GrepBackendDto {
     Ripgrep,
@@ -90,7 +82,7 @@ pub enum GrepBackendDto {
 }
 
 /// Shared automatic-fetch policy for all clients of one App Server profile.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitAutoFetchModeDto {
     #[default]
@@ -99,7 +91,7 @@ pub enum GitAutoFetchModeDto {
     All,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitConfigDto {
     pub autofetch: GitAutoFetchModeDto,
@@ -119,9 +111,8 @@ impl Default for GitConfigDto {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
-#[ts(rename = "ModelRef")]
 pub struct ModelRefDto {
     #[schemars(length(min = 1))]
     pub provider: String,
@@ -130,17 +121,16 @@ pub struct ModelRefDto {
 }
 
 /// Model pair used by Ash's local semantic codebase orchestration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseModelsDto {
     pub embedding_model: ModelRefDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub rerank_model: Option<ModelRefDto>,
 }
 
 /// Whether verified code evidence is automatically attached to an Agent Turn.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodebaseAutomaticContextDto {
     #[default]
@@ -149,17 +139,16 @@ pub enum CodebaseAutomaticContextDto {
 }
 
 /// Current authorization state for the active directory and configured semantic model pair.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseConfigDto {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub models: Option<CodebaseModelsDto>,
     pub automatic_context: CodebaseAutomaticContextDto,
 }
 
 /// User-selected retrieval mode for deferred Agent tools.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolSearchModeDto {
     #[default]
@@ -168,7 +157,7 @@ pub enum ToolSearchModeDto {
 }
 
 /// Runtime readiness of the optional Tool Search embedding path.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -181,59 +170,51 @@ pub enum ToolSearchEmbeddingStatusDto {
     },
     Unavailable {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         model: Option<ModelRefDto>,
         reason: String,
     },
 }
 
 /// Durable Tool Search preference plus the active App Server runtime status.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolSearchConfigDto {
     pub mode: ToolSearchModeDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub embedding_model: Option<ModelRefDto>,
     pub embedding_status: ToolSearchEmbeddingStatusDto,
 }
 
 /// User-facing selection for the model that reviews approval requests.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
     tag = "type"
 )]
-#[ts(rename = "ApprovalReviewModelSelection")]
 pub enum ApprovalReviewModelSelectionDto {
     Automatic,
     Explicit {
         model: ModelRefDto,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         connection: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         reasoning_effort: Option<ReasoningEffort>,
     },
 }
 
 /// Non-secret declarative provider settings exposed through the App Server contract.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ProviderConfigDto {
     pub connection: String,
     #[schemars(length(min = 1))]
     pub provider: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub custom: Option<CustomProviderConfigDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub base_url: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub max_output_tokens: Option<u32>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub model_context: BTreeMap<String, ModelContextConfigDto>,
@@ -241,30 +222,27 @@ pub struct ProviderConfigDto {
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub model_acceleration: BTreeMap<String, String>,
     #[serde(default, skip_serializing_if = "std::collections::BTreeSet::is_empty")]
-    #[ts(as = "Option<Vec<String>>", optional)]
     pub ultra_models: std::collections::BTreeSet<String>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub disabled_acceleration_options: BTreeMap<String, std::collections::BTreeSet<String>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CustomProviderConfigDto {
     #[serde(default = "default_custom_context_window")]
     pub context_window: u32,
     #[serde(default)]
-    #[ts(type = "number")]
     pub order: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model_aliases: Option<BTreeMap<String, String>>,
     pub name: String,
     pub protocol: CustomProviderProtocolDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CustomProviderProtocolDto {
     Responses,
@@ -273,23 +251,20 @@ pub enum CustomProviderProtocolDto {
 }
 
 /// Model-specific context limits used by Core's deterministic budget planner.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelContextConfigDto {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub context_window: Option<u32>,
     /// Select the model default (false) or its current connection maximum (true).
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub long_context: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub auto_compact_token_limit: Option<u32>,
 }
 
 /// Non-secret credential binding for a standalone MCP server declaration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -301,7 +276,7 @@ pub enum McpCredentialBindingDto {
 }
 
 /// Desired enablement for a configured MCP server.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum McpServerEnablementDto {
     Disabled,
@@ -309,7 +284,7 @@ pub enum McpServerEnablementDto {
 }
 
 /// Non-secret transport declaration for a standalone MCP server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type")]
 pub enum McpTransportDto {
     Stdio { command: String, args: Vec<String> },
@@ -317,7 +292,7 @@ pub enum McpTransportDto {
 }
 
 /// Desired, runtime-free standalone MCP server configuration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct McpServerConfigDto {
     #[schemars(length(min = 1))]
@@ -330,7 +305,7 @@ pub struct McpServerConfigDto {
 }
 
 /// Desired enablement for one configured user Skill source.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillSourceEnablementDto {
     Disabled,
@@ -338,7 +313,7 @@ pub enum SkillSourceEnablementDto {
 }
 
 /// Runtime-free declaration for one user-owned Skill source.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillSourceConfigDto {
     #[schemars(length(min = 1))]
@@ -349,7 +324,7 @@ pub struct SkillSourceConfigDto {
 }
 
 /// Desired participation of one exact Plugin request in future activation resolution.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum PluginRequestEnablementDto {
     Disabled,
@@ -357,7 +332,7 @@ pub enum PluginRequestEnablementDto {
 }
 
 /// Declarative request for one exact Plugin package.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginRequestDto {
     #[schemars(length(min = 1))]
@@ -368,7 +343,7 @@ pub struct PluginRequestDto {
 }
 
 /// Safe-point event that may request a Hook execution.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum HookEventDto {
     PreToolUse,          // 工具：执行前
@@ -464,7 +439,7 @@ impl HookEventDto {
 }
 
 /// Desired enablement of one Hook declaration.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum HookEnablementDto {
     Disabled,
@@ -472,21 +447,21 @@ pub enum HookEnablementDto {
 }
 
 /// Optional exact tool-name matcher for tool-related Hook events.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookMatcherDto {
     pub tool_names: Vec<String>,
 }
 
 /// Runtime-free Hook action. Execution still requires policy and sandbox approval.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type")]
 pub enum HookActionDto {
     Process { program: String, args: Vec<String> },
 }
 
 /// Declarative Hook configuration exposed through the App Server contract.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookConfigDto {
     #[schemars(length(min = 1))]
@@ -496,21 +471,19 @@ pub struct HookConfigDto {
     pub action: HookActionDto,
     pub enablement: HookEnablementDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub claude_pre_tool_use: Option<ash_protocol::ClaudePreToolUseHook>,
 }
 
 /// Reads user declarations and directory declarations discoverable by one Session.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HookListParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_id: Option<ash_protocol::SessionId>,
 }
 
 /// One validated configuration source; declarations are not execution grants or run status.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookSourceDto {
     pub namespace: String,
@@ -518,14 +491,14 @@ pub struct HookSourceDto {
     pub hooks: Vec<HookConfigDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookListResult {
     pub sources: Vec<HookSourceDto>,
 }
 
 /// Durable user intent for one language server.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageServerModeDto {
     Disabled,
@@ -533,27 +506,21 @@ pub enum LanguageServerModeDto {
 }
 
 /// Runtime-free language-server preference exposed through the App Server contract.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerConfigDto {
     pub mode: LanguageServerModeDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub executable: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<_>", optional)]
     pub language_ids: Vec<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<_>", optional)]
     pub args: Vec<String>,
     #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
-    #[ts(as = "Option<_>", optional)]
     pub environment: std::collections::BTreeMap<String, String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub initialization_options: Option<serde_json::Value>,
     #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
-    #[ts(as = "Option<_>", optional)]
     pub settings: std::collections::BTreeMap<String, serde_json::Value>,
 }
 
@@ -572,7 +539,7 @@ impl Default for LanguageServerConfigDto {
 }
 
 /// Coarse action category available to deterministic execution-policy selectors.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExecPolicyActionKindDto {
     LocalProcess,
@@ -585,7 +552,7 @@ pub enum ExecPolicyActionKindDto {
 }
 
 /// One exact argv position in a command-prefix selector.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", content = "value")]
 pub enum ExecPolicyTokenDto {
     Literal(String),
@@ -593,7 +560,7 @@ pub enum ExecPolicyTokenDto {
 }
 
 /// Host matching semantics for one structured network target.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", content = "value")]
 pub enum ExecPolicyHostMatcherDto {
     Exact(String),
@@ -601,7 +568,7 @@ pub enum ExecPolicyHostMatcherDto {
 }
 
 /// Scope matching semantics for one structured capability.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", content = "value")]
 pub enum ExecPolicyScopeMatcherDto {
     Exact(String),
@@ -609,7 +576,7 @@ pub enum ExecPolicyScopeMatcherDto {
 }
 
 /// Deterministic selector over host-materialized action fields.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -625,10 +592,8 @@ pub enum ExecPolicySelectorDto {
     },
     Source {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         source: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         source_id: Option<String>,
     },
     CommandPrefix {
@@ -636,11 +601,9 @@ pub enum ExecPolicySelectorDto {
     },
     Network {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         protocol: Option<String>,
         host: ExecPolicyHostMatcherDto,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         port: Option<u16>,
     },
     Capability {
@@ -653,7 +616,7 @@ pub enum ExecPolicySelectorDto {
 }
 
 /// Effect produced when one execution-policy rule matches.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", content = "reason")]
 pub enum ExecPolicyEffectDto {
     Continue,
@@ -664,7 +627,7 @@ pub enum ExecPolicyEffectDto {
 }
 
 /// One durable user-owned deterministic execution-policy rule.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecPolicyRuleDto {
     #[schemars(length(min = 1))]
@@ -672,19 +635,16 @@ pub struct ExecPolicyRuleDto {
     pub selector: ExecPolicySelectorDto,
     pub effect: ExecPolicyEffectDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub justification: Option<String>,
 }
 
 /// One frontend-owned root table whose keys are opaque to App Server.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(transparent)]
-pub struct FrontendConfigDto(
-    #[ts(type = "Record<string, unknown>")] pub BTreeMap<String, serde_json::Value>,
-);
+pub struct FrontendConfigDto(pub BTreeMap<String, serde_json::Value>);
 
 /// Local diagnostic intent, applied when the owning App Server starts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TraceConfigDto {
     pub enabled: bool,
@@ -692,7 +652,7 @@ pub struct TraceConfigDto {
 }
 
 /// Actual recorder state, independent from a newer saved configuration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -705,7 +665,7 @@ pub enum TraceRecordingStateDto {
 }
 
 /// Backend profile defaults for future Turns and local command preparation.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecutionConfigDto {
     pub approval_mode: ash_protocol::ApprovalMode,
@@ -713,14 +673,14 @@ pub struct ExecutionConfigDto {
     pub command_network_access: CommandNetworkAccessDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CommandFileAccessDto {
     ReadOnly,
     DirectoryWrite,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CommandNetworkAccessDto {
     Denied,
@@ -728,7 +688,7 @@ pub enum CommandNetworkAccessDto {
 }
 
 /// Current user configuration snapshot returned by `config/read`.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ConfigReadResult {
     pub execution: ExecutionConfigDto,
@@ -740,34 +700,25 @@ pub struct ConfigReadResult {
     pub issues: crate::protocol::issues::IssueConfigDto,
     pub git: GitConfigDto,
     pub git_configured: bool,
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub generation: u64,
     pub model: Option<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model_reasoning_effort: Option<ReasoningEffort>,
     pub approval_review_model: ApprovalReviewModelSelectionDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub thread_title_model: Option<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub thread_recap_model: Option<ModelRefDto>,
     #[serde(default)]
-    #[ts(as = "Option<bool>", optional)]
     pub thread_recap_enabled: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub code_review_model: Option<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     /// No override inherits the model of the Turn that produced the changes.
     pub commit_message_model: Option<ModelRefDto>,
     pub commit_message_enabled: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub advisor: Option<ash_protocol::AdvisorConfig>,
     pub commit_message_active_dir_authorized: bool,
     pub tool_mode: ToolMode,
@@ -788,103 +739,90 @@ pub struct ConfigReadResult {
 }
 
 /// Creates or replaces one durable User execution-policy rule.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecPolicyRuleUpsertParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub rule: ExecPolicyRuleDto,
 }
 
 /// Removes one durable User execution-policy rule.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecPolicyRuleRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub rule_id: String,
 }
 
 /// Selects lexical Tool Search or enables one exact embedding model after a readiness probe.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolSearchConfigureParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub mode: ToolSearchModeDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub embedding_model: Option<ModelRefDto>,
 }
 
 /// Replaces the device-local semantic model selection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseConfigureParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub models: Option<CodebaseModelsDto>,
     #[serde(default)]
     pub automatic_context: CodebaseAutomaticContextDto,
 }
 
 /// Authorizes the active directory to send bounded context and diff to the exact summary model.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CommitMessageAuthorizeParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     /// Exact originating Turn model when the summary model is inherited.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model: Option<ModelRefDto>,
 }
 
 /// Revokes automatic commit-message source egress for the active directory.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CommitMessageRevokeParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
 }
 
 /// Notification payload emitted after a durable Config authority commit.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ConfigChanged {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub generation: u64,
 }
 
 /// Compact result of a retry-safe configuration mutation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ConfigCommandResult {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub generation: u64,
     pub disposition: ConfigCommandDispositionDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ConfigCommandDispositionDto {
     Updated,
@@ -892,102 +830,80 @@ pub enum ConfigCommandDispositionDto {
 }
 
 /// Patch for user preferences at one expected Config revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ConfigUpdateParams {
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ExecutionConfigDto>")]
-    #[ts(as = "Option<ExecutionConfigDto>", optional = nullable)]
     pub execution: Patch<ExecutionConfigDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<TraceConfigDto>")]
-    #[ts(as = "Option<TraceConfigDto>", optional = nullable)]
     pub trace: Patch<TraceConfigDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ash_protocol::ContextCompactionPolicy>")]
-    #[ts(as = "Option<ash_protocol::ContextCompactionPolicy>", optional = nullable)]
     pub context: Patch<ash_protocol::ContextCompactionPolicy>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<TimeContextConfigDto>")]
-    #[ts(as = "Option<TimeContextConfigDto>", optional = nullable)]
     pub time_context: Patch<TimeContextConfigDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<features::FeatureOverrides>")]
-    #[ts(as = "Option<features::FeatureOverrides>", optional = nullable)]
     pub features: Patch<features::FeatureOverrides>,
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ModelRefDto>")]
-    #[ts(as = "Option<ModelRefDto>", optional = nullable)]
     pub model: Patch<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ReasoningEffort>")]
-    #[ts(as = "Option<ReasoningEffort>", optional = nullable)]
     pub model_reasoning_effort: Patch<ReasoningEffort>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ApprovalReviewModelSelectionDto>")]
-    #[ts(as = "Option<ApprovalReviewModelSelectionDto>", optional = nullable)]
     pub approval_review_model: Patch<ApprovalReviewModelSelectionDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ModelRefDto>")]
-    #[ts(as = "Option<ModelRefDto>", optional = nullable)]
     pub thread_title_model: Patch<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ModelRefDto>")]
-    #[ts(as = "Option<ModelRefDto>", optional = nullable)]
     pub thread_recap_model: Patch<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<bool>")]
-    #[ts(as = "Option<bool>", optional = nullable)]
     pub thread_recap_enabled: Patch<bool>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ModelRefDto>")]
-    #[ts(as = "Option<ModelRefDto>", optional = nullable)]
     pub code_review_model: Patch<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ModelRefDto>")]
-    #[ts(as = "Option<ModelRefDto>", optional = nullable)]
     pub commit_message_model: Patch<ModelRefDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<bool>")]
-    #[ts(as = "Option<bool>", optional = nullable)]
     pub commit_message_enabled: Patch<bool>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ash_protocol::AdvisorConfig>")]
-    #[ts(as = "Option<ash_protocol::AdvisorConfig>", optional = nullable)]
     pub advisor: Patch<ash_protocol::AdvisorConfig>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<ToolMode>")]
-    #[ts(as = "Option<ToolMode>", optional = nullable)]
     pub tool_mode: Patch<ToolMode>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<GrepBackendDto>")]
-    #[ts(as = "Option<GrepBackendDto>", optional = nullable)]
     pub grep_backend: Patch<GrepBackendDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<GitConfigDto>")]
-    #[ts(as = "Option<GitConfigDto>", optional = nullable)]
     pub git: Patch<GitConfigDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<FrontendConfigDto>")]
-    #[ts(as = "Option<FrontendConfigDto>", optional = nullable)]
     pub gui: Patch<FrontendConfigDto>,
     #[serde(default, skip_serializing_if = "Patch::is_missing")]
     #[schemars(with = "Option<FrontendConfigDto>")]
-    #[ts(as = "Option<FrontendConfigDto>", optional = nullable)]
     pub tui: Patch<FrontendConfigDto>,
 }
 
 /// Creates or replaces one user-owned language-server preference.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerConfigureParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub server_id: String,
@@ -995,70 +911,64 @@ pub struct LanguageServerConfigureParams {
 }
 
 /// Removes an explicit language-server preference and restores the product default.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub server_id: String,
 }
 
 /// Creates or replaces one provider entry in the user configuration authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderConfigureParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub config: ProviderConfigDto,
 }
 
 /// Removes one provider entry from the user configuration authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub connection: String,
 }
 
 /// Creates or replaces one standalone MCP server declaration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct McpServerUpsertParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub server: McpServerConfigDto,
 }
 
 /// Removes one standalone MCP server declaration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct McpServerRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub server_id: String,
 }
 
 /// Changes desired enablement for one configured standalone MCP server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct McpServerSetEnablementParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub server_id: String,
@@ -1066,35 +976,32 @@ pub struct McpServerSetEnablementParams {
 }
 
 /// Adds a user-owned, runtime-free Skill source declaration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillSourceAddParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub source: SkillSourceConfigDto,
 }
 
 /// Removes one user-owned Skill source declaration.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillSourceRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub source_id: String,
 }
 
 /// Changes desired enablement for one configured user Skill source.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillSourceSetEnablementParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub source_id: String,
@@ -1102,35 +1009,32 @@ pub struct SkillSourceSetEnablementParams {
 }
 
 /// Creates or replaces one exact user Plugin request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginRequestUpsertParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub request: PluginRequestDto,
 }
 
 /// Removes one user Plugin request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginRequestRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub plugin_id: String,
 }
 
 /// Changes desired enablement for one configured Plugin request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginRequestSetEnablementParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub plugin_id: String,
@@ -1138,35 +1042,32 @@ pub struct PluginRequestSetEnablementParams {
 }
 
 /// Creates or replaces one declarative user Hook.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookUpsertParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub hook: HookConfigDto,
 }
 
 /// Removes one declarative user Hook.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookRemoveParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub hook_id: String,
 }
 
 /// Changes desired enablement for one configured user Hook.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookSetEnablementParams {
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     #[schemars(length(min = 1))]
     pub hook_id: String,

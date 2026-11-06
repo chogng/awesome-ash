@@ -38,31 +38,13 @@ RUN curl --fail --silent --show-error --location https://apt.llvm.org/llvm-snaps
     && rm -f /tmp/ash-llvm-key.asc \
     && rm -rf /var/lib/apt/lists/*
 
-COPY .nvmrc /tmp/ash-node-version
-COPY package.json /tmp/ash-package.json
 COPY rust-toolchain.toml /tmp/ash-rust-toolchain.toml
 COPY .just-version /tmp/ash-just-version
 
-ENV PNPM_HOME=/usr/local/share/pnpm \
-    PATH=/usr/local/share/pnpm/bin:${PATH}
-
-RUN test "$(node --version)" = "v$(cat /tmp/ash-node-version)" \
-    && curl --fail --silent --show-error --location https://raw.githubusercontent.com/pnpm/get.pnpm.io/916ce9e8412d2ce06bb7106a53ce24690b9001dd/install.sh --output /tmp/ash-pnpm-install.sh \
-    && echo '2a13208d522446c35b61f1220b8a133a7c8db3f7e1ab3d00b1bfeda218ae4262  /tmp/ash-pnpm-install.sh' | sha256sum --check \
-    && PNPM_VERSION="$(node -p 'require("/tmp/ash-package.json").packageManager.split("@")[1]')" SHELL=/bin/sh ENV=/tmp/ash-pnpm-profile sh /tmp/ash-pnpm-install.sh \
-    && rm /tmp/ash-pnpm-install.sh /tmp/ash-pnpm-profile \
-    && ln -s "$PNPM_HOME/bin/pnpm" /usr/local/bin/pnpm \
-    && test "$(pnpm --version)" = "$(node -p 'require("/tmp/ash-package.json").packageManager.split("@")[1]')" \
-    && pnpm dlx "playwright@$(node -p 'require("/tmp/ash-package.json").devDependencies["@playwright/test"]')" install-deps chromium \
-    && chown -R node:node "$PNPM_HOME"
-
 RUN printf '%s\n' 'node ALL=(root) NOPASSWD: /usr/bin/chown' > /etc/sudoers.d/ash-node \
-    && printf '%s\n' 'node ALL=(root) NOPASSWD: /usr/local/bin/ash-configure-electron-sandbox' >> /etc/sudoers.d/ash-node \
     && chmod 0440 /etc/sudoers.d/ash-node \
     && mkdir -p /workspaces/ash \
     && chown node:node /workspaces/ash
-
-COPY --chmod=0755 .devcontainer/configure-electron-sandbox.sh /usr/local/bin/ash-configure-electron-sandbox
 
 ENV CARGO_HOME=/home/node/.cargo \
     RUSTUP_HOME=/home/node/.rustup \

@@ -5,10 +5,9 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::BTreeMap;
 use std::sync::Mutex;
-use ts_rs::TS;
 
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum UsageEvent {
@@ -19,11 +18,10 @@ pub enum UsageEvent {
     FeedbackSubmitted,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UsageSnapshot {
     pub enabled: bool,
-    #[ts(type = "{ [key in UsageEvent]?: number }")]
     pub counts: BTreeMap<UsageEvent, u64>,
 }
 

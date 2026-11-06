@@ -1,7 +1,6 @@
 //! Stable leaf values that may cross the RPC boundary.
 
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -15,10 +14,10 @@ pub use ash_protocol::ToolCallId;
 pub use ash_protocol::ToolName;
 pub use ash_protocol::TurnId;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct SchemaHash(pub String);
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientInfo {
     #[schemars(length(min = 1))]
@@ -27,31 +26,25 @@ pub struct ClientInfo {
     pub version: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCapabilities {
     #[serde(default)]
-    #[ts(optional = nullable)]
     pub app_tools: Option<crate::protocol::app_tools::AppToolsCapability>,
     #[serde(default)]
-    #[ts(optional)]
     pub notifications: Option<bool>,
     #[serde(default)]
-    #[ts(optional = nullable)]
     pub agent_interactions: Option<AgentInteractionCapability>,
     #[serde(default)]
-    #[ts(optional = nullable)]
     pub browser: Option<BrowserCapability>,
     #[serde(default)]
-    #[ts(optional = nullable)]
     pub directory_grants_host: Option<DirectoryGrantsHostCapability>,
     #[serde(default)]
-    #[ts(optional = nullable)]
     pub text_documents: Option<TextDocumentsCapability>,
 }
 
 /// This connection can edit its live text models through the generated host requests.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentsCapability {
     pub version: u32,
@@ -62,7 +55,7 @@ pub struct TextDocumentsCapability {
 /// App Server uses this declaration only for ephemeral owner selection. It never persists the
 /// connection capability in Session or Thread state, and clients must still subscribe to the
 /// target Thread before they can become an interaction owner.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentInteractionCapability {
     pub version: u32,
@@ -72,11 +65,10 @@ pub struct AgentInteractionCapability {
     /// This is ephemeral routing authority, not an executable registration. App Server still
     /// accepts and validates definitions through its composition root.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dynamic_tools: Option<Vec<ash_protocol::ToolName>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowserCapability {
     /// Version 3 enforces per-request network authorization; version 4 also consumes authorized
@@ -90,28 +82,26 @@ pub struct BrowserCapability {
 ///
 /// This is an authority boundary for host-only protocol operations. Renderer or extension
 /// connections must not declare it merely because they can display an approval prompt.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirectoryGrantsHostCapability {
     pub version: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ServerInfo {
     pub name: String,
     pub version: String,
     /// OS of this App Server process, not the client or a selected execution environment.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub operating_system: Option<ServerOperatingSystem>,
     /// OS user directory of this App Server process, independent of the Ash data root.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub user_home: Option<String>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ServerOperatingSystem {
     Windows,
@@ -123,22 +113,8 @@ pub enum ServerOperatingSystem {
 #[serde(deny_unknown_fields)]
 pub struct EmptyParams {}
 
-#[cfg(any(test, feature = "export"))]
-impl TS for EmptyParams {
-    type WithoutGenerics = Self;
-    type OptionInnerType = Self;
-
-    fn name(_: &ts_rs::Config) -> String {
-        "Record<string, never>".into()
-    }
-
-    fn inline(_: &ts_rs::Config) -> String {
-        "Record<string, never>".into()
-    }
-}
-
 /// Cancels one server-issued host request without closing its connection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostRequestCancelParams {
     pub id: String,

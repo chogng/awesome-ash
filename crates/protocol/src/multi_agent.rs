@@ -17,10 +17,9 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 /// Immutable task text captured when a parent delegates work to a child Agent.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DelegatedTask {
     pub title: String,
@@ -28,7 +27,7 @@ pub struct DelegatedTask {
 }
 
 /// Canonical execution state rendered for one Agent-tree node.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AgentTreeExecutionStatus {
     Idle,
@@ -41,7 +40,7 @@ pub enum AgentTreeExecutionStatus {
 }
 
 /// Stable reason why the latest Turn of an Agent-tree node is waiting.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AgentTreeWaitingReason {
     Approval,
@@ -50,35 +49,27 @@ pub enum AgentTreeWaitingReason {
 }
 
 /// One canonical, recursively nested Agent-tree node derived from durable Thread facts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentTreeNodeProjection {
     pub thread_id: ThreadId,
-    #[ts(type = "number")]
     pub thread_sequence: u64,
     pub title: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub parent_thread_id: Option<ThreadId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub forked_from_id: Option<ThreadId>,
     pub execution_status: AgentTreeExecutionStatus,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub current_turn_id: Option<TurnId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub waiting_reason: Option<AgentTreeWaitingReason>,
     pub usage: ModelUsageSummary,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub goal: Option<ThreadGoal>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub role: Option<FrozenAgentDefinitionRef>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub result: Option<DelegationResult>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub joins: Vec<AgentJoin>,
@@ -87,14 +78,14 @@ pub struct AgentTreeNodeProjection {
 }
 
 /// Canonical tree consumed directly by product Agent observability surfaces.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentTreeProjection {
     pub roots: Vec<AgentTreeNodeProjection>,
 }
 
 /// One immutable source selected from a fixed sequence of another Thread.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -103,20 +94,18 @@ pub struct AgentTreeProjection {
 pub enum AgentContextSource {
     Item {
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
         item_id: ItemId,
     },
     Checkpoint {
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
         checkpoint_id: ContextCheckpointId,
     },
 }
 
 /// Selection policy for inheriting a fixed prefix of parent Thread history.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -129,7 +118,7 @@ pub enum ForkedAgentContext {
 }
 
 /// Explicit context inheritance selected for one child Agent.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -142,7 +131,7 @@ pub enum AgentContextMode {
 }
 
 /// Provider-independent content copied from one immutable source into a child seed.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -184,7 +173,7 @@ pub enum AgentContextContent {
 }
 
 /// One verified source value materialized before the child Thread is allowed to run.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentMaterializedContext {
     pub source: AgentContextSource,
@@ -193,7 +182,7 @@ pub struct AgentMaterializedContext {
 }
 
 /// Policy revision ceiling delegated by a parent to a child Agent.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DelegatedPolicyCeiling {
     pub policy_revision: String,
@@ -201,9 +190,8 @@ pub struct DelegatedPolicyCeiling {
 
 macro_rules! sha256_digest {
     ($name:ident, $error:ident, $label:literal) => {
-        #[derive(Clone, Debug, Eq, JsonSchema, PartialEq, TS)]
+        #[derive(Clone, Debug, Eq, JsonSchema, PartialEq)]
         #[schemars(transparent)]
-        #[ts(type = "string")]
         pub struct $name(String);
 
         impl $name {
@@ -269,16 +257,14 @@ sha256_digest!(
 );
 
 /// Durable, verifiable input captured before the first child Turn starts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentContextSeed {
     pub delegation_id: DelegationId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub agent_id: Option<crate::AgentId>,
     pub parent_thread_id: ThreadId,
     pub parent_turn_id: TurnId,
-    #[ts(type = "number")]
     pub parent_sequence: u64,
     pub task: DelegatedTask,
     #[serde(flatten)]
@@ -291,17 +277,15 @@ pub struct AgentContextSeed {
 }
 
 /// Inclusive durable child Thread sequence range supporting a delegation result.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadSequenceRange {
-    #[ts(type = "number")]
     pub start_sequence: u64,
-    #[ts(type = "number")]
     pub end_sequence: u64,
 }
 
 /// Stable terminal outcome for a child Agent delegation.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DelegationResultStatus {
     Completed,
@@ -315,17 +299,16 @@ pub enum DelegationResultStatus {
 }
 
 /// Artifact reference returned by a child without embedding artifact bytes in Thread history.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DelegationArtifactRef {
     pub uri: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub content_digest: Option<ContentDigest>,
 }
 
 /// Bounded terminal result delivered from one child Thread to its parent.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DelegationResult {
     pub delegation_id: DelegationId,
@@ -338,7 +321,7 @@ pub struct DelegationResult {
 }
 
 /// Provenance class for one durable cross-Thread Agent message.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AgentMessageProvenance {
     Agent,
@@ -347,7 +330,7 @@ pub enum AgentMessageProvenance {
 }
 
 /// Bounded payload sent between independently ordered Agent Threads.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -359,23 +342,21 @@ pub enum AgentMessageContent {
 }
 
 /// Durable cross-Thread message with stable delivery and provenance identity.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentMessage {
     pub message_id: AgentMessageId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub delegation_id: Option<DelegationId>,
     pub sender_thread_id: ThreadId,
     pub receiver_thread_id: ThreadId,
-    #[ts(type = "number")]
     pub sender_sequence: u64,
     pub content: AgentMessageContent,
     pub provenance: AgentMessageProvenance,
 }
 
 /// Durable join condition evaluated from delegation terminal facts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -389,7 +370,7 @@ pub enum AgentJoinPolicy {
 }
 
 /// Durable lifecycle of one parent-side Agent join.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AgentJoinStatus {
     Waiting,
@@ -397,7 +378,7 @@ pub enum AgentJoinStatus {
 }
 
 /// Frozen target set and current durable outcome for one Agent join.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentJoin {
     pub join_id: AgentJoinId,

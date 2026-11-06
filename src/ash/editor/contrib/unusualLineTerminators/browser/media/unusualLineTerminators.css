@@ -1,8 +1,0 @@
-.stanza-editor .unusual-line-terminator {
-	background: color-mix(
-		in srgb,
-		var(--ash-error-foreground) 24%,
-		transparent
-	);
-	border-bottom: 2px solid var(--ash-error-foreground);
-}

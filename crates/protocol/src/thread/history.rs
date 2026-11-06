@@ -7,26 +7,24 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Immutable original event prefix. Its records retain their original Thread IDs and sequences.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HistoryPrefixRef {
     pub digest: ContentDigest,
     pub source_thread_id: ThreadId,
-    #[ts(type = "number")]
     pub source_sequence: u64,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MessageBoundary {
     Before,
     After,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum HistoryDirection {
     Undo,
@@ -34,24 +32,23 @@ pub enum HistoryDirection {
 }
 
 /// Immutable conversation and file state used by the same Thread's history cursor.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadHistoryCheckpoint {
     pub prefix: HistoryPrefixRef,
     pub workspace: WorkspaceCheckpoint,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadHistoryState {
-    #[ts(type = "number")]
     pub sequence: u64,
     pub can_undo: bool,
     pub can_redo: bool,
 }
 
 /// Exact immutable Git version retained for one repository at a message boundary.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RepositoryCheckpoint {
     pub repository_id: String,
@@ -66,7 +63,7 @@ pub struct RepositoryCheckpoint {
 }
 
 /// File restoration evidence. Missing coverage is explicit and cannot restore current files.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -88,16 +85,14 @@ pub enum WorkspaceCheckpoint {
 }
 
 /// A committed message's original location, independent of the branch displaying it.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageCheckpoint {
     pub item_id: ItemId,
     pub turn_id: TurnId,
     pub source_thread_id: ThreadId,
-    #[ts(type = "number")]
     pub source_sequence: u64,
     pub workspace: WorkspaceCheckpoint,
     /// Includes trailing lifecycle facts from the same atomic message commit.
-    #[ts(type = "number")]
     pub after_sequence: u64,
 }

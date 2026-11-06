@@ -349,9 +349,7 @@ impl AssessmentId {
 }
 
 /// Consequence level assigned to an action by the advisory reviewer.
-#[derive(
-    Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema, ts_rs::TS,
-)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum RiskLevel {
     Low,

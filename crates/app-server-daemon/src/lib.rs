@@ -7,7 +7,6 @@ mod installation;
 mod lifecycle_error;
 mod managed;
 mod process;
-mod runtime;
 pub mod startup_trace;
 mod update;
 mod wire;

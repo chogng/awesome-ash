@@ -5,9 +5,8 @@ use crate::ThreadId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SymphonyTaskStatus {
     Pending,
@@ -20,7 +19,7 @@ pub enum SymphonyTaskStatus {
     Completed,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SymphonyControl {
     Run,
@@ -28,7 +27,7 @@ pub enum SymphonyControl {
     Complete,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SymphonyWorkflow {
     pub id: String,
@@ -40,7 +39,7 @@ pub struct SymphonyWorkflow {
     pub error: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SymphonyConversation {
     pub id: String,
@@ -49,22 +48,20 @@ pub struct SymphonyConversation {
     pub title: String,
     pub status: SymphonyTaskStatus,
     pub thread_id: Option<ThreadId>,
-    #[ts(type = "number")]
     pub attempt: u32,
     pub usage: ModelUsageSummary,
-    #[ts(type = "number")]
     pub duration_ms: u64,
     pub error: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SymphonySnapshot {
     pub workflows: Vec<SymphonyWorkflow>,
     pub conversations: Vec<SymphonyConversation>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SymphonyMessage {
     pub id: String,
@@ -72,14 +69,14 @@ pub struct SymphonyMessage {
     pub text: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SymphonyMessageRole {
     User,
     Assistant,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SymphonyMessages {
     pub conversation: SymphonyConversation,

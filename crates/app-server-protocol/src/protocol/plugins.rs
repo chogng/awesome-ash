@@ -1,11 +1,10 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::extension_packages::ExtensionsUiTargetDto;
 use serde::Deserialize;
 use serde::Serialize;
 
 /// Exact installed package plus each independent Plugin authority layer.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginPackageDto {
     pub id: String,
@@ -13,7 +12,6 @@ pub struct PluginPackageDto {
     pub digest: String,
     pub display_name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub ui_targets: Option<Vec<ExtensionsUiTargetDto>>,
     pub permissions: Vec<PluginPermissionDto>,
     pub has_editor_extensions: bool,
@@ -24,7 +22,7 @@ pub struct PluginPackageDto {
 }
 
 /// Declared maximum permissions of the exact installed package, shown before granting it.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum PluginPermissionDto {
     Directory { access: PluginDirectoryAccessDto },
@@ -32,7 +30,7 @@ pub enum PluginPermissionDto {
     Network { hosts: Vec<String> },
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum PluginDirectoryAccessDto {
     Read,
@@ -41,17 +39,16 @@ pub enum PluginDirectoryAccessDto {
 
 /// Copies a package inside a currently authorized directory into the profile package store.
 /// Installation alone neither enables the package nor grants its requested permissions.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginInstallLocalParams {
     pub command_id: String,
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub path: String,
     pub dir_id: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginInstallLocalResult {
     pub id: String,
@@ -61,22 +58,19 @@ pub struct PluginInstallLocalResult {
 }
 
 /// Current durable Plugin authority projection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginListResult {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub activation_generation: u64,
     pub packages: Vec<PluginPackageDto>,
 }
 
 /// Exact package target for retry-safe Plugin lifecycle commands.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginPackageCommandParams {
     pub command_id: String,
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub id: String,
     pub version: String,
@@ -84,17 +78,15 @@ pub struct PluginPackageCommandParams {
 }
 
 /// Result of one committed or exactly replayed Plugin authority command.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginCommandResultDto {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub activation_generation: u64,
     pub disposition: PluginCommandDispositionDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum PluginCommandDispositionDto {
     Updated,
@@ -102,11 +94,9 @@ pub enum PluginCommandDispositionDto {
 }
 
 /// Notification emitted for every committed Plugin authority revision.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginsChanged {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub activation_generation: u64,
 }

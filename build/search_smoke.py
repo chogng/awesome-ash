@@ -210,7 +210,7 @@ def search(client, pattern, freshness):
             primary.add_note(f"search cleanup also failed: {cleanup}")
 
 
-def verify(package, node=None):
+def verify(package):
     package = package.resolve(strict=True)
     metadata = json.loads((package / "ash-package.json").read_text())
     suffix = ".exe" if os.name == "nt" else ""
@@ -239,15 +239,6 @@ def verify(package, node=None):
             ASH_WORKSPACE_ROOT=str(workspace),
             PATH=str(empty_path),
         )
-        if metadata["javascriptRuntime"]["kind"] == "hostProvidedNode":
-            node = node or shutil.which("node")
-            if not node:
-                raise ValueError(
-                    "host-provided package requires --node-bin or Node on the caller's PATH"
-                )
-            environment["ASH_ELECTRON_RUN_AS_NODE_PATH"] = str(
-                Path(node).resolve(strict=True)
-            )
         assert shutil.which("rg", path=environment["PATH"]) is None
         assert shutil.which("tgrep", path=environment["PATH"]) is None
         with tempfile.TemporaryFile() as errors:
@@ -313,10 +304,9 @@ def verify(package, node=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package-dir", type=Path, required=True)
-    parser.add_argument("--node-bin", type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    report = json.dumps(verify(args.package_dir, args.node_bin), indent=2)
+    report = json.dumps(verify(args.package_dir), indent=2)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(report + "\n", encoding="utf-8")

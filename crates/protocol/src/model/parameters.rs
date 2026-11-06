@@ -7,9 +7,8 @@ use crate::ModelSpeed;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ModelInputModality {
     Text,
@@ -17,7 +16,7 @@ pub enum ModelInputModality {
     Audio,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ModelVerbosity {
     Low,
@@ -25,7 +24,7 @@ pub enum ModelVerbosity {
     High,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ModelReasoningSummary {
     None,
@@ -36,7 +35,7 @@ pub enum ModelReasoningSummary {
 
 /// Limits model-visible tool text; original durable tool results remain intact.
 /// Token limits use the shared output utility's UTF-8 byte approximation, not token measurement.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "mode", content = "limit", rename_all = "snake_case")]
 pub enum ModelToolOutputLimit {
     Bytes(u32),
@@ -44,7 +43,7 @@ pub enum ModelToolOutputLimit {
 }
 
 /// A provider service tier ID is a request value; its label and explanation are display metadata.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelServiceTier {
     pub id: String,
@@ -54,7 +53,7 @@ pub struct ModelServiceTier {
 
 /// A selectable acceleration ID and its catalog-owned display metadata.
 /// IDs are scoped to one model connection; they are never translated or used as credentials.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelAccelerationOption {
     pub id: String,
@@ -64,7 +63,7 @@ pub struct ModelAccelerationOption {
 
 /// The model catalog owns how the product's acceleration preference changes a call.
 /// A speed parameter and a different model ID must never be recorded as service tiers.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ModelAcceleration {
     #[serde(rename_all = "snake_case")]
@@ -101,7 +100,7 @@ impl ModelAcceleration {
 /// A declaration is frozen with model capacity for an in-flight Turn. Missing lists/defaults and
 /// `Unknown` support are absence of evidence. They do not grant endpoint support or account access.
 /// The invocation owner resolves user choices into [`crate::ModelRequest`] separately.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", default, deny_unknown_fields)]
 pub struct ModelSettings {
     /// Declared input kinds; `None` means unknown, while a declared list includes text.

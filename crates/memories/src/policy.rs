@@ -4,9 +4,8 @@ use ash_protocol::CommandId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryReadMode {
     #[default]
@@ -14,7 +13,7 @@ pub enum MemoryReadMode {
     FirstInvocation,
 }
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryWriteMode {
     #[default]
@@ -29,11 +28,10 @@ impl MemoryWriteMode {
 }
 
 /// Scope-specific consent for automatic reading. Explicit management does not grant this consent.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryPolicy {
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub revision: u64,
     pub automatic_read: MemoryReadMode,
     pub model_write: MemoryWriteMode,
@@ -50,11 +48,10 @@ impl MemoryPolicy {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryPolicyMutationResult {
     pub disposition: MemoryMutationDisposition,
-    #[ts(type = "number")]
     pub catalog_revision: u64,
     pub policy: MemoryPolicy,
 }

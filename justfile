@@ -16,7 +16,7 @@ recipe_args := if os_family() == "windows" { "@($args | Select-Object -Skip 1)" 
 tui_profile := "ci-test"
 tui_profile_arg := "--profile " + tui_profile
 
-# Format sources with their owning Just, Rust, Python, and frontend tools.
+# Format sources with their owning Just, Rust, and Python tools.
 fmt *args:
     {{ python }} -B scripts/format.py {{ recipe_args }}
 
@@ -28,11 +28,11 @@ fmt-check *args:
 commit-check *args:
     {{ python }} -B scripts/commit_check.py {{ recipe_args }}
 
-# Format Rust independently of frontend dependencies.
+# Format Rust.
 rust-format:
     {{ python }} -B scripts/format.py --language rust
 
-# Check Rust formatting independently of frontend dependencies.
+# Check Rust formatting.
 rust-format-check:
     {{ python }} -B scripts/format.py --language rust --check
 
@@ -100,16 +100,16 @@ prune-build-cache *args:
 prune-docker-cache *args:
     {{ python }} -B -m build.lib.docker_cache {{ recipe_args }}
 
-# Build the terminal and Electron products from the repository root.
+# Build the terminal product and native Desktop host.
 build: build-code build-ash
 
 # Build the Ash Code CLI/TUI host and its development server programs.
 build-code:
     {{ python }} -B build/code/build.py
 
-# Build the Ash Electron product.
+# Build the native Ash Desktop host.
 build-ash:
-    pnpm build
+    cargo build --locked --manifest-path app/Cargo.toml
 
 # Build the root Rust workspace with the locked V8 inputs when required.
 build-rust *args:
@@ -160,11 +160,8 @@ test-search-rust:
     just test ash-app-server --lib server::environment_runtime::tests
     just test ash-app-server --lib server::search_operations::tests
 
-# Validate search consumers, backend behavior, renderer lifecycle, and compiler warnings.
+# Validate search consumers, backend behavior, and compiler warnings.
 test-search: check-search test-search-rust
-    pnpm test:unit --run src/ash/platform/search/test/browser/searchService.test.ts --run src/ash/platform/search/test/browser/browserFileSearchService.test.ts --run src/ash/platform/app-server/test/browser/webRendererApi.test.ts --run src/ash/sessions/test/browser/sessionFileService.test.ts --run src/ash/workbench/contrib/search/test/browser/searchViewPane.test.ts
-    pnpm run test:browser:integration:prepared chatContextActions.integration.spec.ts --project=chromium
-    ./node_modules/.bin/bun check -p tsconfig.renderer.json --all
     just check-search --deny-warnings
 
 # Exercise an assembled package through real stdio RPC, using its bundled search engines.
@@ -183,7 +180,7 @@ generate-config-schema:
 generate-model-catalog-schema *args:
     {{ python }} -B scripts/cargo.py run -p ash-model-provider-info --bin generate-model-catalog-schema -- {{ args }}
 
-# Prepare the cached App Server schema, metadata and TypeScript client.
+# Prepare the cached App Server JSON schema and metadata.
 generate-protocol:
     {{ python }} -B build/protocol/generate.py
 
@@ -203,9 +200,9 @@ ash-package *args:
 ash-package-run *args:
     {{ python }} -B build/code/run_package.py {{ recipe_args }}
 
-# Launch the Ash Electron product.
+# Launch the native Ash Desktop host.
 ash:
-    pnpm dev
+    cargo run --locked --manifest-path app/Cargo.toml
 
 # Build the shared App Server package.
 app-server-package *args:

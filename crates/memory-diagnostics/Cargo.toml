@@ -13,7 +13,6 @@ sysinfo = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 schemars = { workspace = true }
-ts-rs = { workspace = true, features = ["no-serde-warnings"] }
 thiserror = { workspace = true }
 
 [lints]

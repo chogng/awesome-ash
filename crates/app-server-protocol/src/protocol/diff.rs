@@ -1,10 +1,9 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 
 /// Inputs for one presentation-independent comparison of two text snapshots.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiffComputeParams {
     #[schemars(length(max = 524_288))]
@@ -14,7 +13,7 @@ pub struct DiffComputeParams {
 }
 
 /// The semantic kind of one aligned original/modified row.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DiffRowKindDto {
     Context,
@@ -24,7 +23,7 @@ pub enum DiffRowKindDto {
 }
 
 /// One changed inline region expressed in the editor's zero-based UTF-16 columns.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiffRangeDto {
     pub start_column: usize,
@@ -32,7 +31,7 @@ pub struct DiffRangeDto {
 }
 
 /// One aligned diff row in the frontend's zero-based line coordinate system.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiffComputeRowDto {
     pub kind: DiffRowKindDto,
@@ -43,7 +42,7 @@ pub struct DiffComputeRowDto {
 }
 
 /// One bounded hunk range in the returned row projection.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiffHunkDto {
     pub row_start: usize,
@@ -55,7 +54,7 @@ pub struct DiffHunkDto {
 }
 
 /// Canonical Rust diff data projected for a frontend line model.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiffComputeResult {
     pub rows: Vec<DiffComputeRowDto>,

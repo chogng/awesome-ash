@@ -1,11 +1,9 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Non-negative Unix milliseconds, restricted to dates through year 9999.
-#[derive(Clone, Copy, Debug, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
-#[ts(type = "number")]
+#[derive(Clone, Copy, Debug, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct UnixMillis(#[schemars(range(max = 253_402_300_799_999_u64))] u64);
 
 impl UnixMillis {
@@ -29,7 +27,7 @@ impl<'de> Deserialize<'de> for UnixMillis {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -41,7 +39,6 @@ pub enum AutomationSchedule {
     },
     Interval {
         anchor: UnixMillis,
-        #[ts(type = "number")]
         minutes: u32,
     },
     Weekly {
@@ -53,7 +50,7 @@ pub enum AutomationSchedule {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -67,7 +64,7 @@ pub enum AutomationSession {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutomationDefinition {
     pub title: String,
@@ -78,12 +75,11 @@ pub struct AutomationDefinition {
     pub schedule: AutomationSchedule,
     /// Optional provider condition evaluated before creating an Agent Turn.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub condition: Option<AutomationCondition>,
 }
 
 /// Captures the exact account and PR the user enabled; execution never selects a fallback account.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -95,37 +91,34 @@ pub enum AutomationCondition {
         host: String,
         owner: String,
         repository: String,
-        #[ts(type = "number")]
         number: u64,
         account_id: String,
         credential_revision: String,
         /// Binds artifact Autopilot consent to one durable record generation.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         artifact_id: Option<String>,
     },
 }
 
 /// Durable provider observation, reserved before dispatch and retained across restart.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutomationEvent {
     pub key: String,
     pub context: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AutomationStatus {
     Enabled,
     Paused,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Automation {
     pub id: String,
-    #[ts(type = "number")]
     pub revision: u64,
     pub definition: AutomationDefinition,
     pub status: AutomationStatus,
@@ -134,7 +127,7 @@ pub struct Automation {
     pub next_run_at: Option<UnixMillis>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AutomationRunStatus {
     Pending,
@@ -156,12 +149,11 @@ impl AutomationRunStatus {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutomationRun {
     pub id: String,
     pub automation_id: String,
-    #[ts(type = "number")]
     pub revision: u64,
     pub definition: AutomationDefinition,
     pub scheduled_at: UnixMillis,
@@ -174,6 +166,5 @@ pub struct AutomationRun {
     pub turn_id: Option<crate::TurnId>,
     pub message: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub event: Option<AutomationEvent>,
 }

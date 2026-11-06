@@ -1,7 +1,0 @@
-/* Decoration geometry comes from DecorationsOverlay; the row supplies its height. */
-.stanza-editor .view-overlays .cdr {
-	position: absolute;
-	inset-block: 0;
-	box-sizing: border-box;
-	pointer-events: none;
-}

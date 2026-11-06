@@ -3,7 +3,6 @@
 
 import argparse
 import os
-import subprocess
 import sys
 from pathlib import Path
 from typing import Optional, Sequence
@@ -189,18 +188,13 @@ def parse_arguments(
         choices=("packaged-node", "host-provided-node"),
         default="packaged-node",
         help=(
-            "Package the locked standalone Node runtime, or require a product host "
-            "such as Electron to inject an exact Node-compatible executable."
+            "Package the locked standalone Node runtime or omit it for runtime-only development."
         ),
     )
     parser.add_argument(
         "--update-public-key",
         default=os.environ.get("ASH_UPDATE_PUBLIC_KEY"),
         help="Ed25519 public key trusted by the independently updated App Server.",
-    )
-    parser.add_argument(
-        "--electron-version",
-        help="Exact Electron version required by a Desktop host-provided runtime package.",
     )
     parser.add_argument(
         "--bwrap-bin",
@@ -265,19 +259,6 @@ def main(arguments: Optional[Sequence[str]] = None) -> int:
     return build_package(parse_arguments(arguments))
 
 
-def _prepare_builtin_extensions() -> None:
-    subprocess.run(
-        ["node", "build/resources/localization.ts"],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
-    subprocess.run(
-        ["node", "build/builtin/extensions.ts"],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
-
-
 def build_package(args: argparse.Namespace) -> int:
     media_distribution = args.media_distribution
     if media_distribution == "none" and any(
@@ -304,7 +285,6 @@ def build_package(args: argparse.Namespace) -> int:
         if target not in SUPPORTED_TARGETS:
             raise ValueError(f"Bundled media is not supported for {target}")
     generate_protocol(root=REPOSITORY_ROOT, cargo=args.cargo)
-    _prepare_builtin_extensions()
     protocol_metadata = load_protocol_metadata(REPOSITORY_ROOT)
     inputs = {
         "ash-collab-server": None,
@@ -358,13 +338,6 @@ def build_package(args: argparse.Namespace) -> int:
     if args.javascript_runtime == "host-provided-node" and args.node_bin is not None:
         raise RuntimeError(
             "--node-bin cannot be used with --javascript-runtime host-provided-node"
-        )
-    if (
-        args.electron_version is not None
-        and args.javascript_runtime != "host-provided-node"
-    ):
-        raise ValueError(
-            "--electron-version requires --javascript-runtime host-provided-node"
         )
     tgrep = resolve_tgrep(
         spec, args.tgrep_lock, args.tgrep_cache_root, args.tgrep_bin, cargo=args.cargo
@@ -477,7 +450,6 @@ def build_package(args: argparse.Namespace) -> int:
         protocol_metadata=protocol_metadata,
         update_public_key=args.update_public_key,
         build_profile=args.cargo_profile,
-        electron_version=args.electron_version,
         symbols_dir=args.symbols_dir,
         windows_sandbox_service_binary=binaries.get("ash-windows-sandbox-service"),
         windows_sandbox_binary=binaries["ash-windows-sandbox"]

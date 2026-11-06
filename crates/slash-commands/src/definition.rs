@@ -8,10 +8,8 @@ use serde::Serialize;
     feature = "json-schema",
     schemars(rename = "SlashCommandArgumentModeDto")
 )]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
-#[cfg_attr(feature = "export", ts(rename = "SlashCommandArgumentModeDto"))]
 #[serde(rename_all = "camelCase")]
-#[cfg_attr(feature = "export", ts(rename_all = "camelCase"))]
+
 pub enum SlashCommandArgumentMode {
     None,
     Optional,
@@ -24,15 +22,13 @@ pub enum SlashCommandArgumentMode {
 /// and declares whether inline arguments are accepted.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
-#[cfg_attr(feature = "export", ts(rename_all = "camelCase"))]
+
 pub struct SlashCommandDefinition {
     pub name: String,
     pub description: String,
     pub argument_mode: SlashCommandArgumentMode,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub argument_hint: Option<String>,
 }
 

@@ -1,9 +1,8 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryProduct {
     Tui,
@@ -12,7 +11,7 @@ pub enum MemoryProduct {
     Browser,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryStart {
     #[schemars(length(min = 1, max = 128))]
@@ -22,7 +21,7 @@ pub struct MemoryStart {
     pub duration_secs: u32,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryRole {
     Backend,
@@ -36,14 +35,14 @@ pub enum MemoryRole {
     Extension,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryOrigin {
     BackendHost,
     ClientHost,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryPhase {
     Busy,
@@ -52,7 +51,7 @@ pub enum MemoryPhase {
 }
 
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryMetricKind {
@@ -69,7 +68,7 @@ pub enum MemoryMetricKind {
     Tasks,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryUnavailable {
     Unsupported,
@@ -78,16 +77,15 @@ pub enum MemoryUnavailable {
     Exited,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryMetric {
     pub kind: MemoryMetricKind,
-    #[ts(type = "number | null")]
     pub value: Option<u64>,
     pub unavailable: Option<MemoryUnavailable>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryObservation {
     #[schemars(length(min = 1, max = 128))]
@@ -99,18 +97,17 @@ pub struct MemoryObservation {
     pub metrics: Vec<MemoryMetric>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryEvidence {
     #[schemars(length(min = 1, max = 128))]
     pub session_id: String,
-    #[ts(type = "number")]
     pub sequence: u64,
     #[schemars(length(min = 1, max = 32))]
     pub observations: Vec<MemoryObservation>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryStatus {
     Recording,
@@ -119,7 +116,7 @@ pub enum MemoryStatus {
     TargetsExited,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryFinding {
     InsufficientEvidence,
@@ -128,7 +125,7 @@ pub enum MemoryFinding {
     IdleBaselineGrowth,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryTrend {
     pub kind: MemoryMetricKind,
@@ -138,16 +135,15 @@ pub struct MemoryTrend {
     pub growth_per_second: Option<f64>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemorySample {
-    #[ts(type = "number")]
     pub elapsed_ms: u64,
     pub phase: MemoryPhase,
     pub metrics: Vec<MemoryMetric>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryTargetReport {
     pub origin: MemoryOrigin,
@@ -160,16 +156,14 @@ pub struct MemoryTargetReport {
     pub trends: Vec<MemoryTrend>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryReport {
     pub version: u32,
     pub session_id: String,
     pub product: MemoryProduct,
     pub status: MemoryStatus,
-    #[ts(type = "number")]
     pub started_at_ms: u64,
-    #[ts(type = "number")]
     pub elapsed_ms: u64,
     pub sample_interval_ms: u32,
     pub targets: Vec<MemoryTargetReport>,

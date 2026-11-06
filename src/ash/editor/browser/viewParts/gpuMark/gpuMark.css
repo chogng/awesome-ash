@@ -1,7 +1,0 @@
-.stanza-editor .gpu-mark {
-	position: absolute;
-	inset-block: 0;
-	inset-inline-start: 0;
-	width: 2px;
-	background: var(--ash-warning-foreground);
-}

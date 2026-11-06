@@ -12,7 +12,7 @@ path = "src/lib.rs"
 
 [features]
 json-schema = ["ash-host-logs/json-schema", "dep:schemars", "slash-commands/json-schema", "external-ext-protocol/json-schema"]
-export = ["ash-host-logs/export", "json-schema", "dep:sha2", "dep:ts-rs", "slash-commands/export", "external-ext-protocol/export"]
+export = ["ash-host-logs/export", "json-schema", "dep:sha2", "slash-commands/export", "external-ext-protocol/export"]
 
 [[bin]]
 name = "generate_protocol"
@@ -26,14 +26,11 @@ external-ext-protocol = { workspace = true }
 slash-commands = { package = "ash-slash-commands", path = "../slash-commands" }
 noop-macros = { package = "ash-app-server-protocol-noop-macros", path = "../app-server-protocol-noop-macros" }
 call = { package = "ash-call-contract", path = "../call-contract" }
-response-debug-context = { workspace = true }
 memories = { workspace = true }
 guardian-environment = { workspace = true }
 extension-items = { workspace = true }
 queue = { package = "ash-queue-contract", path = "../queue-contract" }
 task-delivery = { package = "ash-task-delivery-contract", path = "../task-delivery-contract" }
-build-info = { workspace = true }
-analytics = { workspace = true }
 diagnostics = { workspace = true }
 feedback-contract = { workspace = true }
 features = { workspace = true }
@@ -42,7 +39,6 @@ schemars = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 sha2 = { workspace = true, optional = true }
-ts-rs = { workspace = true, features = ["no-serde-warnings"], optional = true }
 url = { workspace = true }
 zeroize = { workspace = true }
 ash-protocol = { workspace = true }
@@ -61,7 +57,6 @@ external-ext-protocol = { workspace = true, features = ["export"] }
 slash-commands = { package = "ash-slash-commands", path = "../slash-commands", features = ["export"] }
 sha2 = { workspace = true }
 schemars = { workspace = true }
-ts-rs = { workspace = true, features = ["no-serde-warnings"] }
 
 [lints]
 workspace = true

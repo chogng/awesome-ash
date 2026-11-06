@@ -1,10 +1,9 @@
 use super::*;
 use crate::protocol::config::CustomProviderConfigDto;
 use crate::protocol::config::CustomProviderProtocolDto;
-use ts_rs::TS;
 
 #[test]
-fn custom_provider_order_uses_a_json_number_in_the_typescript_contract() {
+fn custom_provider_order_round_trips_as_a_json_number() {
     let config = CustomProviderConfigDto {
         model_aliases: Some(std::collections::BTreeMap::from([(
             "local-model".to_owned(),
@@ -26,7 +25,6 @@ fn custom_provider_order_uses_a_json_number_in_the_typescript_contract() {
         serde_json::from_value::<CustomProviderConfigDto>(value).unwrap(),
         config
     );
-    assert!(CustomProviderConfigDto::decl(&ts_rs::Config::default()).contains("order: number"));
 }
 
 #[test]

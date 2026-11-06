@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::AgentId;
 use ash_protocol::AgentRoleSource;
 use ash_protocol::SessionId;
@@ -9,14 +8,14 @@ use ash_protocol::ToolSourceProvenance;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentReadParams {
     pub agent_id: AgentId,
 }
 
 /// One execution branch belonging to the requested Agent, including archived branches.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentThread {
     pub session_id: SessionId,
@@ -24,17 +23,16 @@ pub struct AgentThread {
     pub origin: ThreadOrigin,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentReadResult {
     pub agent_id: AgentId,
-    #[ts(type = "number")]
     pub created_at_unix_ms: u64,
     pub threads: Vec<AgentThread>,
 }
 
 /// One Agent definition that can be selected when creating a root Session.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentRoleEntry {
     pub name: String,
@@ -42,14 +40,14 @@ pub struct AgentRoleEntry {
     pub source: AgentRoleSource,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentRoleListResult {
     pub agents: Vec<AgentRoleEntry>,
 }
 
 /// Product launch restrictions are visible in Settings without becoming launch authority.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AgentRoleLaunch {
     Any,
@@ -59,7 +57,7 @@ pub enum AgentRoleLaunch {
 }
 
 /// A validated definition for inspection, independent of the root Session picker.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentRoleDefinition {
     pub name: String,
@@ -83,7 +81,7 @@ pub struct AgentRoleDefinition {
     pub prompt: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentRoleCatalogResult {
     pub agents: Vec<AgentRoleDefinition>,
@@ -91,7 +89,7 @@ pub struct AgentRoleCatalogResult {
 }
 
 /// Describes the authority a tool may request; the decision is made for each call.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolAuthorityDto {
     DirectoryRead,
@@ -101,7 +99,7 @@ pub enum ToolAuthorityDto {
     ProviderDefined,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolSourceDto {
     Environment,
@@ -112,7 +110,7 @@ pub enum ToolSourceDto {
     Mcp,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolExposureDto {
     Direct,
@@ -121,7 +119,7 @@ pub enum ToolExposureDto {
     Hidden,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentToolCapabilityDto {
     /// Semantic capability; source and execution authority remain separate dimensions.
@@ -136,7 +134,7 @@ pub struct AgentToolCapabilityDto {
 }
 
 /// One source-owned group from the same catalog snapshot as its member tools.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentToolSourceGroupDto {
     pub id: String,
@@ -146,7 +144,7 @@ pub struct AgentToolSourceGroupDto {
 }
 
 /// A snapshot of registered tools and configured local process isolation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AgentCapabilitiesReadResult {
     pub tools: Vec<AgentToolCapabilityDto>,
@@ -157,13 +155,12 @@ pub struct AgentCapabilitiesReadResult {
     pub sandbox_backends: Vec<String>,
     pub sandbox_diagnostics: Vec<SandboxDiagnosticDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub sandbox_policy: Option<SandboxPolicyDto>,
     pub directory_grants_readable: bool,
 }
 
 /// Resolved command policy after profile selection and mandatory host constraints.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SandboxPolicyDto {
     pub profile: String,
@@ -174,7 +171,7 @@ pub struct SandboxPolicyDto {
     pub path_rule_count: u32,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SandboxHostReadDto {
     Host,
@@ -182,7 +179,7 @@ pub enum SandboxHostReadDto {
 }
 
 /// Preparation under the current filesystem policy. Every command is checked again before launch.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SandboxDiagnosticDto {
     pub backend: String,
@@ -190,7 +187,7 @@ pub struct SandboxDiagnosticDto {
     pub readiness: SandboxReadinessDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SandboxNetworkModeDto {
     Denied,
@@ -198,7 +195,7 @@ pub enum SandboxNetworkModeDto {
     Managed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum SandboxReadinessDto {
     Ready,

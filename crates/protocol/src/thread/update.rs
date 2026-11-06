@@ -10,13 +10,12 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Consumer-facing update for one Thread.
 ///
 /// `Committed` carries a durable fact. The remaining variants are low-latency projections and
 /// may be dropped; a later committed Item snapshot remains authoritative.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -43,14 +42,14 @@ pub enum ThreadUpdate {
     },
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolOutputStream {
     Stdout,
     Stderr,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -76,15 +75,13 @@ pub enum ItemDelta {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadUpdateEnvelope {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
-    #[ts(type = "number")]
     pub durable_sequence: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub stream_cursor: Option<StreamCursor>,
     /// Subscriptions carry wait metadata; only AgentRequestEnvelope discloses a review candidate.
     #[serde(serialize_with = "serialize_public_update")]

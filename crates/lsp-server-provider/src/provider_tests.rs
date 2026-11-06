@@ -63,54 +63,6 @@ fn node_package_provider_uses_managed_node_and_a_clean_environment() {
 }
 
 #[test]
-fn an_electron_installation_replaced_after_binding_cannot_start_a_language_server() {
-    let fixture = ProviderFixture::new();
-    let runtime = ManagedNodeRuntime::from_electron_path(&fixture.node).unwrap();
-    let provider = fixture.provider_with_runtime(runtime);
-    fs::write(&fixture.node, b"replaced Electron").unwrap();
-    let mut registry = LspServerProviders::new();
-    registry.register(provider).unwrap();
-    assert!(matches!(
-        registry.definition(
-            TEST_SERVER_ID,
-            fixture.dir.path(),
-            LspServerLaunch::Packaged
-        ),
-        Err(LanguageServerProviderError::ManagedNodeUnavailable)
-    ));
-}
-
-#[test]
-fn node_package_provider_uses_electron_only_for_the_language_server_child() {
-    let fixture = ProviderFixture::new();
-    let provider = fixture
-        .provider_with_runtime(ManagedNodeRuntime::from_electron_path(&fixture.node).unwrap());
-    let mut registry = LspServerProviders::new();
-    registry.register(provider).unwrap();
-
-    let definition = registry
-        .definition(
-            TEST_SERVER_ID,
-            fixture.dir.path(),
-            LspServerLaunch::Packaged,
-        )
-        .unwrap()
-        .unwrap();
-    let (_, command, _) = definition.into_launch_parts();
-    assert_eq!(
-        command
-            .environment()
-            .get(std::ffi::OsStr::new("ELECTRON_RUN_AS_NODE"))
-            .map(std::ffi::OsString::as_os_str),
-        Some(std::ffi::OsStr::new("1"))
-    );
-    assert_eq!(
-        command.environment_policy(),
-        LanguageServerEnvironmentPolicy::Clear
-    );
-}
-
-#[test]
 fn node_package_provider_accepts_an_authoritative_executable_override() {
     let fixture = ProviderFixture::new();
     let provider = fixture.provider();

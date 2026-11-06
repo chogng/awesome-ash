@@ -4,9 +4,7 @@ use serde::Serialize;
 use sha2::Digest;
 use sha2::Sha256;
 
-#[derive(
-    Clone, Debug, Eq, PartialEq, Serialize, serde::Deserialize, schemars::JsonSchema, ts_rs::TS,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildInfo {
     pub version: String,

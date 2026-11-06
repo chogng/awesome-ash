@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::common::TurnId;
 use ash_protocol::AudioAttachmentRef;
 use ash_protocol::ImageAttachmentRef;
@@ -7,7 +6,7 @@ use ash_protocol::SkillRef;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -16,7 +15,6 @@ use serde::Serialize;
 pub enum InputItem {
     /// Resolves an issue from the receiving Session's durable issue-task association.
     Issue {
-        #[ts(type = "number")]
         number: u64,
     },
     Text {
@@ -27,7 +25,6 @@ pub enum InputItem {
         content: String,
         /// Optional HTTPS link shown with the saved attachment.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         source_url: Option<String>,
     },
     /// Materialized from the initiating renderer before domain input is admitted or persisted.
@@ -65,32 +62,28 @@ pub enum InputItem {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnStartResult {
     pub turn_id: TurnId,
-    #[ts(type = "number")]
     pub sequence: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnSteerResult {
     pub turn_id: TurnId,
-    #[ts(type = "number")]
     pub sequence: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnInterruptResult {
-    #[ts(type = "number")]
     pub sequence: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnInteractionResolveResult {
-    #[ts(type = "number")]
     pub sequence: u64,
 }

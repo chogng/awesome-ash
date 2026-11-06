@@ -158,7 +158,7 @@ def _prepare_grammars(target: str, *, verify_only: bool = False) -> Path:
             return directory
         if verify_only:
             raise RuntimeError(
-                f"Missing prepared grammars: {directory}; run pnpm tree-sitter:prepare"
+                f"Missing prepared grammars: {directory}; run the Cargo wrapper to prepare the locked grammar inputs"
             )
         # Publish only complete validated outputs; concurrent Cargo and renderer
         # preparation share the lock, and consumers never see a partial tree.

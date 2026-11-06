@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::common::CommandId;
 use crate::protocol::resources::ResourceMetadataResult;
 use ash_protocol::ContentDigest;
@@ -8,7 +7,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::BTreeMap;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillCatalogReloadDto {
     #[default]
@@ -16,14 +15,14 @@ pub enum SkillCatalogReloadDto {
     Refresh,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillEnablementDto {
     Disabled,
     Enabled,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillSourceKindDto {
     BuiltIn,
@@ -33,7 +32,7 @@ pub enum SkillSourceKindDto {
     Extensions,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -44,7 +43,7 @@ pub enum SkillCompatibilityDto {
     Unknown { note: String },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillDto {
     pub id: SkillId,
@@ -58,7 +57,7 @@ pub struct SkillDto {
     pub compatibility: SkillCompatibilityDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillDiagnosticCodeDto {
     SourceUnavailable,
@@ -72,7 +71,7 @@ pub enum SkillDiagnosticCodeDto {
     ContentTooLarge,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillDiagnosticDto {
     pub source: String,
@@ -81,42 +80,38 @@ pub struct SkillDiagnosticDto {
     pub message: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillListParams {
     #[serde(default)]
     pub reload: SkillCatalogReloadDto,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_id: Option<ash_protocol::SessionId>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillListResult {
-    #[ts(type = "number")]
     pub generation: u64,
     pub skills: Vec<SkillDto>,
     pub diagnostics: Vec<SkillDiagnosticDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillSetEnablementParams {
     /// Catalog lookup scope for directory Skills authorized by this Session. Enablement remains
     /// user configuration keyed by the source-qualified Skill ID, shared by all clients.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_id: Option<ash_protocol::SessionId>,
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub skill_id: SkillId,
     pub enablement: SkillEnablementDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillResourceKindDto {
     Instructions,
@@ -131,11 +126,10 @@ pub enum SkillResourceKindDto {
 ///
 /// `path` remains package-relative. The server revalidates both the Skill digest and the rooted
 /// resource path before publishing bytes into the connection-owned Resource store.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillResourceOpenParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_id: Option<ash_protocol::SessionId>,
     pub skill_id: SkillId,
     pub skill_content_digest: ContentDigest,
@@ -143,7 +137,7 @@ pub struct SkillResourceOpenParams {
     pub path: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillResourceOpenResult {
     pub path: String,
@@ -151,9 +145,8 @@ pub struct SkillResourceOpenResult {
     pub resource: ResourceMetadataResult,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SkillsChanged {
-    #[ts(type = "number")]
     pub generation: u64,
 }

@@ -81,7 +81,6 @@ def build_package_directory(
     protocol_metadata: Optional[Dict[str, object]] = None,
     update_public_key: Optional[str] = None,
     build_profile: str = "release",
-    electron_version: Optional[str] = None,
     windows_sandbox_binary: Optional[Path] = None,
     windows_sandbox_service_binary: Optional[Path] = None,
     remote_host_binary: Optional[Path] = None,
@@ -253,7 +252,6 @@ def build_package_directory(
                 "sourceRoot": str(repository_root),
                 "version": version,
                 "buildProfile": build_profile,
-                "electronVersion": electron_version,
                 "protocol": protocol_metadata
                 if protocol_metadata is not None
                 else load_protocol_metadata(repository_root),
@@ -516,13 +514,6 @@ def assemble_package(staging: Path, inputs: dict) -> None:
     }
     if catalog:
         identity["remoteRuntimeCatalog"] = catalog
-    electron_version = options.get("electronVersion")
-    if electron_version is not None:
-        if node or not valid_electron_version(electron_version):
-            raise RuntimeError(
-                "Electron contract requires a valid version and host-provided Node"
-            )
-        identity["javascriptRuntime"]["electronVersion"] = electron_version
     files = package_files(staging)
     metadata = {
         **identity,

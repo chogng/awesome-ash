@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::turn::InputItem;
 use ash_protocol::ApprovalMode;
 use ash_protocol::CommandId;
@@ -10,36 +9,32 @@ use ash_protocol::ToolMode;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct QueueEnqueueParams {
     pub command_id: CommandId,
     pub session_id: SessionId,
     pub thread_id: ThreadId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub command_interpretation: Option<CommandInterpretation>,
     pub input: Vec<InputItem>,
     #[serde(default)]
     pub mode: ash_protocol::CollaborationMode,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model: Option<ash_protocol::ModelRef>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub reasoning_effort: Option<ash_protocol::ReasoningEffort>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub tool_mode: Option<ToolMode>,
     pub approval_mode: ApprovalMode,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct QueueListParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct QueueCancelParams {
     pub session_id: SessionId,
@@ -48,27 +43,25 @@ pub struct QueueCancelParams {
     /// Older clients may cancel by identity; editors cancel the revision they displayed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(range(min = 0))]
-    #[ts(optional = nullable, type = "number")]
     pub expected_revision: Option<i64>,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QueueListResult {
     pub messages: Vec<queue::QueuedMessage>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct QueueEditParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
     pub command_id: CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: i64,
     pub action: QueueEditAction,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

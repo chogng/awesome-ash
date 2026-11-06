@@ -16,28 +16,6 @@ SOURCE_MANIFEST = "protocol-sources.json"
 REQUIRED_ARTIFACTS = {
     "metadata.json",
     "json/schema.json",
-    "typescript/index.ts",
-    "typescript/protocol.ts",
-    "typescript/types/index.ts",
-    "typescript/AppServerRequestMap.ts",
-    "typescript/AppServerNotificationMap.ts",
-    "typescript/AppServerServerRequestMap.ts",
-    "typescript/AppServerProtocolDecoder.ts",
-    "typescript/AppServerProtocolSchema0.ts",
-    "typescript/AppServerListenInfo.ts",
-    "typescript/WebProtocolDecoder.ts",
-    "typescript/WebListenInfo.ts",
-    "typescript/WebSessionInfo.ts",
-    "typescript/WebWorkspaceState.ts",
-    "typescript/WebWorkspaceFolder.ts",
-    "typescript/WebWorkspaceUpdateRequest.ts",
-    "typescript/RemoteTunnelHostInfo.ts",
-    "typescript/WebWorkspaceDirectory.ts",
-    "typescript/WebWorkspaceListRequest.ts",
-    "typescript/WebWorkspaceListResult.ts",
-    "typescript/WebWorkspaceOpenRequest.ts",
-    "typescript/ProductSlashCommands.ts",
-    "typescript/ApprovalModes.ts",
 }
 
 

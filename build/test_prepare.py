@@ -27,6 +27,7 @@ class PrepareTests(unittest.TestCase):
                 "resources/extension-host/host.mjs",
                 "build/source-layout.json",
                 "build/download/artifacts.py",
+                "build/builtin/__init__.py",
                 "build/prepare.py",
                 "resources/extension-host/node.mjs",
                 "resources/extension-host/ash.js",
@@ -85,7 +86,7 @@ class PrepareTests(unittest.TestCase):
 
     def test_development_modes_and_remote_catalog_are_explicit(self) -> None:
         self.assertEqual(
-            "host-provided-node", prepare.parse_arguments([]).javascript_runtime
+            "packaged-node", prepare.parse_arguments([]).javascript_runtime
         )
         options = prepare.parse_arguments(
             [
@@ -407,7 +408,9 @@ class PrepareTests(unittest.TestCase):
                 archive_sha256="b" * 64,
             )
             runtime.executable.write_text("rg")
-            args = prepare.parse_arguments([])
+            args = prepare.parse_arguments(
+                ["--javascript-runtime", "host-provided-node"]
+            )
 
             def capability(output, *_):
                 output.mkdir(parents=True)

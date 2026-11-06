@@ -9,7 +9,6 @@ from fnmatch import fnmatchcase
 import json
 import os
 import shlex
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -20,15 +19,12 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LANGUAGES = ("just", "rust", "python", "typescript", "config")
+LANGUAGES = ("just", "rust", "python")
 CONFIGURATION = (
     ".just-version",
     "Cargo.toml",
     "rust-toolchain.toml",
     "rustfmt.toml",
-    ".prettierrc.toml",
-    "tsfmt.json",
-    ".prettierignore",
     ".gitignore",
     ".editorconfig",
     "pyproject.toml",
@@ -36,17 +32,6 @@ CONFIGURATION = (
     ".ruff.toml",
     "scripts/pyproject.toml",
 )
-
-
-FRONTEND_FORMATTER_INPUTS = {
-    "typescript": {"build/format.ts", "tsfmt.json"},
-    "config": {".gitignore", ".prettierignore", ".prettierrc.toml"},
-}
-FRONTEND_TOOLCHAIN_INPUTS = {
-    "package.json",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
-}
 
 
 @dataclass(frozen=True)
@@ -103,31 +88,16 @@ def commands(check: bool, language: str | None = None) -> tuple[Command, ...]:
             "scripts",
         )
     )
-    pnpm = package_manager() if language in (None, "typescript", "config") else ""
-    action = "" if check else ":fix"
     configured = {
         "just": lambda: Command("Just", tuple(just)),
         "rust": lambda: rust_command(check),
         "python": lambda: Command("Python", tuple(python)),
-        "typescript": lambda: Command(
-            "TypeScript/JavaScript", (pnpm, f"format:ts{action}")
-        ),
-        "config": lambda: Command(
-            "Configuration/documentation", (pnpm, f"format:config{action}")
-        ),
     }
     return tuple(
         create()
         for key, create in configured.items()
         if language is None or key == language
     )
-
-
-def package_manager() -> str:
-    pnpm = shutil.which("pnpm")
-    if pnpm is None:
-        raise FileNotFoundError("Install the pnpm version declared in package.json.")
-    return pnpm
 
 
 def check_just_version(root: Path) -> None:
@@ -221,13 +191,9 @@ def scoped_commands(
     root: Path,
     files: set[str],
     language: str | None,
-    *,
-    full_frontend_checks: frozenset[str] = frozenset(),
 ) -> list[Command]:
     configured = []
-    mode = "--check" if check else "--write"
     enabled = set(LANGUAGES) if language is None else {language}
-    enabled -= full_frontend_checks
     if "just" in enabled and "justfile" in files:
         configured.append(
             Command(
@@ -269,59 +235,6 @@ def scoped_commands(
                     root,
                 )
             )
-    frontend = [
-        name
-        for name in files
-        if Path(name).suffix
-        in {".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"}
-    ]
-    config = [
-        str(root / name)
-        for name in sorted(files)
-        if Path(name).suffix
-        in {".json", ".jsonc", ".yml", ".yaml", ".md", ".css", ".html"}
-    ]
-    if ("typescript" in enabled and frontend) or ("config" in enabled and config):
-        # Invoke pnpm's native runtime directly, without a package-manager shim.
-        bun = str(
-            REPOSITORY_ROOT
-            / "node_modules/bun"
-            / ("bun.exe" if os.name == "nt" else "bun")
-        )
-        if "typescript" in enabled and frontend:
-            configured.append(
-                Command(
-                    "TypeScript/JavaScript",
-                    (
-                        bun,
-                        str(REPOSITORY_ROOT / "build/format.ts"),
-                        mode,
-                        "--content-root",
-                        str(root),
-                    ),
-                )
-            )
-        if "config" in enabled:
-            for batch in chunks(config):
-                configured.append(
-                    Command(
-                        "Configuration/documentation",
-                        (
-                            bun,
-                            "fmt",
-                            mode,
-                            "--config",
-                            str(root / ".prettierrc.toml"),
-                            "--ignore-path",
-                            str(root / ".gitignore"),
-                            "--ignore-path",
-                            str(root / ".prettierignore"),
-                            "--",
-                            *batch,
-                        ),
-                        root,
-                    )
-                )
     return configured
 
 
@@ -416,22 +329,7 @@ def scoped(
         root = Path(directory)
         snapshot_files(root, selected)
         originals = {name: (root / name).read_bytes() for name in selected}
-        full_frontend_checks = frozenset(
-            formatter
-            for formatter, inputs in FRONTEND_FORMATTER_INPUTS.items()
-            if check
-            and changed is not None
-            and not paths
-            and language in (None, formatter)
-            and selected & (inputs | FRONTEND_TOOLCHAIN_INPUTS)
-        )
-        checks = scoped_commands(
-            check, root, selected, language, full_frontend_checks=full_frontend_checks
-        )
-        for formatter in sorted(full_frontend_checks):
-            print(f"Checking all {formatter} files because formatter inputs changed.")
-            checks.extend(commands(check, formatter))
-        success = execute(checks)
+        success = execute(scoped_commands(check, root, selected, language))
         if language in (None, "rust"):
             success = scoped_rust(check, root, selected) and success
         if not success:

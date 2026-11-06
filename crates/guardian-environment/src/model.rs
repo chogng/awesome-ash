@@ -1,16 +1,15 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum EntryKind {
     Fact,
     Target,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SourceKind {
     ProjectFile,
@@ -21,7 +20,7 @@ pub enum SourceKind {
 }
 
 /// A source identifies the exact observation, never a permission to read its parent directory.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EnvironmentSource {
     pub id: String,
@@ -29,12 +28,11 @@ pub struct EnvironmentSource {
     pub label: String,
     pub revision: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub command: Option<CommandEvidence>,
 }
 
 /// Counts cover the scanned commands; samples are the newest references from distinct Sessions.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CommandEvidence {
     pub occurrences: u32,
@@ -43,15 +41,13 @@ pub struct CommandEvidence {
 }
 
 /// Immutable history coordinates, not an endorsement of the command or its targets.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CommandSource {
     pub session_id: String,
     pub thread_id: String,
     pub turn_id: String,
-    #[ts(type = "number")]
     pub sequence: u64,
-    #[ts(type = "number")]
     pub recorded_at_unix_ms: u64,
 }
 
@@ -62,7 +58,7 @@ pub struct CommandRecord {
     pub arguments_json: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EnvironmentEntry {
     pub id: String,
@@ -75,7 +71,7 @@ pub struct EnvironmentEntry {
     pub current: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EntryInput {
     pub id: String,
@@ -83,14 +79,12 @@ pub struct EntryInput {
     pub title: String,
     pub content: String,
     /// None creates a user-authored entry. Clients cannot supply source labels or revisions.
-    #[ts(optional = nullable)]
     pub source_id: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EnvironmentProfile {
-    #[ts(type = "number")]
     pub revision: u64,
     pub entries: Vec<EnvironmentEntry>,
     /// Latest bounded project observations. They never inherit user acceptance or target trust.
@@ -98,16 +92,15 @@ pub struct EnvironmentProfile {
     pub observations: Vec<EnvironmentEntry>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvironmentDraft {
     pub id: String,
-    #[ts(type = "number")]
     pub base_revision: u64,
     pub entries: Vec<EnvironmentEntry>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ScanOptions {
     pub recent_commands: bool,
@@ -117,7 +110,7 @@ pub struct ScanOptions {
     pub history: HistoryScanOptions,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HistoryScanOptions {
     pub sessions: u32,
@@ -151,13 +144,11 @@ impl HistoryScanOptions {
 }
 
 /// Coverage describes the bounded scan, not the completeness of the project's environment.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HistoryCoverage {
-    #[ts(type = "number")]
     pub sessions_available: u64,
     pub sessions_scanned: u32,
-    #[ts(type = "number")]
     pub commands_available: u64,
     pub commands_scanned: u32,
     pub facts_available: u32,

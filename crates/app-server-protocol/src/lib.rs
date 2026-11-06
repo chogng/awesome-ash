@@ -18,17 +18,11 @@ pub use web::{
 };
 pub mod protocol;
 pub mod rpc;
-#[cfg(any(test, feature = "export"))]
-mod typescript_decoder;
 
-#[cfg(any(test, feature = "export"))]
-pub use export::GENERATED_TYPESCRIPT_HEADER;
 #[cfg(any(test, feature = "export"))]
 pub use export::json_schema;
 #[cfg(any(test, feature = "export"))]
 pub use export::protocol_metadata;
-#[cfg(any(test, feature = "export"))]
-pub use export::typescript_files;
 pub use listen_info::AppServerListenInfo;
 pub use listen_info::AppServerListenInfoError;
 pub use schema::schema_hash;
@@ -43,9 +37,5 @@ mod protocol_compatibility_tests;
 
 #[cfg(not(any(test, feature = "json-schema")))]
 pub(crate) use noop_macros::JsonSchema;
-#[cfg(not(any(test, feature = "export")))]
-pub(crate) use noop_macros::TS;
 #[cfg(any(test, feature = "json-schema"))]
 pub(crate) use schemars::JsonSchema;
-#[cfg(any(test, feature = "export"))]
-pub(crate) use ts_rs::TS;

@@ -23,7 +23,6 @@ use std::sync::Arc;
 use std::sync::Weak;
 use std::time::Duration;
 use std::time::Instant;
-use ts_rs::TS;
 
 const HISTOGRAM_BOUNDS: &[f64] = &[
     0., 1., 5., 10., 25., 50., 100., 250., 500., 1_000., 2_500., 5_000., 10_000., 30_000., 60_000.,
@@ -77,7 +76,7 @@ impl MetricOutcome {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MetricKind {
     Counter,
@@ -86,29 +85,23 @@ pub enum MetricKind {
 
 /// Counts for disjoint buckets, with one final bucket above the last bound.
 /// All bounds are integers because this meter records whole milliseconds and token counts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MetricDistribution {
-    #[ts(type = "number[]")]
     pub bounds: Vec<u64>,
-    #[ts(type = "number[]")]
     pub bucket_counts: Vec<u64>,
-    #[ts(type = "number | null")]
     pub min: Option<u64>,
-    #[ts(type = "number | null")]
     pub max: Option<u64>,
 }
 
 /// One cumulative SDK time series. Histogram count/total describe milliseconds or tokens;
 /// counter count and total both hold the cumulative counter value. Tags are local metadata.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MetricSeries {
     pub name: String,
     pub tags: BTreeMap<String, String>,
-    #[ts(type = "number")]
     pub count: u64,
-    #[ts(type = "number")]
     pub total: u64,
     pub kind: MetricKind,
     pub distribution: Option<MetricDistribution>,

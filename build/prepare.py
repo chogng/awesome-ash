@@ -84,7 +84,7 @@ def parse_arguments(arguments: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--javascript-runtime",
         choices=("host-provided-node", "packaged-node"),
-        default="host-provided-node",
+        default="packaged-node",
     )
     parser.add_argument("--remote-runtime-bundle", type=Path)
     parser.add_argument("--remote-runtime-catalog-url")
@@ -235,6 +235,7 @@ def package_sources(root: Path) -> list[Path]:
         if not path.name.startswith("test_")
         and path.name not in {"__init__.py", "package_test_support.py"}
     ]
+    sources.append(root / "build/builtin/__init__.py")
     sources.append(root / "build/download/artifacts.py")
     sources.append(root / "build/source-layout.json")
     sources += [

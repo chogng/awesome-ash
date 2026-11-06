@@ -10,9 +10,8 @@ const SHA256_PREFIX: &str = "sha256:";
 const SHA256_HEX_BYTES: usize = 64;
 
 /// Exact SHA-256 identity of one immutable content byte sequence.
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, schemars::JsonSchema, ts_rs::TS)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, schemars::JsonSchema)]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct ContentDigest(String);
 
 impl ContentDigest {
@@ -76,7 +75,7 @@ impl fmt::Display for InvalidContentDigest {
 impl std::error::Error for InvalidContentDigest {}
 
 /// Agent Skills-compatible name, unique within one Skill source.
-#[derive(Clone, Debug, Eq, Hash, schemars::JsonSchema, Ord, PartialEq, PartialOrd, ts_rs::TS)]
+#[derive(Clone, Debug, Eq, Hash, schemars::JsonSchema, Ord, PartialEq, PartialOrd)]
 pub struct SkillName(String);
 
 impl SkillName {
@@ -154,7 +153,7 @@ impl fmt::Display for InvalidSkillName {
 impl std::error::Error for InvalidSkillName {}
 
 /// Stable identity for one configured, built-in, directory, or Plugin Skill source.
-#[derive(Clone, Debug, Eq, Hash, schemars::JsonSchema, Ord, PartialEq, PartialOrd, ts_rs::TS)]
+#[derive(Clone, Debug, Eq, Hash, schemars::JsonSchema, Ord, PartialEq, PartialOrd)]
 pub struct SkillSourceId(String);
 
 impl SkillSourceId {
@@ -238,17 +237,7 @@ impl std::error::Error for InvalidSkillSourceId {}
 
 /// Source-qualified stable identity for one Skill.
 #[derive(
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    schemars::JsonSchema,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    Serialize,
-    Deserialize,
-    ts_rs::TS,
+    Clone, Debug, Eq, Hash, schemars::JsonSchema, Ord, PartialEq, PartialOrd, Serialize, Deserialize,
 )]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SkillId {
@@ -263,7 +252,7 @@ impl SkillId {
 }
 
 /// Selects whether a new activation follows the current catalog or requires exact bytes.
-#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize, ts_rs::TS)]
+#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -275,7 +264,7 @@ pub enum SkillVersionSelector {
 }
 
 /// Catalog-owned Skill selection that never exposes a host filesystem path.
-#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize, ts_rs::TS)]
+#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SkillRef {
     pub id: SkillId,
@@ -298,9 +287,7 @@ impl SkillRef {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize, ts_rs::TS,
-)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SkillActivationReason {
     Explicit,
@@ -308,12 +295,11 @@ pub enum SkillActivationReason {
 }
 
 /// Durable exact Skill provenance frozen before a Turn is accepted.
-#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize, ts_rs::TS)]
+#[derive(Clone, Debug, Deserialize, Eq, schemars::JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FrozenSkillActivation {
     pub id: SkillId,
     pub content_digest: ContentDigest,
-    #[ts(type = "number")]
     pub catalog_generation: u64,
     pub reason: SkillActivationReason,
 }

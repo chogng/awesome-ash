@@ -1,10 +1,9 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::SessionId;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionListParams {
     /// Omit for a draft: lists the user and currently authorized environment directory only.
@@ -12,14 +11,14 @@ pub struct InstructionListParams {
     pub session_id: Option<SessionId>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum InstructionScopeDto {
     User,
     Directory,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum InstructionLoadDto {
     Global,
@@ -28,7 +27,7 @@ pub enum InstructionLoadDto {
 }
 
 /// Metadata only; listing does not attach instruction bodies to a Turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionDto {
     pub path: String,
@@ -39,14 +38,14 @@ pub struct InstructionDto {
     pub patterns: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionDiagnosticDto {
     pub path: String,
     pub message: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionListResult {
     pub instructions: Vec<InstructionDto>,
@@ -54,7 +53,7 @@ pub struct InstructionListResult {
 }
 
 /// Empty sources previews all discovered instructions from the selected source; otherwise select exact relative paths.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InstructionImportPreviewParams {
     /// Selects both source layout and destination ownership; never inferred from a path.
@@ -65,7 +64,7 @@ pub struct InstructionImportPreviewParams {
     pub sources: Vec<String>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum InstructionImportStatus {
     Ready,
@@ -76,7 +75,7 @@ pub enum InstructionImportStatus {
     Failed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionImportItem {
     pub source: String,
@@ -86,7 +85,7 @@ pub struct InstructionImportItem {
     pub message: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionImportPreviewResult {
     /// Canonical destination root; item targets are relative to this directory.
@@ -97,7 +96,7 @@ pub struct InstructionImportPreviewResult {
 }
 
 /// Applies exactly a reviewed selection. A stale digest is rejected before any writes.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InstructionImportParams {
     /// Selects both source layout and destination ownership; never inferred from a path.
@@ -110,14 +109,14 @@ pub struct InstructionImportParams {
 }
 
 /// Publication is atomic per file. Inspect every item; a failed item does not roll back earlier files.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionImportResult {
     pub items: Vec<InstructionImportItem>,
 }
 
 /// External instruction format. No implicit default or runtime source registration.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum InstructionImportSource {
     Copilot,

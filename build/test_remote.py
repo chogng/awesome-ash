@@ -174,7 +174,6 @@ class RemotePackageTests(unittest.TestCase):
             with (
                 patch.object(app_server, "REPOSITORY_ROOT", sources),
                 patch.object(app_server, "generate_protocol", return_value=False),
-                patch.object(app_server, "_prepare_builtin_extensions"),
                 patch(
                     "build.lib.package_binaries.cargo_command_packages",
                     return_value=set(),

@@ -37,10 +37,9 @@ use crate::TurnKind;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Durable authority selected before a Tool Call crosses its side-effect boundary.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -69,7 +68,7 @@ pub enum ToolExecutionAuthority {
 ///
 /// This enum deliberately excludes token deltas, delivery notifications, and client requests so
 /// persistence adapters cannot accidentally append transient runtime messages.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -101,28 +100,23 @@ pub enum ThreadEvent {
     ThreadCreated {
         /// Absent only in history written before schema version 16.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         agent_id: Option<crate::AgentId>,
         #[serde(default, skip_serializing_if = "crate::ThreadOrigin::is_root")]
         origin: crate::ThreadOrigin,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         agent: Option<crate::AgentConfiguration>,
         session_id: SessionId,
         thread_id: ThreadId,
         title: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         surface: Option<crate::SessionSurface>,
         /// The root Thread records the Session execution authority. Descendants inherit it.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         execution_target: Option<crate::SessionExecutionTarget>,
     },
     /// Changes future model selections without rewriting historical invocation or billing facts.
     ModelProvidersMigrated {
         thread_id: ThreadId,
-        #[ts(type = "Record<string, string>")]
         providers: std::collections::BTreeMap<crate::ProviderId, crate::ProviderId>,
     },
     AdvisorConfigured {
@@ -202,28 +196,22 @@ pub enum ThreadEvent {
     ForkHistoryImported {
         thread_id: ThreadId,
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
         turns: Vec<Turn>,
     },
     ForkTurnImported {
         thread_id: ThreadId,
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
-        #[ts(type = "number")]
         turn_index: u64,
         turn: Box<Turn>,
     },
     ForkHistoryImportCompleted {
         thread_id: ThreadId,
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
-        #[ts(type = "number")]
         imported_turn_count: u64,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         context_checkpoint: Option<ContextCheckpoint>,
     },
     ContextCheckpointCommitted {
@@ -246,7 +234,6 @@ pub enum ThreadEvent {
         ///
         /// Historical events written before instruction snapshots omit this field.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         instructions: Option<TurnInstructions>,
         #[serde(default = "legacy_turn_action_policy_revision")]
         policy_revision: String,
@@ -257,16 +244,12 @@ pub enum ThreadEvent {
         #[serde(default)]
         activated_skills: Vec<FrozenSkillActivation>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         model: Option<ModelRef>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         reasoning_effort: Option<crate::ReasoningEffort>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         advisor: Option<crate::AdvisorConfig>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         tool_profile: Option<ToolProfileSnapshot>,
     },
     TurnStarted {
@@ -304,7 +287,6 @@ pub enum ThreadEvent {
         turn_id: TurnId,
         usage: Option<ModelUsage>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         input_estimate: Option<ModelInputEstimate>,
     },
     ModelInvocationRecorded {
@@ -314,10 +296,8 @@ pub enum ThreadEvent {
     },
     ItemCompleted {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable, type = "number")]
         checkpoint_after_sequence: Option<u64>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         workspace_checkpoint: Option<crate::WorkspaceCheckpoint>,
         thread_id: ThreadId,
         turn_id: TurnId,
@@ -386,7 +366,6 @@ pub enum ThreadEvent {
         turn_id: TurnId,
         /// Policy stops retain their cause across replay; user cancellation has no error.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         error: Option<StableTurnError>,
     },
     DelegationRequested {

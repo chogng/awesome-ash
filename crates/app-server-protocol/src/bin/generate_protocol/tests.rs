@@ -1,26 +1,7 @@
 use super::Artifact;
 use super::Command;
-use super::write_typescript_files;
-use ash_app_server_protocol::GENERATED_TYPESCRIPT_HEADER;
 use std::path::PathBuf;
 use std::time::SystemTime;
-
-#[test]
-fn parses_a_typescript_output_directory() {
-    let command = Command::parse([
-        "typescript".to_owned(),
-        "--out".to_owned(),
-        "generated/app-server".to_owned(),
-    ])
-    .unwrap();
-
-    let Command::Generate {
-        artifact,
-        output_directory,
-    } = command;
-    assert!(matches!(artifact, Artifact::TypeScript));
-    assert_eq!(output_directory, PathBuf::from("generated/app-server"));
-}
 
 #[test]
 fn parses_a_complete_contract_output_directory() {
@@ -50,37 +31,7 @@ fn rejects_missing_and_extra_arguments() {
 }
 
 #[test]
-fn generation_removes_only_stale_generated_typescript() {
-    let unique = SystemTime::now()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
-        .as_nanos();
-    let directory = std::env::temp_dir().join(format!(
-        "ash-app-server-protocol-{}-{unique}",
-        std::process::id()
-    ));
-    std::fs::create_dir_all(&directory).unwrap();
-    std::fs::write(
-        directory.join("stale.ts"),
-        format!("{GENERATED_TYPESCRIPT_HEADER}export type Stale = never;\n"),
-    )
-    .unwrap();
-    std::fs::write(
-        directory.join("handwritten.ts"),
-        "export const keep = true;\n",
-    )
-    .unwrap();
-
-    write_typescript_files(&directory).unwrap();
-
-    assert!(!directory.join("stale.ts").exists());
-    assert!(directory.join("handwritten.ts").exists());
-    assert!(directory.join("types/ModelRef.ts").exists());
-    std::fs::remove_dir_all(directory).unwrap();
-}
-
-#[test]
-fn writes_metadata_without_exporting_typescript() {
+fn writes_only_metadata_and_leaves_identical_files_untouched() {
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap()

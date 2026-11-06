@@ -683,7 +683,7 @@ fn screen_controls_round_trip_and_reject_ambiguous_targets() {
 
 #[test]
 fn extension_packages_search_supports_capabilities_and_exact_language_routes() {
-    let mut capabilities = super::ServerCapabilities {
+    let mut capabilities = crate::protocol::initialize::ServerCapabilities {
         extension_management: true,
         extensions: true,
         ..Default::default()

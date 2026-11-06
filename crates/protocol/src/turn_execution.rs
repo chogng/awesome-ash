@@ -1,13 +1,12 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Legacy durable binding from a local Thread to an external full-Turn execution runtime.
 ///
 /// Ash no longer creates these bindings. The type remains serializable so existing Thread history
 /// can still be read without discarding its original recovery facts.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnExecutionBinding {
     pub backend: String,

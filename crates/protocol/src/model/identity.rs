@@ -3,14 +3,13 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 use serde::Deserializer;
 use std::fmt;
 
 macro_rules! model_identifier {
     ($name:ident, $label:literal) => {
-        #[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
+        #[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
         pub struct $name(String);
 
         impl $name {
@@ -50,7 +49,7 @@ model_identifier!(ProviderId, "provider ID");
 model_identifier!(ModelId, "model ID");
 model_identifier!(ModelConnectionId, "model connection ID");
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelRef {
     pub provider: ProviderId,

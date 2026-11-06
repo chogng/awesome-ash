@@ -6,18 +6,16 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
-use ts_rs::TS;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DynamicToolSpec {
     pub name: ToolName,
     pub description: String,
-    #[ts(type = "unknown")]
     pub input_schema: Value,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DynamicToolCall {
     pub call_id: ToolCallId,
@@ -27,11 +25,10 @@ pub struct DynamicToolCall {
     /// Interaction owners must echo results only for this frozen definition. This prevents a
     /// same-name tool installed after a restart or hot reload from claiming an older invocation.
     pub definition_digest: String,
-    #[ts(type = "unknown")]
     pub arguments: Value,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DynamicToolResponse {
     pub call_id: ToolCallId,
@@ -39,7 +36,7 @@ pub struct DynamicToolResponse {
     pub success: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

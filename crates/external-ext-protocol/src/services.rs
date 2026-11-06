@@ -6,7 +6,6 @@ use serde::Serialize;
 /// Closed service calls; the host binds namespace and network authority at activation.
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     tag = "service",
     rename_all = "camelCase",
@@ -52,7 +51,6 @@ pub enum CoreServiceRequest {
 /// Methods permitted by the shared unary HTTP transport.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum CoreHttpMethod {
     Get,
@@ -65,7 +63,6 @@ pub enum CoreHttpMethod {
 /// Core service replies stay on private runtime pipes, never on renderer RPC.
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     tag = "service",
     rename_all = "camelCase",

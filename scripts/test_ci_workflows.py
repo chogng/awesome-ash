@@ -140,69 +140,6 @@ class CiWorkflowTests(unittest.TestCase):
             workflow.split("\n  binding:\n", 1)[0],
         )
 
-    def test_component_fixture_sources_select_the_blocking_screenshot_workflow(
-        self,
-    ) -> None:
-        for path in (
-            "src/ash/base/browser/ui/selectbox/selectbox.css",
-            "test/componentFixtures/blocks-ci-screenshots.md",
-            "test/componentFixtures/component-explorer-diff.json",
-            "build/lib/screenshotBlocksCi.ts",
-            ".github/workflows/component-fixtures.yml",
-        ):
-            with self.subTest(path=path):
-                self.assertTrue(
-                    ci_workflows.select([path], self.policy)["component-fixtures"]
-                )
-        workflow = (ROOT / ".github/workflows/component-fixtures.yml").read_text()
-        self.assertIn("pnpm test:component-fixtures:prepared", workflow)
-        self.assertIn("pnpm test:component-fixtures:screenshots:prepared", workflow)
-        self.assertIn("pnpm test:component-fixtures:compare:prepared", workflow)
-        self.assertIn("node build/lib/screenshotBlocksCi.ts", workflow)
-        self.assertIn("actions/upload-artifact@", workflow)
-        self.assertNotIn("continue-on-error", workflow)
-        self.assertNotIn("contents: write", workflow)
-
-    def test_formatter_changes_select_their_behavior_test_owners(self) -> None:
-        for path in (
-            "build/format.ts",
-            ".prettierignore",
-            ".prettierrc.toml",
-            "tsfmt.json",
-            ".editorconfig",
-            ".gitignore",
-            ".vscode/settings.json",
-            ".vscode/extensions.json",
-            "package.json",
-            "pnpm-lock.yaml",
-            "pnpm-workspace.yaml",
-        ):
-            with self.subTest(path=path):
-                selected = ci_workflows.select([path], self.policy)
-                self.assertTrue(selected["frontend"])
-        for path in (
-            "scripts/format.py",
-            "scripts/test_format.py",
-            ".github/workflows/format.yml",
-        ):
-            with self.subTest(path=path):
-                selected = ci_workflows.select([path], self.policy)
-                self.assertTrue(selected["frontend"])
-                if path.startswith("scripts/"):
-                    self.assertTrue(selected["tooling"])
-
-    def test_formatter_behavior_tests_do_not_block_the_source_format_gate(self) -> None:
-        formatting = (ROOT / ".github/workflows/format.yml").read_text()
-        self.assertNotIn("pnpm test:format", formatting)
-        self.assertNotIn("test_format", formatting)
-        frontend = (ROOT / ".github/workflows/frontend.yml").read_text()
-        contracts = frontend.split("\n  contracts:\n")[1].split(
-            "\n  desktop-runtime:\n"
-        )[0]
-        self.assertIn("test_format.ScopedFormattingTests", contracts)
-        self.assertIn("pnpm install --frozen-lockfile", contracts)
-        self.assertIn("scripts/install_python_tools.py", contracts)
-
     def test_just_version_and_setup_changes_select_all_consumers(self) -> None:
         policy = ci_workflows.load_policy(ci_workflows.POLICY)
         for name in (".just-version", ".github/actions/setup-just/action.yml"):
@@ -280,41 +217,6 @@ class CiWorkflowTests(unittest.TestCase):
                 ci_workflows.main(["select", "--since-successful-main"]), 0
             )
         self.assertTrue(all(json.loads(output.getvalue()).values()))
-
-    def test_windows_desktop_release_prepares_the_locked_python_environment(
-        self,
-    ) -> None:
-        workflow = (ROOT / ".github/workflows/release-windows.yml").read_text()
-        steps = re.split(r"\n      - ", workflow)[1:]
-        setup = next(
-            index for index, step in enumerate(steps) if "actions/setup-python@" in step
-        )
-        uv = next(
-            index for index, step in enumerate(steps) if "astral-sh/setup-uv@" in step
-        )
-        sync = next(
-            index
-            for index, step in enumerate(steps)
-            if "scripts/install_python_tools.py" in step
-        )
-        install = next(
-            index
-            for index, step in enumerate(steps)
-            if "pnpm install --frozen-lockfile" in step
-        )
-        bundle = next(
-            index
-            for index, step in enumerate(steps)
-            if "pnpm package:win32:bundle" in step
-        )
-        self.assertLess(setup, uv)
-        self.assertLess(uv, sync)
-        self.assertLess(sync, install)
-        self.assertLess(install, bundle)
-        for index in (setup, uv, sync):
-            self.assertIn("if: matrix.target == 'x86_64-pc-windows-msvc'", steps[index])
-        self.assertIn('python-version: "3.11"', steps[setup])
-        self.assertIn("version-file: scripts/pyproject.toml", steps[uv])
 
     def setUp(self) -> None:
         self.policy = ci_workflows.load_policy(ci_workflows.POLICY)
@@ -399,33 +301,26 @@ class CiWorkflowTests(unittest.TestCase):
         cases = {
             "resources/extension-host/ash.js": {
                 "bazel",
-                "frontend",
                 "rust-warnings",
                 "tooling",
             },
-            "src/ash/editor/browser/view.ts": {"frontend"},
-            "third_party/node/runtime-lock.json": {"frontend", "tooling"},
-            "sdk/rust/src/lib.rs": {"bazel", "frontend"},
-            "sdk/typescript/package.json": {"bazel", "frontend"},
-            "sdk/typescript/index.js": {"bazel", "frontend"},
-            "sdk/typescript/index.d.ts": {"bazel", "frontend"},
-            "examples/extensions/inspect/extension.ts": {"bazel", "frontend"},
+            "third_party/node/runtime-lock.json": {"tooling"},
+            "sdk/rust/src/lib.rs": {"bazel", "rust-build-health", "rust-warnings"},
+            "app/src/main.rs": {"native-desktop"},
+            "app/Cargo.lock": {"native-desktop"},
             "crates/tui/src/app.rs": {
                 "bazel",
-                "frontend",
                 "rust-build-health",
                 "rust-warnings",
             },
             "build/lib/package.py": {
                 "bazel",
-                "frontend",
                 "rust-build-health",
                 "rust-warnings",
                 "tooling",
             },
             "crates/livekit-client/src/lib.rs": {
                 "bazel",
-                "frontend",
                 "rust-build-health",
                 "rust-warnings",
                 "media",
@@ -443,19 +338,6 @@ class CiWorkflowTests(unittest.TestCase):
                 self.assertTrue(
                     ci_workflows.select([path], self.policy)["rust-warnings"]
                 )
-
-    def test_frontend_runs_the_typescript_sdk_author_contract(self) -> None:
-        frontend = (ROOT / ".github/workflows/frontend.yml").read_text()
-        contracts = frontend.split("\n  contracts:\n")[1].split(
-            "\n  desktop-runtime:\n"
-        )[0]
-        self.assertIn("pnpm --dir build run test:prepared", contracts)
-        build = json.loads((ROOT / "build/package.json").read_text())
-        self.assertEqual(
-            build["scripts"]["test:prepared"],
-            'node --test --test-concurrency=1 "**/*.test.ts"',
-        )
-        self.assertTrue((ROOT / "build/builtin/typescriptSdk.test.ts").is_file())
 
     def test_root_files_globs_and_control_changes(self) -> None:
         self.assertTrue(ci_workflows.matches("**/Cargo.toml", "Cargo.toml"))

@@ -1,20 +1,8 @@
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountCreditBalanceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountLoginCancelParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountLoginCancelResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountLoginCancelStatusDto;
 use crate::protocol::account::AccountLoginCompleted;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountLoginCompletionStatusDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountLoginFailureDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountLoginMethodDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountLoginStartParams;
 #[cfg(any(test, feature = "export"))]
@@ -24,22 +12,12 @@ use crate::protocol::account::AccountLogoutParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountLogoutResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountLogoutStatusDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountRateLimitDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountRateLimitWindowDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountRateLimitsReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountRateLimitsReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::account::AccountReadResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountStatusDto;
 use crate::protocol::account::AccountUpdated;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::account::AccountXaiUsageDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::agent::AgentCapabilitiesReadResult;
 #[cfg(any(test, feature = "export"))]
@@ -49,27 +27,7 @@ use crate::protocol::agent::AgentReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::agent::AgentRoleCatalogResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::AgentRoleEntry;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::agent::AgentRoleListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::AgentThread;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::AgentToolCapabilityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::AgentToolSourceGroupDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::SandboxDiagnosticDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::SandboxNetworkModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::SandboxReadinessDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::ToolAuthorityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::ToolExposureDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::agent::ToolSourceDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::approval_environment::ApprovalEnvironmentCancelParams;
 #[cfg(any(test, feature = "export"))]
@@ -83,10 +41,6 @@ use crate::protocol::approval_environment::ApprovalEnvironmentScanParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::approval_environment::ApprovalEnvironmentScanResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::approval_environment::ApprovalEnvironmentScope;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::assets::AssetCatalogEntry;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::assets::AssetCatalogParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::assets::AssetCatalogResult;
@@ -96,8 +50,6 @@ use crate::protocol::assets::AssetCatalogUpdateParams;
 use crate::protocol::assets::AssetCollection;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::assets::AssetCollectionDeleteParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::assets::AssetImageType;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::assets::AssetImportParams;
 #[cfg(any(test, feature = "export"))]
@@ -119,8 +71,6 @@ use crate::protocol::attachments::AttachmentMaterializeResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::attachments::AttachmentResourceOpenParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::backup::BackupContentDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupDiscardParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupListPageParams;
@@ -137,43 +87,21 @@ use crate::protocol::backup::BackupMoveResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupRecordDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::backup::BackupRevisionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::backup::BackupWorkspaceDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupWorkspacesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupWorkspacesResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::backup::BackupWriteParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::common::TextDocumentsCapability;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugBreakpointDefinition;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugConsoleParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugDataBreakpoint;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugFunctionBreakpoint;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugSessionLifecycleParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugSessionPrepareParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugSourceBreakpoint;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugWorkspaceEdit;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugWorkspaceReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugWorkspaceResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugWorkspaceSnapshot;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugWorkspaceState;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugWorkspaceStatus;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugWorkspaceWriteParams;
 #[cfg(any(test, feature = "export"))]
@@ -181,33 +109,17 @@ use crate::protocol::extension_host::ExtensionClientRequestParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsAddSourceParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsAvailableUpdateDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsSetSourceEnabledParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsSetUpdatePolicyParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsSourcesResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsUpdatePolicyDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsUpdatesResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::{ExtensionRegistryKindDto, ExtensionsSourceDto};
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitAIContributionParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitAIContributionResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitAIEditorEvidenceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitInteractionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRemovalEntryDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRemovalFileDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRemovalModeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitRemovalReviewResult;
 #[cfg(any(test, feature = "export"))]
@@ -216,8 +128,6 @@ use crate::protocol::git::GitRemoveFilesParams;
 use crate::protocol::message_history::MessageHistoryAppendParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::message_history::MessageHistoryEntry;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::message_history::MessageHistoryKind;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::message_history::MessageHistoryPage;
 #[cfg(any(test, feature = "export"))]
@@ -237,10 +147,6 @@ use crate::protocol::text_document::TextDocumentApplyParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::text_document::TextDocumentApplyResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::text_document::TextDocumentChangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::text_document::TextDocumentContentDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::text_document::TextDocumentListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::text_document::TextDocumentListResult;
@@ -252,103 +158,19 @@ use crate::protocol::text_document::TextDocumentReadResult;
 use crate::protocol::text_document::TextDocumentReleaseParams;
 use crate::protocol::text_document::TextDocumentTurnFinished;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::text_document::TextDocumentTurnOutcome;
-#[cfg(any(test, feature = "export"))]
-use ash_debug_contract::DebugConsoleEntry;
-#[cfg(any(test, feature = "export"))]
-use ash_debug_contract::DebugConsoleEntryKind;
-#[cfg(any(test, feature = "export"))]
 use ash_debug_contract::DebugConsoleSnapshot;
-#[cfg(any(test, feature = "export"))]
-use ash_debug_contract::DebugExceptionsSnapshot;
-#[cfg(any(test, feature = "export"))]
-use ash_debug_contract::DebugSessionAction;
 #[cfg(any(test, feature = "export"))]
 use ash_debug_contract::DebugSessionAdmission;
 #[cfg(any(test, feature = "export"))]
 use ash_debug_contract::DebugSessionRelation;
 #[cfg(any(test, feature = "export"))]
-use ash_protocol::SymphonyControl;
-#[cfg(any(test, feature = "export"))]
 use ash_protocol::SymphonyConversation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SymphonyMessage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SymphonyMessageRole;
 #[cfg(any(test, feature = "export"))]
 use ash_protocol::SymphonyMessages;
 #[cfg(any(test, feature = "export"))]
 use ash_protocol::SymphonySnapshot;
 #[cfg(any(test, feature = "export"))]
-use ash_protocol::SymphonyTaskStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SymphonyWorkflow;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionClientOperation;
-#[cfg(any(test, feature = "export"))]
 use external_ext_protocol::ExtensionClientResult;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionCommandMenu;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionConfigurationTarget;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDebugSessionOptions;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDiagnostic;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDiagnosticEntry;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDiagnosticSeverity;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDocumentEdit;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionDocumentSnapshot;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionHostInitialization;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionLocalization;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionMessageSeverity;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionProgressOptions;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionQuickPickItem;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionStatusBarAlignment;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionStatusBarCommand;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionStatusBarEntry;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionTextEdit;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionTextPosition;
-#[cfg(any(test, feature = "export"))]
-use external_ext_protocol::ExtensionWorkspaceFolder;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::CommandEvidence;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::CommandSource;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EntryInput;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EntryKind;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EnvironmentDraft;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EnvironmentEntry;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EnvironmentProfile;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::EnvironmentSource;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::HistoryCoverage;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::HistoryScanOptions;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::ScanOptions;
-#[cfg(any(test, feature = "export"))]
-use guardian_environment::SourceKind;
 
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::assets::AssetReadParams;
@@ -387,19 +209,9 @@ use crate::protocol::automation::AutomationStopParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::automation::AutomationWriteParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserBinaryPayload;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserCanvasDefinition;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserCanvasDefinitionId;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserCanvasListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserCanvasListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserCanvasPresentation;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserCdpOperationDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserCloseParams;
 #[cfg(any(test, feature = "export"))]
@@ -408,8 +220,6 @@ use crate::protocol::browser::BrowserConfigureParams;
 use crate::protocol::browser::BrowserCreateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserCreateResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserElementTargetDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserListParams;
 #[cfg(any(test, feature = "export"))]
@@ -422,10 +232,6 @@ use crate::protocol::browser::BrowserNetworkAuthorizeResult;
 use crate::protocol::browser::BrowserObserveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserObserveResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserPageSummary;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserPerformActionDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserPerformParams;
 #[cfg(any(test, feature = "export"))]
@@ -443,17 +249,7 @@ use crate::protocol::browser::BrowserTcpWriteParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::browser::BrowserTcpWriteResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserTextInputTargetDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::browser::BrowserUploadFile;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallControlParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::call::CallDeployment;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::call::CallDocument;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::call::CallDocumentChange;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallDocumentParams;
 #[cfg(any(test, feature = "export"))]
@@ -469,68 +265,34 @@ use crate::protocol::call::CallResourceParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallRoleParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::call::CallScreenFrame;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallScreenFrames;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::call::CallScreenSource;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallScreenSources;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::call::CallStartParams;
 use crate::protocol::call::CallStatus;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::call::ScreenTarget;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CloudCodebaseAuthorizeParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CloudCodebaseDestinationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CloudCodebaseGrantDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CloudCodebasePreviewParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CloudCodebasePreviewResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CloudCodebaseSelectionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CloudCodebaseStateDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CloudCodebaseStatusResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseChunkSpanDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseDeploymentModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseEmbeddingStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseEmbeddingStatusDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseRetrievalDegradationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseRetrievalHitDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CodebaseRetrievalParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CodebaseRetrievalResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseSearchHitDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CodebaseSearchParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CodebaseSearchResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase::CodebaseStateDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase::CodebaseStatusResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase_symbols::CodebaseSymbolsSearchHitDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase_symbols::CodebaseSymbolsSearchParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase_symbols::CodebaseSymbolsSearchResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase_symbols::CodebaseSymbolsStateDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase_symbols::CodebaseSymbolsStatusResult;
 #[cfg(any(test, feature = "export"))]
@@ -539,12 +301,6 @@ use crate::protocol::codebase_symbols::DocumentOverlayCloseParams;
 use crate::protocol::codebase_symbols::DocumentOverlayStatusResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::codebase_symbols::DocumentOverlaySynchronizeParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::codebase_symbols::SymbolKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::Channel;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::ChannelChange;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::ChannelConnectParams;
 #[cfg(any(test, feature = "export"))]
@@ -556,101 +312,37 @@ use crate::protocol::collaboration::ChannelInvitation;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::ChannelInviteParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::ChannelMember;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::ChannelResourceAccess;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::ChannelResourceParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::ChannelRole;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::ChannelSnapshot;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationOpenParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationOpenResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::DocumentCollaborationPresence;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationPresenceParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationPresenceReadParams;
 use crate::protocol::collaboration::DocumentCollaborationPresenceSnapshot;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::collaboration::DocumentCollaborationSnapshot;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationSubmitParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::collaboration::DocumentCollaborationSubmitResult;
 use crate::protocol::collaboration::DocumentCollaborationUpdate;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::AgentInteractionCapability;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::BrowserCapability;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ClientCapabilities;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ClientInfo;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::CommandId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::DirectoryGrantsHostCapability;
 use crate::protocol::common::EmptyParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ItemId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::RequestId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::SchemaHash;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ServerInfo;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ServerOperatingSystem;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::SessionId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::StreamInstanceId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ThreadId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ToolCallId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::ToolName;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::common::TurnId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ApprovalReviewModelSelectionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CodebaseAutomaticContextDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CodebaseConfigDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::CodebaseConfigureParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CodebaseModelsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CommandFileAccessDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CommandNetworkAccessDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::CommitMessageAuthorizeParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::CommitMessageRevokeParams;
 use crate::protocol::config::ConfigChanged;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ConfigCommandDispositionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ConfigCommandResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ConfigReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ConfigUpdateParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CustomProviderConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::CustomProviderProtocolDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::DirectoryGrantsEntryDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::DirectoryGrantsForgetParams;
 #[cfg(any(test, feature = "export"))]
@@ -662,69 +354,23 @@ use crate::protocol::config::DirectoryGrantsReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::DirectoryGrantsSetParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyActionKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyEffectDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyHostMatcherDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyRuleDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ExecPolicyRuleRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ExecPolicyRuleUpsertParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyScopeMatcherDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicySelectorDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecPolicyTokenDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ExecutionConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::FrontendConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::GitAutoFetchModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::GitConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::GrepBackendDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookActionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookEnablementDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookEventDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::HookListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::HookListResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookMatcherDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::HookRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::HookSetEnablementParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::HookSourceDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::HookUpsertParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::LanguageServerConfigDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::LanguageServerConfigureParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::LanguageServerModeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::LanguageServerRemoveParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::McpCredentialBindingDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::McpServerConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::McpServerEnablementDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::McpServerRemoveParams;
 #[cfg(any(test, feature = "export"))]
@@ -732,23 +378,11 @@ use crate::protocol::config::McpServerSetEnablementParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::McpServerUpsertParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::McpTransportDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ModelContextConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ModelRefDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::PluginRequestDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::PluginRequestEnablementDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::PluginRequestRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::PluginRequestSetEnablementParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::PluginRequestUpsertParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ProviderConfigDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ProviderConfigureParams;
 #[cfg(any(test, feature = "export"))]
@@ -756,39 +390,15 @@ use crate::protocol::config::ProviderRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::SkillSourceAddParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::SkillSourceConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::SkillSourceEnablementDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::SkillSourceRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::config::SkillSourceSetEnablementParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::config::TimeContextConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ToolSearchConfigDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::config::ToolSearchConfigureParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ToolSearchEmbeddingStatusDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::ToolSearchModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::TraceConfigDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::config::TraceRecordingStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorAccountDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorApiTokenConnectParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorAvailableActionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorCommandDispositionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorCommandResultDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorConnectionStateDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorCredentialCleanupDto;
 #[cfg(any(test, feature = "export"))]
@@ -806,15 +416,11 @@ use crate::protocol::connectors::ConnectorDisconnectParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorDisconnectResultDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorListResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorOAuthCancelParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorOAuthCompleteParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorOAuthMethodDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorOAuthRefreshParams;
 #[cfg(any(test, feature = "export"))]
@@ -822,16 +428,10 @@ use crate::protocol::connectors::ConnectorOAuthStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorOAuthStartResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::connectors::ConnectorSecretDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::connectors::ConnectorSetEnabledParams;
 use crate::protocol::connectors::ConnectorsChanged;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugAdapterCloseParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugAdapterConnectionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugAdapterMessageDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugAdapterReadParams;
 #[cfg(any(test, feature = "export"))]
@@ -843,29 +443,11 @@ use crate::protocol::debug::DebugAdapterStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugAdapterStartResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugBreakpointBinding;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugBreakpointIntent;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugBreakpointLocation;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugBreakpointUnsupported;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugBreakpointsSetParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugBreakpointsSnapshot;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugDataAccess;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugExceptionFilterDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugExceptionsSetResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugExecutionStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugInitializationPhaseDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugInspection;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugInspectionReadParams;
 #[cfg(any(test, feature = "export"))]
@@ -874,16 +456,6 @@ use crate::protocol::debug::DebugInspectionResult;
 use crate::protocol::debug::DebugInspectionStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugInspectionStartResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugInspectionValue;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugLaunchRequestDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugMessageDirectionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugScopeVariables;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugSessionCapabilitiesDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugSessionConfigureParams;
 #[cfg(any(test, feature = "export"))]
@@ -899,14 +471,6 @@ use crate::protocol::debug::DebugSessionResponseParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::debug::DebugSessionResponseResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugSessionSnapshotDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugSourceAddress;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::debug::DebugWatchValue;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::AgentHostDebugLogFile;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::AgentHostDebugLogsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::AgentHostDebugLogsResult;
@@ -915,46 +479,20 @@ use crate::protocol::diagnostics::FeedbackPrepareParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::FeedbackUploadParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::HttpCompatibilityModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkCheckDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkCheckOutcomeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::NetworkDiagnosticsRunResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkFailureDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::NetworkHttpConfigureParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkPurposeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::NetworkReadResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkRouteDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::NetworkTargetDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationAudioInput;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::dictation::DictationAudioParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationBackend;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationCloudProvider;
 use crate::protocol::dictation::DictationEnded;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationInputDevice;
 use crate::protocol::dictation::DictationModelChanged;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::dictation::DictationModelList;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationModelOperation;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::dictation::DictationModelParams;
 use crate::protocol::dictation::DictationModelProgress;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::dictation::DictationModelStage;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::dictation::DictationModelStartParams;
 #[cfg(any(test, feature = "export"))]
@@ -975,35 +513,17 @@ use crate::protocol::diff::DiffComputeParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::diff::DiffComputeResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::diff::DiffComputeRowDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diff::DiffHunkDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diff::DiffRangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diff::DiffRowKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::DirContributionsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::DirGrantDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::EnvDirDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::EnvDirReadParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::EnvDirSetEntry;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::EnvDirsSetParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::EnvDirsSetResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::PermissionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirAddParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirAddResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::SessionDirDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirListParams;
 #[cfg(any(test, feature = "export"))]
@@ -1013,44 +533,14 @@ use crate::protocol::environment::SessionDirMoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirMoveResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::SessionDirMutationDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirMutationResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirRemoveParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::environment::SessionDirSelector;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::environment::SessionDirectoryGrantSetParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::error::AppServerError;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::error::AppServerErrorData;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::error::AppServerErrorName;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_host::ExtensionHostActivateParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostActivationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostActivationEventDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostCancellationReasonDto;
 use crate::protocol::extension_host::ExtensionHostChanged;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostCommandContributionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostDebugActivationPhaseDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostExtensionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostExternalUriSchemeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostFailureCodeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostFailureDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostInvokeCancelDispositionDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_host::ExtensionHostInvokeCancelParams;
 #[cfg(any(test, feature = "export"))]
@@ -1065,25 +555,7 @@ use crate::protocol::extension_host::ExtensionHostInvokeStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_host::ExtensionHostInvokeStartResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostLanguageProviderOperationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostLifecycleDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostOutputChannelKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostOutputEventDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostOutputOperationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostOutputSeverityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostReconcileModeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_host::ExtensionHostReconcileParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostRegistrationDescriptorDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_host::ExtensionHostRegistrationKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_host::ExtensionHostSnapshotDto;
 #[cfg(any(test, feature = "export"))]
@@ -1093,27 +565,13 @@ use crate::protocol::extension_items::ExtensionItemsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_items::ExtensionItemsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionCatalogReloadDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionDiagnosticCodeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionDiagnosticDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extensions::ExtensionListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extensions::ExtensionListResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionRendererClientDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extensions::ExtensionResourceOpenParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extensions::ExtensionResourceOpenResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionRuntimeBindingDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extensions::ExtensionSourceKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsCancelElevatedWriteParams;
 use crate::protocol::fs::FsChanged;
@@ -1124,37 +582,17 @@ use crate::protocol::fs::FsCreateDirectoryParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsCreateFileParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsDeleteMode;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsDeleteParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsDirectoryTarget;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsExistingTargetBehavior;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsFileType;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsFileWriteMode;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsFileWriteOptions;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsGetMetadataParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsGetMetadataResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsMissingTargetBehavior;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsPasteSystemFilesParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsPathCaseSensitivity;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsPathCaseSensitivityScope;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsReadBinaryFileParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsReadBinaryFileResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::fs::FsReadDirectoryEntry;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::fs::FsReadDirectoryParams;
 #[cfg(any(test, feature = "export"))]
@@ -1190,8 +628,6 @@ use crate::protocol::git::GitBranchCreateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitBranchDeleteParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitBranchDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitBranchListResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitBranchSwitchParams;
@@ -1206,21 +642,15 @@ use crate::protocol::git::GitChangeFilesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitChangeFilesResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitChangeStatusDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitChangesSummaryResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCheckIgnoreCancelParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCheckIgnoreCancelResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCheckIgnoreCancelStatusDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCheckIgnoreParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCheckIgnoreResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitClientOptionsDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCloneCancelParams;
 #[cfg(any(test, feature = "export"))]
@@ -1232,15 +662,9 @@ use crate::protocol::git::GitCloneResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCloneToParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommandDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommandOutcomeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommandParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommandResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitChangeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitChangesParams;
 #[cfg(any(test, feature = "export"))]
@@ -1248,39 +672,19 @@ use crate::protocol::git::GitCommitChangesResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitDetailsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitFileContentDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitFileParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitFileResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitHooksDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitIdentityDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitMessageResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitModeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCommitResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitScopeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitSigningDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitSignoffDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitStatisticsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitCommitSummaryDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCompareChangesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCompareChangesResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitComparisonModeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitCompleteConflictParams;
 #[cfg(any(test, feature = "export"))]
@@ -1288,21 +692,9 @@ use crate::protocol::git::GitConflictFileParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitConflictFileResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitConflictResolutionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitDiffStatisticsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitDiscoveryFolderDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitDiscoveryParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitEmptyCommitPolicyDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitFetchModeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitFetchParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitFileHistoryItemDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitFileHistoryParams;
 #[cfg(any(test, feature = "export"))]
@@ -1311,8 +703,6 @@ use crate::protocol::git::GitFileHistoryResult;
 use crate::protocol::git::GitGraphParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitGraphResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitHeadDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitHistoryRefsResult;
 #[cfg(any(test, feature = "export"))]
@@ -1323,78 +713,30 @@ use crate::protocol::git::GitIndexDiffResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitIndexEditParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitIndexHunkDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitIndexSelectionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitInitParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitInstallationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitIntegrationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitNamedRefDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitOperationResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitPathsParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitPullModeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitPullParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitPullPreflightResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitPushModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitReferenceCommitDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitReferenceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitReferenceKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRemoteDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRemoteProviderDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitRepositoriesResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRepositoryChangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRepositoryDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitRepositoryIdentityDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitRepositoryParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitStashDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitStashModeDto;
 use crate::protocol::git::GitStatusChanged;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitStatusResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitSubmoduleStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitTextDiffDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitTextDiffParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitTextDiffProjectionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitTextDiffResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitTransportOperationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitTransportOptionsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitTransportOutcomeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitTransportParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitTransportResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitUpstreamDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitVersionResult;
 #[cfg(any(test, feature = "export"))]
@@ -1402,11 +744,7 @@ use crate::protocol::git::GitWorktreeCreateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitWorktreeCreateResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitWorktreeDeleteMode;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitWorktreeDeleteParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitWorktreeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitWorktreeListParams;
 #[cfg(any(test, feature = "export"))]
@@ -1415,8 +753,6 @@ use crate::protocol::git::GitWorktreeListResult;
 use crate::protocol::git::GitWorktreeResolveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::git::GitWorktreeResolveResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::git::GitWorktreeStateDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::goal::ThreadGoalClearParams;
 #[cfg(any(test, feature = "export"))]
@@ -1432,21 +768,9 @@ use crate::protocol::goal::ThreadGoalSetParams;
 use crate::protocol::goal::ThreadGoalSetResponse;
 use crate::protocol::goal::ThreadGoalUpdatedNotification;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::initialize::CapabilityContract;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::initialize::InitializeParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::initialize::InitializeResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::initialize::ProtocolVersion;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::initialize::ServerCapabilities;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionDiagnosticDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionImportItem;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::instructions::InstructionImportParams;
 #[cfg(any(test, feature = "export"))]
@@ -1456,17 +780,9 @@ use crate::protocol::instructions::InstructionImportPreviewResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::instructions::InstructionImportResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionImportSource;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionImportStatus;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::instructions::InstructionListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::instructions::InstructionListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionLoadDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::instructions::InstructionScopeDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::issues::IssueComment;
 #[cfg(any(test, feature = "export"))]
@@ -1646,12 +962,6 @@ use crate::protocol::github::GitHubLabelsResult;
 use crate::protocol::github::GitHubRepositoryResult;
 
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::WireLogDirection;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::WireLogFrame;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::diagnostics::WireLogFrameKind;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::WireLogPage;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::diagnostics::WireLogParams;
@@ -1662,82 +972,36 @@ use crate::protocol::extension_packages::ExtensionsAcquireCapabilityParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsAcquiredCapabilityDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsArtifactHandleDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsAvailableCapabilityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsBuiltInProviderDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsBuiltInProviderEnablementParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsBuiltInProvidersResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsCapabilityDescriptorDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsCapabilityKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsCapabilityLeaseDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsCapabilityRefDto;
 use crate::protocol::extension_packages::ExtensionsChanged;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsConnectorActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsDownloadParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsEditorExecutionKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsEditorExtensionPolicyActionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsEditorExtensionPolicyDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsEditorExtensionPolicyParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsEditorExtensionsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsExecutableActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsExecutableRuntimeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsGetParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsInstallParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsInstallationStateDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsInstalledPackageDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsLanguageActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsListInstalledResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsLocalizationActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsMcpActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsMcpTransportDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsOpenResourceParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsPackageDetailsDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsPackageRefDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsPackageSourceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsPackageSummaryDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsRecommendationEnvironmentResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsRecommendationPlatformDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsReleaseCapabilityParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsResourceContentDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsResourceRefDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsSearchPageParams;
 #[cfg(any(test, feature = "export"))]
@@ -1747,21 +1011,9 @@ use crate::protocol::extension_packages::ExtensionsSearchParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsSearchResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsSkillActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsThemeActivationSpecDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsUiTargetDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsUninstallModeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsUninstallParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::extension_packages::ExtensionsUpdateParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsUpstreamReferenceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::extension_packages::ExtensionsUpstreamRegistryDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::input_completions::InputCompletionsParams;
 #[cfg(any(test, feature = "export"))]
@@ -1791,11 +1043,7 @@ use crate::protocol::language::LanguageCancelParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCancelResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCancelStatusDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCloseParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCodeActionDiagnosticDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCodeActionDto;
 #[cfg(any(test, feature = "export"))]
@@ -1803,41 +1051,19 @@ use crate::protocol::language::LanguageCodeActionsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCodeActionsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCodeLensDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCodeLensesResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageColorDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageColorPresentationDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageColorPresentationsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageColorPresentationsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCommandDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCompletionDetailsResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCompletionInsertTextFormatDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCompletionItemDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCompletionItemKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageCompletionTriggerKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCompletionsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageCompletionsResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDiagnosticReportKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDiagnosticSeverityDto;
 use crate::protocol::language::LanguageDiagnosticsNotification;
 use crate::protocol::language::LanguageDiagnosticsRefreshNotification;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDirectoryDiagnosticSnapshotDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDirectoryDiagnosticsParams;
 #[cfg(any(test, feature = "export"))]
@@ -1845,15 +1071,9 @@ use crate::protocol::language::LanguageDirectoryDiagnosticsResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDirectoryEditDto;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDirectoryEditEntryDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDirectorySymbolDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDirectorySymbolsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDirectorySymbolsResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDocumentColorDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentColorsResult;
 #[cfg(any(test, feature = "export"))]
@@ -1861,37 +1081,19 @@ use crate::protocol::language::LanguageDocumentDiagnosticsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentDiagnosticsResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDocumentDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentFeaturesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentFormattingParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDocumentLinkDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentLinksResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageDocumentSymbolDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageDocumentSymbolsResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageExecuteCommandParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageFoldingRangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageFoldingRangeKindDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageFoldingRangesResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageFormattingOptionsDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageFormattingResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageHierarchyEntryDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageHierarchyItemDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageHierarchyKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageHierarchyParams;
 #[cfg(any(test, feature = "export"))]
@@ -1901,10 +1103,6 @@ use crate::protocol::language::LanguageHoverParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageHoverResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageInlayHintDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageInlayHintKindDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageInlayHintsParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageInlayHintsResult;
@@ -1912,10 +1110,6 @@ use crate::protocol::language::LanguageInlayHintsResult;
 use crate::protocol::language::LanguageLinkedEditingRangesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageLinkedEditingRangesResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageLocationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageLocationKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageLocationsParams;
 #[cfg(any(test, feature = "export"))]
@@ -1925,21 +1119,13 @@ use crate::protocol::language::LanguageOnTypeFormattingParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageOperationParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageParameterInformationDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguagePositionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguagePrepareRenameParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguagePrepareRenameResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageRangeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageRangeFormattingParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageRenameParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageRenamePreparationDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageResolveCodeActionParams;
 #[cfg(any(test, feature = "export"))]
@@ -1951,28 +1137,14 @@ use crate::protocol::language::LanguageResolveDocumentLinkParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageSaveParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageSemanticTokenDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageSemanticTokensParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageSemanticTokensResult;
 use crate::protocol::language::LanguageServerCapabilitiesNotification;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerControlActionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageServerControlParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerDescriptorDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerFeatureDto;
 use crate::protocol::language::LanguageServerMessageNotification;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerMessageSeverityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerMessageSourceDto;
 use crate::protocol::language::LanguageServerProgressNotification;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageServerStateDto;
 use crate::protocol::language::LanguageServerStateNotification;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageServersParams;
@@ -1983,15 +1155,7 @@ use crate::protocol::language::LanguageSignatureHelpParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageSignatureHelpResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageSignatureHelpTriggerKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageSignatureInformationDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::language::LanguageSynchronizeParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageTextDocumentEditDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::language::LanguageTextEditDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::McpOAuthCancelParams;
 #[cfg(any(test, feature = "export"))]
@@ -2005,17 +1169,9 @@ use crate::protocol::mcp::McpOAuthStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::McpOAuthStartResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::mcp::McpSecretDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::mcp::McpServerRuntimeIntentDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::McpServerRuntimeIntentParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::McpServerRuntimeIntentResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::mcp::McpServerRuntimeStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::mcp::McpServerStatusDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::McpServerStatusResult;
 #[cfg(any(test, feature = "export"))]
@@ -2030,8 +1186,6 @@ use crate::protocol::mcp::ToolAppListResult;
 use crate::protocol::mcp::ToolAppResourceOpenParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::ToolResourceCancelParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::mcp::ToolResourceEncoding;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::mcp::ToolResourceOpenParams;
 #[cfg(any(test, feature = "export"))]
@@ -2052,8 +1206,6 @@ use crate::protocol::memory::MemoryPolicyUpdateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::memory::MemoryReadParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::memory::MemoryScopeDescriptor;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::memory::MemoryScopesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::memory::MemoryScopesResult;
@@ -2063,24 +1215,10 @@ use crate::protocol::memory::MemorySearchParams;
 use crate::protocol::memory::MemoryUpdateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::memory_diagnostics::MemoryDiagnosticsSessionParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ContextReadDetail;
 use crate::protocol::model::ContextReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::model::ContextReadResult;
 use crate::protocol::model::ContextReadScope;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ContextToolDefinition;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ModelCatalogEntry;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ModelCatalogIssue;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ModelCatalogScope;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ModelCatalogSource;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::model::ModelCatalogStatus;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::model::ModelListParams;
 #[cfg(any(test, feature = "export"))]
@@ -2090,11 +1228,7 @@ use crate::protocol::model::ModelPreferencesUpdateParams;
 use crate::protocol::notification::ThreadTranscriptUpdateEnvelope;
 use crate::protocol::notification::ThreadUpdateEnvelope;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::plugins::PluginCommandDispositionDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::plugins::PluginCommandResultDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::plugins::PluginDirectoryAccessDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::plugins::PluginInstallLocalParams;
 #[cfg(any(test, feature = "export"))]
@@ -2103,30 +1237,18 @@ use crate::protocol::plugins::PluginInstallLocalResult;
 use crate::protocol::plugins::PluginListResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::plugins::PluginPackageCommandParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::plugins::PluginPackageDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::plugins::PluginPermissionDto;
 use crate::protocol::plugins::PluginsChanged;
 use crate::protocol::projects::ProjectChanged;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectCommandDispositionDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectCreateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectDetailsUpdateParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectLifecycleParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectMaterialDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectMaterialKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectMutationResult;
 #[cfg(any(test, feature = "export"))]
@@ -2136,38 +1258,18 @@ use crate::protocol::projects::ProjectReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectRootAddParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectRootDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectRootRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectRootUpdateParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectScopeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::projects::ProjectSessionMutationParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectStatusDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::projects::ProjectSummaryDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderApiKeyDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderApiKeyPolicyDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::provider::ProviderApiKeyRemoveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::provider::ProviderApiKeySetParams;
 use crate::protocol::provider::ProviderApiKeySetResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderCatalogEntryDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::provider::ProviderListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderModelsAuthorityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderModelsListFailureCodeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::provider::ProviderModelsListFailureDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::provider::ProviderModelsListParams;
 #[cfg(any(test, feature = "export"))]
@@ -2179,8 +1281,6 @@ use crate::protocol::provider::ProviderProbeParams;
 use crate::protocol::provider::ProviderProbeResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::queue::QueueCancelParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::queue::QueueEditAction;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::queue::QueueEditParams;
 #[cfg(any(test, feature = "export"))]
@@ -2202,18 +1302,6 @@ use crate::protocol::resources::ResourceReleaseParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::ContentSearchCancelParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::search::ContentSearchCaseSensitivity;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::search::ContentSearchFreshness;
-#[cfg(any(feature = "export", test))]
-use crate::protocol::search::ContentSearchIndexStats;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::search::ContentSearchMatch;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::search::ContentSearchMatchRange;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::search::ContentSearchPatternKind;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::search::ContentSearchReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::ContentSearchReadResult;
@@ -2221,8 +1309,6 @@ use crate::protocol::search::ContentSearchReadResult;
 use crate::protocol::search::ContentSearchStartParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::ContentSearchStartResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::search::FileFuzzyMatch;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::FileFuzzyParams;
 #[cfg(any(test, feature = "export"))]
@@ -2234,29 +1320,15 @@ use crate::protocol::search::FileGlobParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::FileGlobResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::search::FileGlobTarget;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::search::GrepIndexDisableAndDeleteParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::GrepIndexDisableAndDeleteResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::search::GrepIndexStatusResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::search::LocalIndexClearOutcomeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::secrets::SecretStorageMode;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::secrets::SecretStorageModeSetParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::secrets::SecretStorageStatus;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::secrets::SecretStorageStatusResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::secrets::SecretStorageType;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::AdvisorConfigureResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::ComparisonForkParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::MessageCheckpointsParams;
 #[cfg(any(test, feature = "export"))]
@@ -2274,21 +1346,15 @@ use crate::protocol::session::SessionEnvironmentProfileReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionEnvironmentProfileSaveParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionEnvironmentVariables;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionListResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionReadParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionRequest;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionRequestParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionRequestResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionRewriteResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionRuntimeCancelParams;
 #[cfg(any(test, feature = "export"))]
@@ -2298,13 +1364,9 @@ use crate::protocol::session::SessionSubscribeParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionSubscribeResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionThreadProjection;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionThreadReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionThreadReadResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionThreadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionThreadSubscribeParams;
 #[cfg(any(test, feature = "export"))]
@@ -2328,109 +1390,37 @@ use crate::protocol::session::SessionTraceReadResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::session::SessionUnsubscribeParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::session::SessionWorktreeStart;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::ThreadHistoryBoundary;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::session::ThreadSnapshotHistory;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillCatalogReloadDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillCompatibilityDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillDiagnosticCodeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillDiagnosticDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillEnablementDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::skills::SkillListParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::skills::SkillListResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillResourceKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::skills::SkillResourceOpenParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::skills::SkillResourceOpenResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::skills::SkillSetEnablementParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::skills::SkillSourceKindDto;
 use crate::protocol::skills::SkillsChanged;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::slash_commands::SlashCommandArgumentModeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::slash_commands::SlashCommandDefinition;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxAnalyzeParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxAnalyzeResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxBracketDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxCancelParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxCaptureDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxCloseParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxDiagnosticDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxDiagnosticKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxDiagnosticsSpliceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxEditDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxFactsDeltaDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxFoldingRangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxFoldsSpliceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxLanguageDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxLineRangeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxOpenParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxPositionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxQueryKindDto;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxQueryParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxQueryResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxRangeDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxRowDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxSelectionRangeDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxSelectionRangesParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxSelectionRangesResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxSymbolDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxSymbolKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxSymbolsSpliceDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxTokenDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::syntax::SyntaxTokenKindDto;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::syntax::SyntaxUpdateParams;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelCatalogFreshness;
 
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::speech::SpeechInstructionKind;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::speech::SpeechInstructionsDocument;
 #[cfg(any(test, feature = "export"))]
@@ -2440,11 +1430,7 @@ use crate::protocol::speech::SpeechInstructionsWriteParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::speech::SpeechInstructionsWriteResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::task_delivery::CodeSnapshot;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::task_delivery::SnapshotInfo;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::task_delivery::SourceTask;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::task_delivery::TaskPackage;
 #[cfg(any(test, feature = "export"))]
@@ -2456,19 +1442,11 @@ use crate::protocol::task_delivery::TaskReport;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::teams::*;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalArguments;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalAttachParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalAttachResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalAutoReply;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalCloseParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalCommandStatus;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalCommandStatusEvent;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalCreateInSessionDirectoryParams;
 #[cfg(any(test, feature = "export"))]
@@ -2476,27 +1454,13 @@ use crate::protocol::terminal::TerminalCreateParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalCreateResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalCwd;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalEnvironmentReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalEnvironmentReadResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalExecution;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalLifecycle;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalOutputChunk;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalProcessInfo;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalProcessInfoParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalProcessLaunch;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalProcessReady;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalProfile;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalProfileListParams;
 #[cfg(any(test, feature = "export"))]
@@ -2505,8 +1469,6 @@ use crate::protocol::terminal::TerminalProfileListResult;
 use crate::protocol::terminal::TerminalProfileResolveParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalProfileResolveResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalProfileSelection;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalReadParams;
 #[cfg(any(test, feature = "export"))]
@@ -2520,84 +1482,20 @@ use crate::protocol::terminal::TerminalSendSignalParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalSetAutoRepliesParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalShellIntegration;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalShellIntegrationEvent;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalShellType;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::terminal::TerminalSignal;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalWriteBinaryParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::terminal::TerminalWriteParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingDebugLaunch;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::testing::TestingDiscoverParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingItem;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingOperationKind;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::testing::TestingOperationParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingOperationStatus;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::testing::TestingPrepareDebugParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::testing::TestingRunParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::testing::TestingSnapshot;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingSource;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingState;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::testing::TestingTargetKind;
 use crate::protocol::testing::TestingUpdate;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::transcript::ThreadTranscriptChange;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::transcript::ThreadTranscriptEntry;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::transcript::ThreadTranscriptSnapshot;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn::InputItem;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn::TurnInteractionResolveResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn::TurnInterruptResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn::TurnStartResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn::TurnSteerResult;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::ChangeSetId;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::ThreadDirBinding;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::ThreadWorktreeRepositoryBindingDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeCaptureStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeCommitStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeFileDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeFileKindDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeFileStatisticsDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeMessageStateDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeSelectionDto;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeSetSummary;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangeTerminalStateDto;
 use crate::protocol::turn_changes::TurnChangesChanged;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::turn_changes::TurnChangesCommitParams;
@@ -2628,28 +1526,16 @@ use crate::protocol::turn_changes::TurnChangesReadParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::turn_changes::TurnChangesReadResult;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::turn_changes::TurnChangesRepositorySummary;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::turn_changes::TurnChangesSummaryFileParams;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::turn_changes::TurnChangesSummaryResult;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::turn_changes::TurnChangesUpdateDraftParams;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceConnectionChoice;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceConnectionState;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::voice::VoiceControlParams;
 use crate::protocol::voice::VoiceDelegationRequest;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceInputControl;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceInputMode;
-#[cfg(any(test, feature = "export"))]
 use crate::protocol::voice::VoiceInputParams;
-#[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceModelChoice;
 #[cfg(any(test, feature = "export"))]
 use crate::protocol::voice::VoiceOptions;
 #[cfg(any(test, feature = "export"))]
@@ -2662,592 +1548,28 @@ use crate::protocol::voice::VoiceStartCancelParams;
 use crate::protocol::voice::VoiceStartParams;
 use crate::protocol::voice::VoiceStatus;
 #[cfg(any(test, feature = "export"))]
-use crate::protocol::voice::VoiceTaskLabels;
-#[cfg(any(test, feature = "export"))]
-use analytics::UsageEvent;
-#[cfg(any(test, feature = "export"))]
-use analytics::UsageSnapshot;
-#[cfg(any(test, feature = "export"))]
-use ash_environment::EnvId;
-#[cfg(any(test, feature = "export"))]
-use ash_file_access::DirId;
-#[cfg(any(test, feature = "export"))]
 use ash_memory_diagnostics::MemoryEvidence;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryFinding;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryMetric;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryMetricKind;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryObservation;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryOrigin;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryPhase;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryProduct;
 #[cfg(any(test, feature = "export"))]
 use ash_memory_diagnostics::MemoryReport;
 #[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryRole;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemorySample;
-#[cfg(any(test, feature = "export"))]
 use ash_memory_diagnostics::MemoryStart;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryTargetReport;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryTrend;
-#[cfg(any(test, feature = "export"))]
-use ash_memory_diagnostics::MemoryUnavailable;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalCapability;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalCapabilityKind;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalCommand;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalDecision;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalRequest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ActionApprovalRiskAssessment;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AdvisorConfig;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AdvisorSelection;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentCapabilityScope;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentContextContent;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentContextMode;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentContextSeed;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentContextSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentDefinitionSelectionReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentInteractionKind;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentJoin;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentJoinId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentJoinPolicy;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentJoinStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentMaterializedContext;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentMessage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentMessageContent;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentMessageId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentMessageProvenance;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentRequest;
 use ash_protocol::AgentRequestEnvelope;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentRoleSnapshot;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentRoleSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentTreeExecutionStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentTreeNodeProjection;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentTreeProjection;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AgentTreeWaitingReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ApprovalMode;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AttachmentRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AudioAttachmentRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AudioMediaType;
 #[cfg(any(test, feature = "export"))]
 use ash_protocol::Automation;
 #[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationCondition;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationDefinition;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationEvent;
-#[cfg(any(test, feature = "export"))]
 use ash_protocol::AutomationRun;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationRunStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationSchedule;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationSession;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::AutomationStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::CapabilitySupport;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContentDigest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContentPart;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextCheckpoint;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextCheckpointId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextCheckpointVerification;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextCompactionPolicy;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextSeedDigest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextSourceDigest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ContextSourceRange;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegatedPolicyCeiling;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegatedTask;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegationArtifactRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegationId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegationResult;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegationResultDigest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DelegationResultStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DirectoryCapability;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DynamicToolCall;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DynamicToolOutput;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::DynamicToolResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ForkedAgentContext;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::FrozenAgentDefinitionRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::FrozenSkillActivation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::HistoryPrefixRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::HookEvent;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::HookRunRecord;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::HookRunStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ImageAttachmentRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ImageDetail;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ImageMediaType;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::InteractionCancelReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::InteractionDeadline;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ItemDelta;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::McpAppResourceCsp;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::MessageBoundary;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::MessageCheckpoint;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::MessagePhase;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelAcceleration;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelAccelerationOption;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelAccess;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelBillingEvidence;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelBillingRecord;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelBillingScope;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelCapabilities;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelConnectionId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextAllocation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextCategory;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextCategoryUsage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextInspection;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextSourceUsage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextUsage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelContextUsageSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelCostLineItem;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInputEstimate;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInputModality;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInvocationId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInvocationOutcome;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInvocationRecord;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelInvocationTiming;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelMetadataQuality;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelMoneyAmount;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelOutputTransport;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelPurpose;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelReasoningEffortOption;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelReasoningSummary;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelReferenceCostReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelReferenceCostRecord;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelReferenceCostSummary;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelRetirement;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelServiceTier;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelSettings;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelSpeed;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelTokenPricing;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelToolOutputLimit;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelUsage;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelUsageSummary;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelUsageTotal;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ModelVerbosity;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PendingInteraction;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PermissionGrantDuration;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PermissionRequest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PermissionResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::Personality;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PlanStep;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PlanStepStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::PlanUpdate;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ProcessExecutionOutput;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ProcessExitStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ProjectId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RatedModelCost;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ReasoningEffort;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ReasoningReplayContext;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ReasoningState;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RepositoryCheckpoint;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RequestUserInput;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RequestUserInputResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RequestedDirectoryGrant;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ReviewTarget;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::RiskLevel;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SandboxDenialOutput;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::Session;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionExecutionTarget;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionManagerActivity;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionManagerInfo;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionManagerStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionRuntimeRequest;
 #[cfg(any(test, feature = "export"))]
 use ash_protocol::SessionRuntimeResult;
 #[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionSurface;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SessionThread;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillActivationReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillName;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillRef;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillSourceId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::SkillVersionSelector;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::StableTurnError;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::StableTurnErrorCode;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::StopReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::StreamCursor;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TeamId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TeamRunId;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::Thread;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadArchiveReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadEvent;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadGoal;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadGoalStatus;
-#[cfg(any(test, feature = "export"))]
 use ash_protocol::ThreadHistoryState;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadItem;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadOrigin;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadSequenceRange;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadTitleSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ThreadUpdate;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TimeContext;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TimeContextMode;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TimeZoneOrigin;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolActivity;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolCallBinding;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolCallCaller;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolCategory;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolConfirmationPresentation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolExecutionAuthority;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolMode;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolModifiedFile;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolOutputArtifact;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolOutputArtifactData;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolOutputArtifactSource;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolOutputStream;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolProductProfile;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolProductStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolProfileSnapshot;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolReplaySafety;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolResultPresentation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolResultReview;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolResultReviewDecision;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolResultReviewRequest;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolResultReviewResponse;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolScope;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolSetDefinition;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::ToolSourceProvenance;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::Turn;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnExecutionBinding;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnInstructions;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnInteraction;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnKind;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnLoopAction;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnLoopDecision;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnLoopReason;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::TurnStatus;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UnixMillis;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserGoalChange;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserInput;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserInputAnswer;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserInputOption;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserInputQuestion;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::UserInputValidation;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::VoiceTranscript;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::VoiceTranscriptSpeaker;
-#[cfg(any(test, feature = "export"))]
-use ash_protocol::WorkspaceCheckpoint;
-#[cfg(any(test, feature = "export"))]
-use ash_utils_path_uri::PathUri;
-#[cfg(any(test, feature = "export"))]
-use build_info::BuildInfo;
-#[cfg(any(test, feature = "export"))]
-use call::CallConnection;
-#[cfg(any(test, feature = "export"))]
-use call::CallControl;
-#[cfg(any(test, feature = "export"))]
-use call::CallMember;
-#[cfg(any(test, feature = "export"))]
-use call::CallParticipant;
-#[cfg(any(test, feature = "export"))]
-use call::CallRole;
-#[cfg(any(test, feature = "export"))]
-use call::CallSnapshot;
-#[cfg(any(test, feature = "export"))]
-use call::MediaState;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::Activity;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::ActivitySummary;
 #[cfg(any(test, feature = "export"))]
 use diagnostics::DiagnosticSnapshot;
 #[cfg(any(test, feature = "export"))]
-use diagnostics::MetricDistribution;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::MetricKind;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::MetricSeries;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::Observation;
-#[cfg(any(test, feature = "export"))]
-use diagnostics::Outcome;
-#[cfg(any(test, feature = "export"))]
-use extension_items::ExtensionItem;
-#[cfg(any(test, feature = "export"))]
-use extension_items::ExtensionItemContent;
-#[cfg(any(test, feature = "export"))]
-use extension_items::ExtensionItemStatus;
-#[cfg(any(test, feature = "export"))]
-use extension_items::SearchSource;
-#[cfg(any(test, feature = "export"))]
-use features::Feature;
-#[cfg(any(test, feature = "export"))]
-use features::FeatureSource;
-#[cfg(any(test, feature = "export"))]
-use features::FeatureStage;
-#[cfg(any(test, feature = "export"))]
-use features::FeatureState;
-#[cfg(any(test, feature = "export"))]
 use feedback_contract::PreparedFeedback;
-#[cfg(any(test, feature = "export"))]
-use queue::QueueDelivery;
-#[cfg(any(test, feature = "export"))]
-use queue::QueueInput;
-#[cfg(any(test, feature = "export"))]
-use queue::QueueMove;
-#[cfg(any(test, feature = "export"))]
-use queue::QueueStatus;
 #[cfg(any(test, feature = "export"))]
 use queue::QueuedMessage;
 #[cfg(any(test, feature = "export"))]
-use response_debug_context::AuthHeader;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::AuthRecovery;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::DiagnosticOutcome;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::RequestAttempt;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::RequestOutcome;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::ResponseDebugContext;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::ResponseDiagnostic;
-#[cfg(any(test, feature = "export"))]
-use response_debug_context::ResponseOperation;
-#[cfg(any(test, feature = "export"))]
 use schemars::JsonSchema;
-#[cfg(any(test, feature = "export"))]
-use ts_rs::Config;
-#[cfg(any(test, feature = "export"))]
-use ts_rs::TS;
 
 /// Selects whether equal scheduling keys exclude or share execution.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -3326,23 +1648,9 @@ pub struct ClientMethodDefinition {
     pub method: &'static str,
     pub serialization: SerializationScopeDefinition,
     pub cancellation: CancellationDefinition,
-    #[cfg(any(test, feature = "export"))]
-    params_type: fn(&Config) -> String,
-    #[cfg(any(test, feature = "export"))]
-    result_type: fn(&Config) -> String,
 }
 
 impl ClientMethodDefinition {
-    #[cfg(any(test, feature = "export"))]
-    pub fn params_type(&self) -> String {
-        (self.params_type)(&Config::default())
-    }
-
-    #[cfg(any(test, feature = "export"))]
-    pub fn result_type(&self) -> String {
-        (self.result_type)(&Config::default())
-    }
-
     /// Resolves the client-generated operation identity declared by this method.
     pub fn cancellation_operation_id(
         &self,
@@ -3553,63 +1861,12 @@ fn serialization_parameter(
 pub struct HostMethodDefinition {
     pub kind: HostMethod,
     pub method: &'static str,
-    #[cfg(any(test, feature = "export"))]
-    params_type: fn(&Config) -> String,
-    #[cfg(any(test, feature = "export"))]
-    result_type: fn(&Config) -> String,
-}
-
-impl HostMethodDefinition {
-    #[cfg(any(test, feature = "export"))]
-    pub fn params_type(&self) -> String {
-        (self.params_type)(&Config::default())
-    }
-
-    #[cfg(any(test, feature = "export"))]
-    pub fn result_type(&self) -> String {
-        (self.result_type)(&Config::default())
-    }
 }
 
 #[derive(Clone, Copy)]
 pub struct ServerNotificationDefinition {
     pub kind: ServerNotificationMethod,
     pub method: &'static str,
-    #[cfg(any(test, feature = "export"))]
-    params_type: fn(&Config) -> String,
-}
-
-impl ServerNotificationDefinition {
-    #[cfg(any(test, feature = "export"))]
-    pub fn params_type(&self) -> String {
-        (self.params_type)(&Config::default())
-    }
-}
-
-#[cfg(any(test, feature = "export"))]
-#[derive(Clone, Copy)]
-pub(crate) struct TypeScriptBinding {
-    declaration: fn(&Config) -> String,
-    dependencies: fn(&Config) -> Vec<ts_rs::Dependency>,
-    identifier: fn(&Config) -> String,
-}
-
-#[cfg(any(test, feature = "export"))]
-impl TypeScriptBinding {
-    pub(crate) fn declaration(&self) -> String {
-        (self.declaration)(&Config::default())
-    }
-
-    pub(crate) fn dependencies(&self) -> Vec<String> {
-        (self.dependencies)(&Config::default())
-            .into_iter()
-            .map(|dependency| dependency.ts_name)
-            .collect()
-    }
-
-    pub(crate) fn identifier(&self) -> String {
-        (self.identifier)(&Config::default())
-    }
 }
 
 #[cfg(any(test, feature = "export"))]
@@ -3706,10 +1963,6 @@ macro_rules! client_methods {
                     method: $method,
                     serialization: SerializationScopeDefinition::$serialization$(($serialization_key))?,
                     cancellation: cancellation_definition!($($cancellation_parameter $(, $cancellation_outcome)?)?),
-                    #[cfg(any(test, feature = "export"))]
-                    params_type: <$params as TS>::name,
-                    #[cfg(any(test, feature = "export"))]
-                    result_type: <$response as TS>::name,
                 },
             )+
         ];
@@ -6060,10 +4313,6 @@ macro_rules! host_methods {
                 HostMethodDefinition {
                     kind: HostMethod::$variant,
                     method: $method,
-                    #[cfg(any(test, feature = "export"))]
-                    params_type: <$params as TS>::name,
-                    #[cfg(any(test, feature = "export"))]
-                    result_type: <$response as TS>::name,
                 },
             )+
         ];
@@ -6176,8 +4425,6 @@ macro_rules! server_notifications {
                 ServerNotificationDefinition {
                     kind: ServerNotificationMethod::$variant,
                     method: $method,
-                    #[cfg(any(test, feature = "export"))]
-                    params_type: <$params as TS>::name,
                 },
             )+
         ];
@@ -6325,1785 +4572,6 @@ server_notifications! {
     LanguageServerState => "language/serverState" {
         params: LanguageServerStateNotification,
     },
-}
-
-macro_rules! typescript_bindings {
-    ($($type:ty),+ $(,)?) => {
-#[cfg(any(test, feature = "export"))]
-        pub(crate) const TYPESCRIPT_BINDINGS: &[TypeScriptBinding] = &[
-            $(
-                TypeScriptBinding {
-                    declaration: <$type as TS>::decl,
-                    dependencies: <$type as TS>::dependencies,
-                    identifier: <$type as TS>::ident,
-                },
-            )+
-        ];
-    };
-}
-
-typescript_bindings! {
-    serde_json::Value,
-    ash_protocol::CollaborationMode,
-    ash_protocol::CommandInterpretation,
-    ash_protocol::AgentConfiguration,
-    ash_protocol::AgentRoleSelection,
-    ash_protocol::InstructionText,
-    ash_protocol::ModelInstructionSelection,
-    ash_protocol::ModelInstructionMessages,
-    crate::protocol::issues::IssueConfigDto,
-    crate::protocol::issues::IssueConfigureParams,
-    crate::protocol::issues::IssueRepository,
-    crate::protocol::issues::IssueSummary,
-    crate::protocol::issues::IssueState,
-    crate::protocol::issues::IssueListMode,
-    crate::protocol::issues::IssueListParams,
-    crate::protocol::issues::IssueListResult,
-    crate::protocol::issues::IssueReadParams,
-    crate::protocol::issues::IssueReadResult,
-    crate::protocol::issues::IssueComment,
-    crate::protocol::github::GitHubReviewDiffParams,
-    crate::protocol::github::GitHubReviewDiffResult,
-    crate::protocol::github::GitHubFileReadParams,
-    crate::protocol::github::GitHubRepositoryTreeParams,
-    crate::protocol::github::GitHubRepositoryTreeResult,
-    crate::protocol::github::GitHubRepositoryTreeEntry,
-    crate::protocol::github::GitHubRepositoryEntryKind,
-    crate::protocol::github::GitHubRepositoryBlobParams,
-    crate::protocol::github::GitHubRepositoryBlobResult,
-    crate::protocol::github::GitHubFileContent,
-    crate::protocol::github::GitHubReviewThreadsParams,
-    crate::protocol::github::GitHubReviewThreadReadParams,
-    crate::protocol::github::GitHubReviewThreadReplyParams,
-    crate::protocol::github::GitHubReviewThreadResolveParams,
-    crate::protocol::github::GitHubReviewComment,
-    crate::protocol::github::GitHubReviewCommentsResult,
-    crate::protocol::github::GitHubReviewThread,
-    crate::protocol::github::GitHubReviewThreadsResult,
-    crate::protocol::github::GitHubDiffSide,
-    crate::protocol::github::GitHubReviewThreadState,
-    crate::protocol::github::GitHubReviewCommentInput,
-    crate::protocol::github::GitHubMergeMethod,
-    crate::protocol::github::GitHubReviewEvent,
-    crate::protocol::github::GitHubCancelStatus,
-    crate::protocol::github::GitHubNotificationsParams,
-    crate::protocol::github::GitHubNotificationReadParams,
-    crate::protocol::github::GitHubNotificationsReadParams,
-    crate::protocol::github::GitHubNotification,
-    crate::protocol::github::GitHubNotificationsResult,
-    crate::protocol::github::GitHubForkCreateParams,
-    crate::protocol::github::GitHubForkResult,
-    crate::protocol::github::GitHubNotificationFilter,
-    crate::protocol::github::GitHubForkBranches,
-    crate::protocol::github::GitHubAccount,
-    crate::protocol::github::GitHubAccountsResult,
-    crate::protocol::github::GitHubAccountConnectParams,
-    crate::protocol::github::GitHubAccountListParams,
-    crate::protocol::github::GitHubRepositoryVisibility,
-    crate::protocol::github::GitHubShareReferenceKind,
-    crate::protocol::github::GitHubShareTarget,
-    crate::protocol::github::GitHubRepositorySearchParams,
-    crate::protocol::github::GitHubRepositoryCreateParams,
-    crate::protocol::github::GitHubRemoteRepository,
-    crate::protocol::github::GitHubRepositorySearchResult,
-    crate::protocol::github::GitHubRepositoryBranchesParams,
-    crate::protocol::github::GitHubRepositoryBranch,
-    crate::protocol::github::GitHubRepositoryBranchesResult,
-    crate::protocol::github::GitHubBranchProtectionRule,
-    crate::protocol::github::GitHubBranchProtectionResult,
-    crate::protocol::github::GitHubSharePathKind,
-    crate::protocol::github::GitHubShareLines,
-    crate::protocol::github::GitHubShareLinkParams,
-    crate::protocol::github::GitHubShareLinkResult,
-    crate::protocol::github::GitHubManagedSettingsParams,
-    crate::protocol::github::GitHubManagedSettingsReadMode,
-    crate::protocol::github::GitHubManagedSettingsFailure,
-    crate::protocol::github::GitHubManagedSettingsRefresh,
-    crate::protocol::github::GitHubManagedSettingsResult,
-    crate::protocol::github::GitHubPullRequestArtifactOrigin,
-    crate::protocol::github::GitHubPullRequestReference,
-    crate::protocol::github::GitHubSessionPullRequestsParams,
-    crate::protocol::github::GitHubIssueReference,
-    crate::protocol::github::GitHubSessionIssuesParams,
-    crate::protocol::github::GitHubSessionPullRequestParams,
-    crate::protocol::github::GitHubSessionIssueParams,
-    crate::protocol::github::GitHubSessionPullRequestsResult,
-    crate::protocol::github::GitHubSessionIssuesResult,
-    crate::protocol::github::GitHubReviewCommentEditParams,
-    crate::protocol::github::GitHubReviewCommentDeleteParams,
-    crate::protocol::github::GitHubReviewerChange,
-    crate::protocol::github::GitHubReviewersChangeParams,
-    crate::protocol::github::GitHubRequestedReviewers,
-    crate::protocol::github::GitHubRepositoryParams,
-    crate::protocol::github::GitHubNumberParams,
-    crate::protocol::github::GitHubPageParams,
-    crate::protocol::github::GitHubIssueListParams,
-    crate::protocol::github::GitHubIssueListResult,
-    crate::protocol::github::GitHubIssueCreateParams,
-    crate::protocol::github::GitHubIssueUpdateParams,
-    crate::protocol::github::GitHubIssue,
-    crate::protocol::github::GitHubCommentListResult,
-    crate::protocol::github::GitHubCommentCreateParams,
-    crate::protocol::github::GitHubCommentUpdateParams,
-    crate::protocol::github::GitHubCommentDeleteParams,
-    crate::protocol::github::GitHubPullRequestListParams,
-    crate::protocol::github::GitHubPullRequest,
-    crate::protocol::github::GitHubPullRequestListResult,
-    crate::protocol::github::GitHubPullRequestCreateParams,
-    crate::protocol::github::GitHubPullRequestUpdateParams,
-    crate::protocol::github::GitHubPullRequestFile,
-    crate::protocol::github::GitHubPullRequestFilesResult,
-    crate::protocol::github::GitHubPullRequestReview,
-    crate::protocol::github::GitHubPullRequestReviewsResult,
-    crate::protocol::github::GitHubPullRequestReviewParams,
-    crate::protocol::github::GitHubPullRequestMergeParams,
-    crate::protocol::github::GitHubMergeResult,
-    crate::protocol::github::GitHubChecksParams,
-    crate::protocol::github::GitHubCheckParams,
-    crate::protocol::github::GitHubCheckDetailsParams,
-    crate::protocol::github::GitHubCheckDetailsResult,
-    crate::protocol::github::GitHubCheckAnnotation,
-    crate::protocol::github::GitHubCheckLogResult,
-    crate::protocol::github::GitHubCommitParams,
-    crate::protocol::github::GitHubCommit,
-    crate::protocol::github::GitHubCommitStatus,
-    crate::protocol::github::GitHubCheckRun,
-    crate::protocol::github::GitHubChecksResult,
-    crate::protocol::github::GitHubRepositoryResult,
-    crate::protocol::github::GitHubLabel,
-    crate::protocol::github::GitHubLabelsResult,
-    crate::protocol::github::GitHubLabelParams,
-    crate::protocol::github::GitHubAssigneesResult,
-    crate::protocol::github::GitHubCancelParams,
-    crate::protocol::github::GitHubCancelResult,
-
-    crate::protocol::issue_reporter::IssueReporterContext,
-    crate::protocol::issue_reporter::IssueReporterSearchParams,
-    crate::protocol::issue_reporter::IssueReporterSearchResult,
-    crate::protocol::issue_reporter::IssueReporterIssue,
-    crate::protocol::issue_reporter::IssueReporterSubmitParams,
-    crate::protocol::issue_reporter::IssueReporterCancelParams,
-    crate::protocol::issue_reporter::IssueReporterCancelResult,
-    crate::protocol::issue_reporter::IssueReporterCancelStatus,
-    AccountDto,
-    BackupContentDto,
-    BackupDiscardParams,
-    BackupListParams,
-    BackupListPageParams,
-    BackupListPageResult,
-    BackupListResult,
-    BackupRecordDto,
-    BackupWorkspaceDto,
-    BackupWorkspacesParams,
-    BackupWorkspacesResult,
-    BackupWriteParams,
-    BackupMoveParams,
-    BackupMoveResult,
-    BackupRevisionDto,
-    AccountLoginCancelParams,
-    AccountLoginCancelResult,
-    AccountLoginCancelStatusDto,
-    AccountLoginCompleted,
-    AccountLoginCompletionStatusDto,
-    AccountLoginFailureDto,
-    AccountLoginMethodDto,
-    AccountLoginStartParams,
-    AccountLoginStartResult,
-    AccountLogoutResult,
-    AccountLogoutParams,
-    AccountLogoutStatusDto,
-    AccountReadResult,
-    AccountRateLimitsReadParams,
-    AccountRateLimitsReadResult,
-    AccountXaiUsageDto,
-    AccountRateLimitDto,
-    AccountRateLimitWindowDto,
-    AccountCreditBalanceDto,
-    AccountStatusDto,
-    AccountUpdated,
-    ThreadId,
-    SessionId,
-    CommandId,
-    RequestId,
-    StreamInstanceId,
-    ItemId,
-    ToolCallId,
-    ToolName,
-    DirId,
-    EnvId,
-    ProjectId,
-    TeamId,
-    TeamRunId,
-    ConnectorAccountDto,
-    ConnectorAvailableActionDto,
-    ConnectorOAuthMethodDto,
-    ConnectorConnectionStateDto,
-    ConnectorDto,
-    ConnectorListResult,
-    ConnectorSecretDto,
-    ConnectorApiTokenConnectParams,
-    ConnectorOAuthStartParams,
-    ConnectorOAuthStartResult,
-    ConnectorOAuthCompleteParams,
-    ConnectorOAuthCancelParams,
-    ConnectorDeviceOAuthStartParams,
-    ConnectorDeviceOAuthStartResult,
-    ConnectorDeviceOAuthPollParams,
-    ConnectorDeviceOAuthPollResult,
-    ConnectorOAuthRefreshParams,
-    ConnectorDisconnectParams,
-    ConnectorSetEnabledParams,
-    ConnectorCommandDispositionDto,
-    ConnectorCommandResultDto,
-    ConnectorCredentialCleanupDto,
-    ConnectorCredentialCleanupParams,
-    ConnectorDisconnectResultDto,
-    ConnectorsChanged,
-    McpSecretDto,
-    McpOAuthStartParams,
-    ToolResourceOpenParams,
-    ToolResourceOpenResult,
-    ToolResourceEncoding,
-    ToolAppResourceOpenParams,
-    ToolAppCallParams,
-    ToolAppListParams,
-    ToolAppListResult,
-    ToolAppCallResult,
-    ToolResourceCancelParams,
-    McpOAuthStartResult,
-    McpOAuthCompleteParams,
-    McpOAuthCancelParams,
-    McpOAuthMutationParams,
-    McpOAuthMutationResult,
-    McpServerRuntimeIntentDto,
-    McpServerRuntimeIntentParams,
-    McpServerRuntimeIntentResult,
-    McpServerRuntimeStateDto,
-    McpServerStatusDto,
-    McpServerStatusResult,
-    ExtensionsPackageRefDto,
-    ExtensionsArtifactHandleDto,
-    ExtensionsCapabilityRefDto,
-    ExtensionsResourceRefDto,
-    ExtensionsCapabilityKindDto,
-    ExtensionsCapabilityDescriptorDto,
-    ExtensionsAvailableCapabilityDto,
-    ExtensionsPackageSummaryDto,
-    ExtensionsSearchParams,
-    ExtensionsSearchResult,
-    ExtensionsRecommendationEnvironmentResult,
-    ExtensionsRecommendationPlatformDto,
-    ExtensionsSearchPageParams,
-    ExtensionsSearchPageResult,
-    ExtensionsSourcesResult,
-    ExtensionsUpdatesResult,
-    ExtensionsSetUpdatePolicyParams,
-    ExtensionsUpdatePolicyDto,
-    ExtensionsAvailableUpdateDto,
-    ExtensionsSourceDto,
-    ExtensionRegistryKindDto,
-    ExtensionsAddSourceParams,
-    ExtensionsSetSourceEnabledParams,
-    ExtensionsGetParams,
-    ExtensionsPackageDetailsDto,
-    ExtensionsPackageSourceDto,
-    ExtensionsUiTargetDto,
-    ExtensionsUpstreamRegistryDto,
-    ExtensionsUpstreamReferenceDto,
-    ExtensionsDownloadParams,
-    ExtensionsInstallParams,
-    ExtensionsUpdateParams,
-    ExtensionsInstallationStateDto,
-    ExtensionsInstalledPackageDto,
-    ExtensionsListInstalledResult,
-    ExtensionsEditorExtensionPolicyActionDto,
-    ExtensionsEditorExtensionPolicyParams,
-    ExtensionsEditorExtensionPolicyDto,
-    ExtensionsEditorExecutionKindDto,
-    ExtensionsEditorExtensionsResult,
-    ExtensionsBuiltInProviderDto,
-    ExtensionsBuiltInProviderEnablementParams,
-    ExtensionsBuiltInProvidersResult,
-    ExtensionsChanged,
-    ExtensionsUninstallModeDto,
-    ExtensionsUninstallParams,
-    ExtensionsAcquireCapabilityParams,
-    ExtensionsCapabilityLeaseDto,
-    ExtensionsActivationSpecDto,
-    ExtensionsSkillActivationSpecDto,
-    ExtensionsThemeActivationSpecDto,
-    ExtensionsMcpActivationSpecDto,
-    ExtensionsMcpTransportDto,
-    ExtensionsConnectorActivationSpecDto,
-    ExtensionsLanguageActivationSpecDto,
-    ExtensionsLocalizationActivationSpecDto,
-    ExtensionsExecutableRuntimeDto,
-    ExtensionsExecutableActivationSpecDto,
-    ExtensionsAcquiredCapabilityDto,
-    ExtensionsReleaseCapabilityParams,
-    ExtensionsOpenResourceParams,
-    ExtensionsResourceContentDto,
-    PluginPackageDto,
-    PluginPermissionDto,
-    PluginDirectoryAccessDto,
-    PluginInstallLocalParams,
-    PluginInstallLocalResult,
-    PluginListResult,
-    PluginPackageCommandParams,
-    PluginCommandDispositionDto,
-    PluginCommandResultDto,
-    PluginsChanged,
-    TurnId,
-    DelegationId,
-    AgentJoinId,
-    AgentMessageId,
-    SchemaHash,
-    ClientInfo,
-    AgentInteractionCapability,
-    BrowserCapability,
-    BrowserTcpParams,
-    BrowserTcpOpenParams,
-    BrowserTcpWriteParams,
-    BrowserTcpReadResult,
-    BrowserTcpWriteResult,
-    BrowserConfigureParams,
-    BrowserCdpOperationDto,
-    DirectoryGrantsHostCapability,
-    BrowserBinaryPayload,
-    BrowserCloseParams,
-    BrowserListParams,
-    BrowserListResult,
-    BrowserPageSummary,
-    BrowserCreateParams,
-    BrowserCanvasPresentation,
-    BrowserCanvasDefinition,
-    BrowserCanvasDefinitionId,
-    BrowserCanvasListParams,
-    BrowserCanvasListResult,
-    BrowserNetworkAuthorizeParams,
-    BrowserNetworkAuthorizeResult,
-    BrowserSharingSetParams,
-    BrowserCreateResult,
-    BrowserElementTargetDto,
-    BrowserObserveParams,
-    BrowserObserveResult,
-    BrowserPerformActionDto,
-    BrowserPerformParams,
-    BrowserUploadFile,
-    BrowserPerformResult,
-    BrowserTextInputTargetDto,
-    ClientCapabilities,
-    crate::protocol::common::HostRequestCancelParams,
-    crate::protocol::ide::IdeWindow,
-    crate::protocol::ide::IdeOrigin,
-    crate::protocol::ide::IdeRequest,
-    crate::protocol::ide::IdeResult,
-    crate::protocol::ide::IdeContext,
-    crate::protocol::ide::IdeActiveFile,
-    crate::protocol::ide::IdeSelection,
-    crate::protocol::ide::IdeHostRequest,
-    crate::protocol::ide::IdeHostResult,
-    crate::protocol::app_tools::AppToolsCapability,
-    crate::protocol::app_tools::AppHostRequestParams,
-    crate::protocol::app_tools::AppHostOperation,
-    crate::protocol::app_tools::AppHostResult,
-    TextDocumentsCapability,
-    ExtensionClientOperation,
-    ExtensionQuickPickItem,
-    ExtensionProgressOptions,
-    external_ext_protocol::services::CoreServiceRequest,
-    external_ext_protocol::services::CoreServiceResponse,
-    external_ext_protocol::services::CoreHttpMethod,
-    ExtensionStatusBarEntry,
-    ExtensionCommandMenu,
-    ExtensionStatusBarAlignment,
-    ExtensionStatusBarCommand,
-    ExtensionDiagnostic,
-    ExtensionDiagnosticEntry,
-    ExtensionDiagnosticSeverity,
-    ExtensionClientRequestParams,
-    ExtensionClientResult,
-    ExtensionHostInitialization,
-    ExtensionLocalization,
-    ExtensionWorkspaceFolder,
-    ExtensionConfigurationTarget,
-    ExtensionDebugSessionOptions,
-    ExtensionDocumentEdit,
-    ExtensionDocumentSnapshot,
-    ExtensionMessageSeverity,
-    ExtensionTextEdit,
-    ExtensionTextPosition,
-    TextDocumentListParams,
-    TextDocumentListResult,
-    TextDocumentContentDto,
-    crate::protocol::host_resource::HostResourceRef,
-    crate::protocol::host_resource::HostResourceReadParams,
-    crate::protocol::host_resource::HostResourceReadResult,
-    crate::protocol::host_resource::HostResourceReleaseParams,
-    TextDocumentReadParams,
-    TextDocumentReadResult,
-    TextDocumentApplyParams,
-    TextDocumentTurnFinished,
-    TextDocumentTurnOutcome,
-    TextDocumentApplyResult,
-    TextDocumentChangeDto,
-    TextDocumentReleaseParams,
-    ServerInfo,
-    ServerOperatingSystem,
-    SpeechInstructionKind,
-    SpeechInstructionsReadParams,
-    SpeechInstructionsDocument,
-    SpeechInstructionsWriteParams,
-    SpeechInstructionsWriteResult,
-    VoiceStartParams,
-    VoiceInputControl,
-    VoiceInputMode,
-    VoiceInputParams,
-    VoiceStartCancelParams,
-    VoiceResourceParams,
-    VoiceControlParams,
-    VoiceRejectDelegationParams,
-    VoiceStatus,
-    VoiceOptions,
-    VoiceConnectionChoice,
-    VoiceModelChoice,
-    VoiceDelegationRequest,
-    VoiceTaskLabels,
-    VoiceConnectionState,
-    CallStartParams,
-    CallResourceParams,
-    CallControlParams,
-    CallInviteParams,
-    CallDocumentParams,
-    CallDocument,
-    CallDocumentChange,
-    CallEndParams,
-    CallInvitation,
-    CallMemberParams,
-    CallRoleParams,
-    CallStatus,
-    DictationResourceParams,
-    DictationStartParams,
-    DictationAudioParams,
-    DictationOptions,
-    DictationOptionsParams,
-    DictationInputDevice,
-    DictationBackend,
-    DictationAudioInput,
-    DictationCloudProvider,
-    DictationTranscript,
-    DictationEnded,
-    DictationStopResult,
-    DictationModelParams,
-    DictationModelStatus,
-    DictationModelOperation,
-    DictationModelStartParams,
-    DictationModelStage,
-    DictationModelProgress,
-    DictationModelChanged,
-    DictationModelList,
-    CallScreenSource,
-    CallScreenSources,
-    CallScreenFrame,
-    CallScreenFrames,
-    ScreenTarget,
-    CallDeployment,
-    CallConnection,
-    CallControl,
-    CallParticipant,
-    CallRole,
-    CallSnapshot,
-    CallMember,
-    Channel,
-    ChannelRole,
-    ChannelMember,
-    ChannelSnapshot,
-    ChannelChange,
-    ChannelConnectParams,
-    ChannelConnection,
-    ChannelEditParams,
-    ChannelInviteParams,
-    ChannelInvitation,
-    ChannelResourceParams,
-    ChannelResourceAccess,
-    MediaState,
-    DocumentCollaborationOpenParams,
-    DocumentCollaborationSnapshot,
-    DocumentCollaborationOpenResult,
-    DocumentCollaborationPresence,
-    DocumentCollaborationPresenceParams,
-    DocumentCollaborationPresenceReadParams,
-    DocumentCollaborationPresenceSnapshot,
-    DocumentCollaborationUpdate,
-    DocumentCollaborationSubmitParams,
-    DocumentCollaborationSubmitResult,
-    ModelRefDto,
-    CodebaseModelsDto,
-    CodebaseAutomaticContextDto,
-    CodebaseConfigDto,
-    ApprovalReviewModelSelectionDto,
-    GrepBackendDto,
-    GitAutoFetchModeDto,
-    GitConfigDto,
-    ModelContextConfigDto,
-    CustomProviderConfigDto,
-    CustomProviderProtocolDto,
-    ProviderConfigDto,
-    McpCredentialBindingDto,
-    McpServerEnablementDto,
-    McpTransportDto,
-    McpServerConfigDto,
-    SkillSourceEnablementDto,
-    SkillSourceConfigDto,
-    PluginRequestEnablementDto,
-    PluginRequestDto,
-    HookEventDto,
-    HookEnablementDto,
-    HookMatcherDto,
-    HookActionDto,
-    HookConfigDto,
-    ash_protocol::ClaudePreToolUseHook,
-    LanguageServerModeDto,
-    LanguageServerConfigDto,
-    FrontendConfigDto,
-    ConfigReadResult,
-    ExecutionConfigDto,
-    CommandFileAccessDto,
-    CommandNetworkAccessDto,
-    TraceConfigDto,
-    TraceRecordingStateDto,
-    TimeContextConfigDto,
-    TimeContext,
-    TimeContextMode,
-    TimeZoneOrigin,
-    ConfigChanged,
-    ConfigCommandDispositionDto,
-    ConfigCommandResult,
-    ConfigUpdateParams,
-    ExecPolicyActionKindDto,
-    ExecPolicyTokenDto,
-    ExecPolicyHostMatcherDto,
-    ExecPolicyScopeMatcherDto,
-    ExecPolicySelectorDto,
-    ExecPolicyEffectDto,
-    ExecPolicyRuleDto,
-    ExecPolicyRuleUpsertParams,
-    ExecPolicyRuleRemoveParams,
-    ToolSearchModeDto,
-    ToolSearchEmbeddingStatusDto,
-    ToolSearchConfigDto,
-    ToolSearchConfigureParams,
-    CodebaseConfigureParams,
-    CommitMessageAuthorizeParams,
-    CommitMessageRevokeParams,
-    LanguageServerConfigureParams,
-    LanguageServerRemoveParams,
-    ProviderConfigureParams,
-    ProviderRemoveParams,
-    McpServerUpsertParams,
-    McpServerRemoveParams,
-    McpServerSetEnablementParams,
-    SkillSourceAddParams,
-    SkillSourceRemoveParams,
-    SkillSourceSetEnablementParams,
-    PluginRequestUpsertParams,
-    PluginRequestRemoveParams,
-    PluginRequestSetEnablementParams,
-    HookListParams,
-    HookListResult,
-    HookSourceDto,
-    HookUpsertParams,
-    HookRemoveParams,
-    HookSetEnablementParams,
-    SkillName,
-    SkillSourceId,
-    SkillId,
-    ContentDigest,
-    DelegatedTask,
-    AgentDefinitionSelectionReason,
-    FrozenAgentDefinitionRef,
-    AgentRoleSource,
-    AgentRoleEntry,
-    AgentRoleListResult,
-    AgentRoleCatalogResult,
-    crate::protocol::agent::AgentRoleDefinition,
-    crate::protocol::agent::AgentRoleLaunch,
-    AgentCapabilitiesReadResult,
-    crate::protocol::agent::SandboxPolicyDto,
-    crate::protocol::agent::SandboxHostReadDto,
-    ash_protocol::SandboxMode,
-    SandboxDiagnosticDto,
-    SandboxNetworkModeDto,
-    SandboxReadinessDto,
-    AgentToolCapabilityDto,
-    AgentToolSourceGroupDto,
-    ToolAuthorityDto,
-    ToolExposureDto,
-    ToolSourceDto,
-    AgentRoleSnapshot,
-    AgentTreeExecutionStatus,
-    AgentTreeWaitingReason,
-    AgentTreeNodeProjection,
-    AgentTreeProjection,
-    AgentContextSource,
-    AgentContextContent,
-    AgentMaterializedContext,
-    ForkedAgentContext,
-    AgentContextMode,
-    DelegatedPolicyCeiling,
-    AgentCapabilityScope,
-    ContextSeedDigest,
-    AgentContextSeed,
-    ThreadSequenceRange,
-    DelegationResultStatus,
-    DelegationArtifactRef,
-    DelegationResultDigest,
-    DelegationResult,
-    AgentMessageProvenance,
-    AgentMessageContent,
-    AgentMessage,
-    AgentJoinPolicy,
-    AgentJoinStatus,
-    AgentJoin,
-    SkillVersionSelector,
-    SkillRef,
-    ApprovalEnvironmentScope,
-    ApprovalEnvironmentReadParams,
-    ApprovalEnvironmentReadResult,
-    ApprovalEnvironmentScanResult,
-    ApprovalEnvironmentScanParams,
-    ApprovalEnvironmentSaveParams,
-    ApprovalEnvironmentCancelParams,
-    EnvironmentProfile,
-    EnvironmentDraft,
-    EnvironmentEntry,
-    EnvironmentSource,
-    CommandSource,
-    CommandEvidence,
-    HistoryScanOptions,
-    HistoryCoverage,
-    EntryInput,
-    EntryKind,
-    SourceKind,
-    ScanOptions,
-    SkillActivationReason,
-    FrozenSkillActivation,
-    SkillCatalogReloadDto,
-    SkillEnablementDto,
-    SkillSourceKindDto,
-    SkillCompatibilityDto,
-    SkillDto,
-    SkillDiagnosticCodeDto,
-    SkillDiagnosticDto,
-    InstructionImportPreviewParams,
-    InstructionImportPreviewResult,
-    InstructionImportParams,
-    InstructionImportResult,
-    InstructionImportItem,
-    InstructionImportStatus,
-    InstructionImportSource,
-    InstructionListParams,
-    InstructionListResult,
-    InstructionDto,
-    InstructionDiagnosticDto,
-    InstructionScopeDto,
-    InstructionLoadDto,
-    SkillListParams,
-    SkillListResult,
-    SkillResourceKindDto,
-    SkillResourceOpenParams,
-    SkillResourceOpenResult,
-    SkillSetEnablementParams,
-    SkillsChanged,
-    ExtensionCatalogReloadDto,
-    ExtensionSourceKindDto,
-    ExtensionDiagnosticCodeDto,
-    ExtensionDto,
-    ExtensionRendererClientDto,
-    ExtensionRuntimeBindingDto,
-    ExtensionDiagnosticDto,
-    ExtensionListParams,
-    ExtensionListResult,
-    ExtensionResourceOpenParams,
-    ExtensionResourceOpenResult,
-    ExtensionHostReconcileModeDto,
-    ExtensionHostReconcileParams,
-    ExtensionHostStartParams,
-    ExtensionHostActivateParams,
-    ExtensionHostActivationEventDto,
-    ExtensionHostDebugActivationPhaseDto,
-    ExtensionHostActivationDto,
-    ExtensionHostCommandContributionDto,
-    ExtensionHostSnapshotDto,
-    ExtensionHostExtensionDto,
-    ExtensionHostLifecycleDto,
-    ExtensionHostOutputEventDto,
-    ExtensionHostOutputOperationDto,
-    ExtensionHostOutputChannelKindDto,
-    ExtensionHostOutputSeverityDto,
-    ExtensionHostFailureCodeDto,
-    ExtensionHostFailureDto,
-    ExtensionHostRegistrationDescriptorDto,
-    ExtensionHostRegistrationKindDto,
-    ExtensionHostExternalUriSchemeDto,
-    ExtensionHostLanguageProviderOperationDto,
-    ExtensionHostInvokeStartParams,
-    ExtensionHostInvokeStartResult,
-    ExtensionHostInvokeCompleted,
-    ExtensionHostInvokeReadParams,
-    ExtensionHostInvokeReadResult,
-    ExtensionHostInvokeCancelParams,
-    ExtensionHostInvokeCancelResult,
-    ExtensionHostInvokeCancelDispositionDto,
-    ExtensionHostCancellationReasonDto,
-    ExtensionHostChanged,
-    SlashCommandArgumentModeDto,
-    SlashCommandDefinition,
-    ProtocolVersion,
-    CapabilityContract,
-    ServerCapabilities,
-    crate::protocol::input_completions::InputCompletionsCapability,
-    crate::protocol::input_completions::InputCompletionsParams,
-    crate::protocol::input_completions::InputCompletionsResult,
-    crate::protocol::input_completions::InputCompletionValue,
-    crate::protocol::input_completions::InputCompletionItem,
-    InitializeParams,
-    InitializeResult,
-    DirGrantDto,
-    EnvDirDto,
-    EnvDirReadParams,
-    EnvDirSetEntry,
-    EnvDirsSetParams,
-    EnvDirsSetResult,
-    SessionDirSelector,
-    SessionDirDto,
-    DirContributionsDto,
-    SessionDirListParams,
-    SessionDirListResult,
-    SessionDirAddParams,
-    SessionDirRemoveParams,
-    SessionDirMutationDto,
-    SessionDirAddResult,
-    SessionDirMoveParams,
-    SessionDirMoveResult,
-    SessionDirMutationResult,
-    PermissionDto,
-    SessionDirectoryGrantSetParams,
-    DirectoryGrantsReadParams,
-    DirectoryGrantsReadResult,
-    DirectoryGrantsEntryDto,
-    DirectoryGrantsListResult,
-    DirectoryGrantsSetParams,
-    DirectoryGrantsForgetParams,
-    SessionStatus,
-    SessionSource,
-    SessionSurface,
-    SessionManagerStatus,
-    SessionManagerActivity,
-    SessionManagerInfo,
-    ThreadOrigin,
-    SessionThread,
-    Session,
-    SessionExecutionTarget,
-    ApprovalMode,
-    SessionCreateParams,
-    ComparisonForkParams,
-    SessionEnvironmentVariables,
-    SessionWorktreeStart,
-    SessionEnvironmentProfileReadParams,
-    SessionEnvironmentProfileReadResult,
-    SessionEnvironmentProfileSaveParams,
-    SessionRuntimeParams,
-    SessionRuntimeCancelParams,
-    SessionRuntimeResult,
-    SessionRuntimeRequest,
-    SessionReadParams,
-    WireLogParams,
-    WireLogReadParams,
-    WireLogPage,
-    WireLogDirection,
-    WireLogFrameKind,
-    WireLogFrame,
-    SessionTraceReadParams,
-    SessionTraceReadResult,
-    AgentHostDebugLogsResult,
-    AgentHostDebugLogsParams,
-    AgentHostDebugLogFile,
-    SessionTraceDiagnosticsReadParams,
-    SessionTraceDiagnosticsReadResult,
-    SessionTracePayloadReadParams,
-    SessionTracePayloadReadResult,
-    SessionTraceGraphReadResult,
-    MessageCheckpointsParams,
-    MessageCheckpointsResult,
-    ash_protocol::HistoryDirection,
-    ash_protocol::ThreadHistoryCheckpoint,
-    ThreadHistoryState,
-    MessageCheckpoint,
-    MessageBoundary,
-    WorkspaceCheckpoint,
-    RepositoryCheckpoint,
-    HistoryPrefixRef,
-    AgentId,
-    AgentReadParams,
-    AgentReadResult,
-    AgentThread,
-    SessionSubscribeParams,
-    SessionUnsubscribeParams,
-    SessionChanged,
-    SessionCatalogReadResult,
-    SessionDeleted,
-    SessionRequest,
-    SessionRequestParams,
-    SessionRequestResult,
-    AdvisorConfig,
-    AdvisorSelection,
-    AdvisorConfigureResult,
-    ContextReadDetail,
-    ContextToolDefinition,
-    ContextReadParams,
-    ContextReadResult,
-    ContextReadScope,
-    ModelContextInspection,
-    ContextCompactionPolicy,
-    ModelContextCategory,
-    ModelContextCategoryUsage,
-    ModelContextSourceUsage,
-    ModelContextAllocation,
-    SessionThreadReadParams,
-    SessionThreadReadResult,
-    SessionThreadSubscribeParams,
-    SessionThreadSubscribeResult,
-    SessionThreadUnsubscribeParams,
-    SessionResult,
-    SessionListResult,
-    SessionSubscribeResult,
-    SessionThreadProjection,
-    SessionThreadResult,
-    SessionRewriteResult,
-    ThreadGoalStatus,
-    UserGoalChange,
-    ThreadGoal,
-    ThreadGoalSetParams,
-    ThreadGoalSetResponse,
-    ThreadGoalGetParams,
-    ThreadGoalGetResponse,
-    ThreadGoalClearParams,
-    ThreadGoalClearResponse,
-    ThreadGoalUpdatedNotification,
-    ThreadGoalClearedNotification,
-    ThreadSnapshotHistory,
-    ThreadHistoryBoundary,
-    CapabilitySupport,
-    ModelAccess,
-    ModelOutputTransport,
-    ModelCapabilities,
-    ModelSettings,
-    ModelInputModality,
-    ModelVerbosity,
-    ModelReasoningSummary,
-    ModelServiceTier,
-    ModelSpeed,
-    ModelAcceleration,
-    ModelAccelerationOption,
-    ModelRetirement,
-    ModelPurpose,
-    ModelMetadataQuality,
-    ModelTokenPricing,
-    ModelToolOutputLimit,
-    ReasoningEffort,
-    ModelReasoningEffortOption,
-    ReasoningState,
-    ReasoningReplayContext,
-    Personality,
-    ModelCatalogEntry,
-    ModelCatalogSource,
-    ModelCatalogStatus,
-    ModelCatalogIssue,
-    ModelCatalogFreshness,
-    ModelListParams,
-    ModelCatalogScope,
-    ModelListResult,
-    ModelPreferencesUpdateParams,
-    ProviderApiKeyDto,
-    ProviderApiKeyPolicyDto,
-    ProviderApiKeySetParams,
-    ProviderApiKeyRemoveParams,
-    ProviderApiKeySetResult,
-    ProviderProbeParams,
-    ProviderProbeResult,
-    ProviderModelsListParams,
-    ProviderModelsListFailureCodeDto,
-    ProviderModelsListFailureDto,
-    ProviderModelsListResult,
-    ProviderModelsUpdated,
-    ProviderModelsAuthorityDto,
-    ProviderCatalogEntryDto,
-    ProviderListResult,
-    SecretStorageStatus,
-    SecretStorageStatusResult,
-    SecretStorageType,
-    SecretStorageMode,
-    SecretStorageModeSetParams,
-    StableTurnErrorCode,
-    StableTurnError,
-    ThreadStatus,
-    ThreadTitleSource,
-    ThreadArchiveReason,
-    TurnStatus,
-    MessagePhase,
-    StopReason,
-    TurnLoopAction,
-    TurnLoopDecision,
-    TurnLoopReason,
-    ActionApprovalCapabilityKind,
-    ActionApprovalCapability,
-    DirectoryCapability,
-    PermissionGrantDuration,
-    RequestedDirectoryGrant,
-    PermissionRequest,
-    PermissionResponse,
-    ActionApprovalRequest,
-    ActionApprovalCommand,
-    ActionApprovalDecision,
-    ActionApprovalResponse,
-    ActionApprovalRiskAssessment,
-    ToolResultReview,
-    ToolResultReviewDecision,
-    ToolResultReviewRequest,
-    ToolResultReviewResponse,
-    RiskLevel,
-    AgentInteractionKind,
-    AgentRequest,
-    AgentRequestEnvelope,
-    AgentResponse,
-    TurnInteraction,
-    PendingInteraction,
-    InteractionDeadline,
-    InteractionCancelReason,
-    RequestUserInput,
-    RequestUserInputResponse,
-    UserInputQuestion,
-    UserInputValidation,
-    UserInputOption,
-    UserInputAnswer,
-    DynamicToolCall,
-    DynamicToolResponse,
-    DynamicToolOutput,
-    ThreadItem,
-    ToolActivity,
-    ToolConfirmationPresentation,
-    ToolModifiedFile,
-    ToolCallBinding,
-    ToolSourceProvenance,
-    ToolCallCaller,
-    ContentPart,
-    ImageAttachmentRef,
-    AttachmentRef,
-    AudioAttachmentRef,
-    AudioMediaType,
-    ImageMediaType,
-    ImageDetail,
-    ModelContextUsageSource,
-    ModelContextUsage,
-    ModelInputEstimate,
-    ModelUsage,
-    ModelUsageTotal,
-    ModelUsageSummary,
-    ModelBillingEvidence,
-    ModelBillingRecord,
-    ModelBillingScope,
-    ModelCostLineItem,
-    ModelId,
-    ModelInvocationId,
-    ModelInvocationOutcome,
-    ModelInvocationRecord,
-    ModelInvocationTiming,
-    ModelMoneyAmount,
-    ModelReferenceCostReason,
-    ModelReferenceCostRecord,
-    ModelReferenceCostSummary,
-    RatedModelCost,
-    ToolMode,
-    ToolCategory,
-    ToolProfileSnapshot,
-    ToolScope,
-    ToolSetDefinition,
-    ToolProductProfile,
-    ToolProductStatus,
-    ReviewTarget,
-    TurnKind,
-    TurnInstructions,
-    Turn,
-    Thread,
-    ToolExecutionAuthority,
-    ToolOutputArtifact,
-    ToolResultPresentation,
-    ToolOutputArtifactData,
-    ToolOutputArtifactSource,
-    McpAppResourceCsp,
-    VoiceTranscript,
-    ModelConnectionId,
-    VoiceTranscriptSpeaker,
-    ToolOutputStream,
-    ProcessExitStatus,
-    ProcessExecutionOutput,
-    ToolReplaySafety,
-    SandboxDenialOutput,
-    ContextCheckpointId,
-    ContextSourceRange,
-    ContextSourceDigest,
-    ContextCheckpointVerification,
-    ContextCheckpoint,
-    TurnExecutionBinding,
-    ThreadEvent,
-    HookEvent,
-    HookRunRecord,
-    HookRunStatus,
-    PlanStepStatus,
-    PlanStep,
-    PlanUpdate,
-    StreamCursor,
-    ItemDelta,
-    ThreadUpdate,
-    ThreadUpdateEnvelope,
-    ThreadTranscriptEntry,
-    ThreadTranscriptSnapshot,
-    ThreadTranscriptChange,
-    ThreadTranscriptUpdateEnvelope,
-    InputItem,
-    TurnStartResult,
-    TurnSteerResult,
-    TurnInterruptResult,
-    TurnInteractionResolveResult,
-    ChangeSetId,
-    TurnChangeCaptureStateDto,
-    TurnChangeMessageStateDto,
-    TurnChangeCommitStateDto,
-    TurnChangeTerminalStateDto,
-    TurnChangeFileKindDto,
-    TurnChangeFileDto,
-    TurnChangeFileStatisticsDto,
-    ThreadDirBinding,
-    ThreadWorktreeRepositoryBindingDto,
-    TurnChangeSetSummary,
-    TurnChangesListParams,
-    TurnChangesListResult,
-    TurnChangesSummaryResult,
-    TurnChangesRepositorySummary,
-    TurnChangesSummaryFileParams,
-    TurnChangesReadParams,
-    TurnChangesReadResult,
-    TurnChangesReadFileParams,
-    TurnChangesReadFileResult,
-    TurnChangesMutationParams,
-    TurnChangesUpdateDraftParams,
-    TurnChangesCommitParams,
-    TurnChangeSelectionDto,
-    TurnChangesPrepareCommitParams,
-    TurnChangesPrepareCommitResult,
-    TurnChangesReadCommitFileParams,
-    TurnChangesReadCommitParams,
-    TurnChangesDiscardThreadParams,
-    TurnChangesMutationResult,
-    TurnChangesChanged,
-    ProjectStatusDto,
-    ProjectScopeDto,
-    UnixMillis,
-    SymphonyConfigureParams,
-    SymphonySubmitParams,
-    SymphonyControlParams,
-    SymphonyEnableParams,
-    SymphonyMessagesParams,
-    SymphonySnapshot,
-    SymphonyWorkflow,
-    SymphonyConversation,
-    SymphonyTaskStatus,
-    SymphonyControl,
-    SymphonyMessage,
-    SymphonyMessageRole,
-    SymphonyMessages,
-    Automation,
-    AutomationDefinition,
-    AutomationCondition,
-    AutomationEvent,
-    AutomationSchedule,
-    AutomationSession,
-    AutomationStatus,
-    AutomationRun,
-    AutomationRunStatus,
-    ExtensionItemsParams,
-    ExtensionItemsResult,
-    ExtensionItem,
-    ExtensionItemStatus,
-    ExtensionItemContent,
-    SearchSource,
-    QueueEditParams,
-    QueueEditAction,
-    QueueDelivery,
-    QueueMove,
-    QueueEnqueueParams,
-    QueueListParams,
-    QueueCancelParams,
-    QueueListResult,
-    QueueInput,
-    CodeSnapshot,
-    SnapshotInfo,
-    SourceTask,
-    TaskPackage,
-    TaskReadParams,
-    TaskReceipt,
-    TaskReport,
-    UserInput,
-    QueuedMessage,
-    QueueStatus,
-    NetworkReadResult,
-    NetworkHttpConfigureParams,
-    HttpCompatibilityModeDto,
-    NetworkDiagnosticsRunResult,
-    NetworkTargetDto,
-    NetworkPurposeDto,
-    NetworkRouteDto,
-    NetworkCheckDto,
-    NetworkCheckOutcomeDto,
-    NetworkFailureDto,
-    FeedbackPrepareParams,
-    FeedbackUploadParams,
-    DiagnosticSnapshot,
-    MetricSeries,
-    MetricKind,
-    MetricDistribution,
-    AuthHeader,
-    AuthRecovery,
-    DiagnosticOutcome,
-    RequestAttempt,
-    RequestOutcome,
-    ResponseDebugContext,
-    ResponseDiagnostic,
-    ResponseOperation,
-    Activity,
-    ActivitySummary,
-    Observation,
-    Outcome,
-    UsageSnapshot,
-    UsageEvent,
-    PreparedFeedback,
-    BuildInfo,
-    Feature,
-    FeatureState,
-    FeatureStage,
-    FeatureSource,
-    MemoryDiagnosticsSessionParams,
-    MemoryAddParams,
-    MemoryUpdateParams,
-    MemoryScopesParams,
-    MemoryScopesResult,
-    MemoryScopeDescriptor,
-    MemoryCitationReadParams,
-    MemoryPolicyReadParams,
-    MemoryPolicyUpdateParams,
-    memories::MemoryCitation,
-    memories::MemoryCitationResult,
-    memories::MemoryReadMode,
-    memories::MemoryWriteMode,
-    memories::MemoryPolicy,
-    memories::MemoryPolicyMutationResult,
-    MemoryListParams,
-    MemoryReadParams,
-    MemorySearchParams,
-    MemoryDeleteParams,
-    MemoryChanged,
-    memories::MemoryId,
-    memories::MemoryScope,
-    memories::MemorySource,
-    memories::Memory,
-    memories::MemorySummary,
-    memories::MemoryListPage,
-    memories::MemorySearchMatch,
-    memories::MemorySearchPage,
-    memories::MemoryMutationDisposition,
-    memories::MemoryMutationResult,
-    memories::MemoryDeleteResult,
-    MemoryProduct,
-    MemoryStart,
-    MemoryRole,
-    MemoryOrigin,
-    MemoryPhase,
-    MemoryMetricKind,
-    MemoryUnavailable,
-    MemoryMetric,
-    MemoryObservation,
-    MemoryEvidence,
-    MemoryStatus,
-    MemoryFinding,
-    MemorySample,
-    MemoryTrend,
-    MemoryTargetReport,
-    MemoryReport,
-    MessageHistoryKind,
-    MessageHistoryAppendParams,
-    MessageHistoryEntry,
-    MessageHistoryReadParams,
-    MessageHistoryPage,
-    AutomationListResult,
-    AutomationPreviewParams,
-    AutomationPreviewResult,
-    AutomationWriteParams,
-    AutomationDeleteParams,
-    AutomationRunParams,
-    AutomationRunReadParams,
-    AutomationRunsParams,
-    AutomationRunsResult,
-    AutomationStopParams,
-    PathUri,
-    ProjectRootDto,
-    ProjectMaterialDto,
-    ProjectMaterialKindDto,
-    ProjectDto,
-    ProjectSummaryDto,
-    ProjectListParams,
-    ProjectListResult,
-    ProjectReadParams,
-    ProjectReadResult,
-    ProjectCreateParams,
-    ProjectDetailsUpdateParams,
-    ProjectRootAddParams,
-    ProjectRootUpdateParams,
-    ProjectRootRemoveParams,
-    ProjectSessionMutationParams,
-    ProjectLifecycleParams,
-    ProjectCommandDispositionDto,
-    ProjectMutationResult,
-    ProjectChanged,
-    TeamMemberDto,
-    TeamStatusDto,
-    TeamDto,
-    TeamCommandDto,
-    TeamListParams,
-    TeamListResult,
-    TeamReadParams,
-    TeamReadResult,
-    TeamCommandParams,
-    TeamCommandResult,
-    TeamRunDto,
-    TeamRunStartParams,
-    TeamRunStartResult,
-    TeamRunAttachParams,
-    TeamRunReadParams,
-    TeamRunReadResult,
-    TeamRunListParams,
-    TeamRunListResult,
-    TeamMessageDto,
-    TeamMessagePostParams,
-    TeamMessagePostResult,
-    TeamMessageListParams,
-    TeamMessageListResult,
-    AssetCatalogParams,
-    AssetCatalogEntry,
-    AssetCollection,
-    AssetCatalogResult,
-    AssetCatalogUpdateParams,
-    AssetCollectionDeleteParams,
-    AssetImportStartParams,
-    AssetImportStartResult,
-    AssetImportWriteParams,
-    AssetImportWriteResult,
-    AssetImportParams,
-    AssetVersionParams,
-    AssetVersionResult,
-    AssetImageType,
-    AssetReadParams,
-    AssetReadResult,
-    ResourceMetadataParams,
-    ResourceMetadataResult,
-    ResourceReadParams,
-    ResourceReadResult,
-    ResourceReleaseParams,
-    AttachmentUploadStartParams,
-    AttachmentUploadStartResult,
-    AttachmentUploadWriteParams,
-    AttachmentUploadWriteResult,
-    AttachmentUploadFinishParams,
-    AttachmentUploadCancelParams,
-    AttachmentImportRemoteParams,
-    AttachmentResourceOpenParams,
-    AttachmentMaterializeResult,
-    FsFileType,
-    FsFileWriteMode,
-    FsFileWriteOptions,
-    FsGetMetadataParams,
-    FsGetMetadataResult,
-    FsPathCaseSensitivity,
-    FsPathCaseSensitivityScope,
-    FsResolvePathParams,
-    FsResolvePathResult,
-    FsDirectoryTarget,
-    FsReadPathCaseSensitivityParams,
-    FsReadPathCaseSensitivityResult,
-    FsReadDirectoryParams,
-    FsReadDirectoryEntry,
-    FsReadDirectoryResult,
-    FsReadBinaryFileParams,
-    FsReadBinaryFileResult,
-    FsReadFileParams,
-    FsReadFileResult,
-    DiffComputeParams,
-    DiffRowKindDto,
-    DiffRangeDto,
-    DiffComputeRowDto,
-    DiffHunkDto,
-    DiffComputeResult,
-    SyntaxLanguageDto,
-    SyntaxOpenParams,
-    SyntaxEditDto,
-    SyntaxUpdateParams,
-    SyntaxPositionDto,
-    SyntaxRangeDto,
-    SyntaxTokenKindDto,
-    SyntaxTokenDto,
-    SyntaxFoldingRangeDto,
-    SyntaxSelectionRangeDto,
-    SyntaxSelectionRangesParams,
-    SyntaxSelectionRangesResult,
-    SyntaxSymbolKindDto,
-    SyntaxSymbolDto,
-    SyntaxDiagnosticKindDto,
-    SyntaxDiagnosticDto,
-    SyntaxAnalyzeParams,
-    SyntaxCloseParams,
-    SyntaxAnalyzeResult,
-    SyntaxQueryKindDto,
-    SyntaxLineRangeDto,
-    SyntaxQueryParams,
-    SyntaxCancelParams,
-    SyntaxCaptureDto,
-    SyntaxRowDto,
-    SyntaxFactsDeltaDto,
-    SyntaxSymbolsSpliceDto,
-    SyntaxFoldsSpliceDto,
-    SyntaxDiagnosticsSpliceDto,
-    SyntaxBracketDto,
-    SyntaxQueryResult,
-    LanguageLocationKindDto,
-    LanguagePositionDto,
-    LanguageRangeDto,
-    LanguageDocumentDto,
-    LanguageServersParams,
-    LanguageServersResult,
-    LanguageServerDescriptorDto,
-    LanguageServerControlParams,
-    LanguageServerControlActionDto,
-    LanguageSynchronizeParams,
-    LanguageCloseParams,
-    LanguageSaveParams,
-    LanguageServerCapabilitiesNotification,
-    LanguageDiagnosticsRefreshNotification,
-    LanguageServerFeatureDto,
-    LanguageOperationParams<()>,
-    LanguageCancelParams,
-    LanguageCancelStatusDto,
-    LanguageCancelResult,
-    LanguageHoverParams,
-    LanguageHoverResult,
-    LanguageCompletionTriggerKindDto,
-    LanguageCompletionsParams,
-    LanguageCompletionItemKindDto,
-    LanguageCompletionInsertTextFormatDto,
-    LanguageCompletionItemDto,
-    LanguageResolveCompletionParams,
-    LanguageCompletionDetailsResult,
-    LanguageExecuteCommandParams,
-    LanguageCompletionsResult,
-    LanguageDocumentDiagnosticsParams,
-    LanguageDiagnosticReportKindDto,
-    LanguageDocumentDiagnosticsResult,
-    LanguageDirectoryDiagnosticsParams,
-    LanguageDirectoryDiagnosticSnapshotDto,
-    LanguageDirectoryDiagnosticsResult,
-    LanguageFormattingOptionsDto,
-    LanguageDocumentFormattingParams,
-    LanguageRangeFormattingParams,
-    LanguageOnTypeFormattingParams,
-    LanguageFormattingResult,
-    LanguageSignatureHelpTriggerKindDto,
-    LanguageSignatureHelpParams,
-    LanguageParameterInformationDto,
-    LanguageSignatureInformationDto,
-    LanguageSignatureHelpResult,
-    LanguageInlayHintsParams,
-    LanguageInlayHintKindDto,
-    LanguageInlayHintDto,
-    LanguageInlayHintsResult,
-    LanguageLinkedEditingRangesParams,
-    LanguageLinkedEditingRangesResult,
-    LanguageSemanticTokensParams,
-    LanguageSemanticTokenDto,
-    LanguageSemanticTokensResult,
-    LanguageDocumentFeaturesParams,
-    LanguageDocumentSymbolDto,
-    LanguageDocumentSymbolsResult,
-    LanguageCommandDto,
-    LanguageCodeLensDto,
-    LanguageCodeLensesResult,
-    LanguageResolveCodeLensParams,
-    LanguageDocumentLinkDto,
-    LanguageDocumentLinksResult,
-    LanguageResolveDocumentLinkParams,
-    LanguageColorDto,
-    LanguageDocumentColorDto,
-    LanguageDocumentColorsResult,
-    LanguageColorPresentationsParams,
-    LanguageColorPresentationDto,
-    LanguageColorPresentationsResult,
-    LanguageFoldingRangeKindDto,
-    LanguageFoldingRangeDto,
-    LanguageFoldingRangesResult,
-    LanguageLocationsParams,
-    LanguageLocationDto,
-    LanguageLocationsResult,
-    LanguageHierarchyKindDto,
-    LanguageHierarchyItemDto,
-    LanguageHierarchyParams,
-    LanguageHierarchyEntryDto,
-    LanguageHierarchyResultDto,
-    LanguageDirectorySymbolsParams,
-    LanguageDirectorySymbolDto,
-    LanguageDirectorySymbolsResult,
-    LanguagePrepareRenameParams,
-    LanguageRenamePreparationDto,
-    LanguagePrepareRenameResult,
-    LanguageRenameParams,
-    LanguageTextEditDto,
-    LanguageTextDocumentEditDto,
-    LanguageDirectoryEditDto,
-    LanguageDirectoryEditEntryDto,
-    LanguageDiagnosticSeverityDto,
-    LanguageCodeActionDiagnosticDto,
-    LanguageDiagnosticsNotification,
-    LanguageServerMessageSeverityDto,
-    LanguageServerMessageSourceDto,
-    LanguageServerMessageNotification,
-    LanguageServerProgressNotification,
-    LanguageServerStateDto,
-    LanguageServerStateNotification,
-    LanguageCodeActionsParams,
-    LanguageCodeActionDto,
-    LanguageCodeActionsResult,
-    LanguageResolveCodeActionParams,
-    FsWriteFileParams,
-    FsWriteFileElevatedParams,
-    FsCancelElevatedWriteParams,
-    FsWriteBinaryFileParams,
-    FsWriteFileResult,
-    FsExistingTargetBehavior,
-    FsMissingTargetBehavior,
-    FsDeleteMode,
-    FsCreateFileParams,
-    FsCreateDirectoryParams,
-    FsCopyParams,
-    FsPasteSystemFilesParams,
-    FsRenameParams,
-    FsDeleteParams,
-    FsChanged,
-    GitIntegrationDto,
-    GitCommitScopeDto,
-    GitCommitModeDto,
-    GitCommitSignoffDto,
-    GitCommitSigningDto,
-    GitCommitHooksDto,
-    GitCommitIdentityDto,
-    GitEmptyCommitPolicyDto,
-    GitStashModeDto,
-    GitCommandDto,
-    GitCommandParams,
-    GitCommandOutcomeDto,
-    GitCommandResult,
-    GitNamedRefDto,
-    GitStashDto,
-    GitCatalogResult,
-    GitInitParams,
-    GitIndexSelectionDto,
-    GitIndexEditParams,
-    GitIndexHunkDto,
-    GitIndexDiffResult,
-    GitChangeStatusDto,
-    GitUpstreamDto,
-    GitHeadDto,
-    GitSubmoduleStateDto,
-    GitTransportParams,
-    GitTransportOperationDto,
-    GitTransportResult,
-    GitTransportOutcomeDto,
-    GitVersionResult,
-    GitInstallationDto,
-    GitPullPreflightResult,
-    GitBlameParams,
-    GitClientOptionsDto,
-    GitInteractionDto,
-    GitDiscoveryParams,
-    GitDiscoveryFolderDto,
-    GitBlameResult,
-    GitFileHistoryParams,
-    GitFileHistoryResult,
-    GitFileHistoryItemDto,
-    GitRepositoryParams,
-    GitCloneParams,
-    GitCloneResult,
-    GitCloneToParams,
-    GitCloneCancelParams,
-    GitCloneCancelResult,
-    GitFetchModeDto,
-    GitFetchParams,
-    GitTransportOptionsDto,
-    GitPushModeDto,
-    GitPullModeDto,
-    GitPullParams,
-    GitRepositoryDto,
-    crate::protocol::git::GitRepositoryContextsParams,
-    crate::protocol::git::GitRepositoryContextDto,
-    crate::protocol::git::GitRepositoryContextsResult,
-    GitRepositoriesResult,
-    GitRepositoryChangeDto,
-    GitStatusResult,
-    GitCheckIgnoreParams,
-    GitCheckIgnoreCancelParams,
-    GitCheckIgnoreCancelResult,
-    GitCheckIgnoreCancelStatusDto,
-    GitIgnoreChanged,
-    GitCheckIgnoreResult,
-    GitStatusChanged,
-    GitBranchDto,
-    GitBranchCreateParams,
-    GitBranchDeleteParams,
-    GitWorktreeCreateParams,
-    GitWorktreeDeleteParams,
-    GitWorktreeDeleteMode,
-    GitWorktreeCreateResult,
-    GitWorktreeDto,
-    GitWorktreeStateDto,
-    GitWorktreeListParams,
-    GitWorktreeListResult,
-    GitWorktreeResolveParams,
-    GitWorktreeResolveResult,
-    GitBranchListResult,
-    GitCommitSummaryDto,
-    GitHistoryRefsResult,
-    GitHistoryResult,
-    GitRemoteProviderDto,
-    GitRepositoryIdentityDto,
-    GitRemoteDto,
-    GitReferenceKindDto,
-    GitReferenceCommitDto,
-    GitReferenceDto,
-    GitGraphParams,
-    GitGraphResult,
-    GitCommitChangesParams,
-    GitCompareChangesParams,
-    GitCompareChangesResult,
-    GitComparisonModeDto,
-    GitCommitMessageResult,
-    GitCommitDetailsResult,
-    GitCommitStatisticsDto,
-    GitCommitChangeDto,
-    GitCommitChangesResult,
-    GitCommitFileParams,
-    GitCommitFileContentDto,
-    GitCommitFileResult,
-    GitChangeFileComparisonDto,
-    GitChangeFileParams,
-    GitChangeFileResult,
-    GitChangeFilesParams,
-    GitChangeFilesResult,
-    GitConflictFileParams,
-    GitConflictFileResult,
-    GitConflictResolutionDto,
-    GitCompleteConflictParams,
-    GitBranchSwitchParams,
-    GitTextDiffDto,
-    GitTextDiffParams,
-    GitTextDiffProjectionDto,
-    GitDiffStatisticsDto,
-    GitTextDiffResult,
-    GitChangesSummaryResult,
-    GitAIEditorEvidenceDto,
-    GitAIContributionParams,
-    GitAIContributionResult,
-    GitRemovalFileDto,
-    GitRemovalEntryDto,
-    GitRemovalReviewResult,
-    GitRemovalModeDto,
-    GitRemoveFilesParams,
-    GitPathsParams,
-    GitCommitParams,
-    GitOperationResult,
-    GitCommitResult,
-    FileGlobParams,
-    FileFuzzyParams,
-    FileFuzzyResult,
-    FileFuzzyMatch,
-    FileGlobResult,
-    FileGlobTarget,
-    FileGlobCancelParams,
-    ContentSearchPatternKind,
-    ContentSearchCaseSensitivity,
-    ContentSearchFreshness,
-    ContentSearchStartParams,
-    ContentSearchStartResult,
-    ContentSearchReadParams,
-    ContentSearchMatchRange,
-    ContentSearchMatch,
-    ContentSearchIndexStats,
-    ContentSearchReadResult,
-    ContentSearchCancelParams,
-    CodebaseStateDto,
-    CodebaseEmbeddingStateDto,
-    CodebaseEmbeddingStatusDto,
-    CodebaseStatusResult,
-    GrepIndexStatusResult,
-    GrepIndexDisableAndDeleteParams,
-    GrepIndexDisableAndDeleteResult,
-    LocalIndexClearOutcomeDto,
-    CodebaseSearchParams,
-    CodebaseChunkSpanDto,
-    CodebaseSearchHitDto,
-    CodebaseSearchResult,
-    CodebaseSymbolsStateDto,
-    CodebaseSymbolsStatusResult,
-    CodebaseSymbolsSearchParams,
-    SymbolKindDto,
-    CodebaseSymbolsSearchHitDto,
-    CodebaseSymbolsSearchResult,
-    DocumentOverlaySynchronizeParams,
-    DocumentOverlayCloseParams,
-    DocumentOverlayStatusResult,
-    CodebaseRetrievalParams,
-    CodebaseRetrievalDegradationDto,
-    CodebaseRetrievalHitDto,
-    CodebaseRetrievalResult,
-    CodebaseDeploymentModeDto,
-    CloudCodebaseStateDto,
-    CloudCodebaseSelectionDto,
-    CloudCodebaseDestinationDto,
-    CloudCodebaseGrantDto,
-    CloudCodebasePreviewParams,
-    CloudCodebasePreviewResult,
-    CloudCodebaseAuthorizeParams,
-    CloudCodebaseStatusResult,
-    TerminalProfile,
-    TerminalProfileListParams,
-    TerminalProfileListResult,
-    TerminalProfileResolveParams,
-    TerminalProfileResolveResult,
-    TerminalEnvironmentReadParams,
-    TerminalEnvironmentReadResult,
-    TerminalArguments,
-    TerminalProfileSelection,
-    TerminalLifecycle,
-    TerminalExecution,
-    TerminalCreateParams,
-    TerminalCreateInSessionDirectoryParams,
-    TerminalCreateResult,
-    TerminalReconnectLease,
-    TerminalAttachParams,
-    TerminalAttachResult,
-    TerminalWriteParams,
-    TerminalWriteBinaryParams,
-    TerminalProcessReady,
-    TerminalProcessLaunch,
-    TerminalProcessInfo,
-    TerminalProcessInfoParams,
-    TerminalSignal,
-    TerminalSendSignalParams,
-    TerminalAutoReply,
-    TerminalSetAutoRepliesParams,
-    TerminalResizeParams,
-    TerminalReadParams,
-    TerminalOutputChunk,
-    TerminalCommandStatus,
-    TerminalCommandStatusEvent,
-    TerminalReadResult,
-    TerminalCwd,
-    TerminalShellIntegration,
-    TerminalShellIntegrationEvent,
-    TerminalShellType,
-    TerminalCloseParams,
-    TestingDiscoverParams,
-    TestingPrepareDebugParams,
-    TestingDebugLaunch,
-    TestingSource,
-    TestingRunParams,
-    TestingOperationParams,
-    TestingTargetKind,
-    TestingItem,
-    TestingState,
-    TestingResult,
-    TestingOperationKind,
-    TestingOperationStatus,
-    TestingSnapshot,
-    TestingUpdate,
-    DebugWorkspaceState,
-    DebugWorkspaceEdit,
-    DebugWorkspaceSnapshot,
-    DebugWorkspaceStatus,
-    DebugWorkspaceResult,
-    DebugBreakpointDefinition,
-    DebugSourceBreakpoint,
-    DebugFunctionBreakpoint,
-    DebugDataBreakpoint,
-    DebugWorkspaceReadParams,
-    DebugWorkspaceWriteParams,
-    DebugBreakpointsSetParams,
-    DebugInspectionStartParams,
-    DebugInspectionStartResult,
-    DebugInspectionReadParams,
-    DebugSourceAddress,
-    DebugBreakpointLocation,
-    DebugDataAccess,
-    DebugBreakpointIntent,
-    DebugBreakpointUnsupported,
-    DebugBreakpointBinding,
-    DebugBreakpointsSnapshot,
-    DebugInspection,
-    DebugWatchValue,
-    DebugScopeVariables,
-    DebugInspectionValue,
-    DebugInspectionResult,
-    DebugSessionInitializeParams,
-    DebugSessionLifecycleParams,
-    DebugConsoleParams,
-    DebugSessionAdmission,
-    DebugSessionPrepareParams,
-    DebugSessionRelation,
-    DebugConsoleSnapshot,
-    DebugConsoleEntry,
-    DebugConsoleEntryKind,
-    DebugExceptionsSnapshot,
-    DebugSessionAction,
-    DebugSessionConfigureParams,
-    DebugExceptionsSetResult,
-    DebugLaunchRequestDto,
-    DebugExecutionStateDto,
-    DebugInitializationPhaseDto,
-    DebugSessionSnapshotDto,
-    DebugSessionCapabilitiesDto,
-    DebugExceptionFilterDto,
-    DebugAdapterConnectionDto,
-    DebugAdapterStartParams,
-    DebugAdapterStartResult,
-    DebugAdapterSendParams,
-    DebugAdapterReadParams,
-    DebugAdapterMessageDto,
-    DebugAdapterReadResult,
-    DebugMessageDirectionDto,
-    DebugSessionRequestParams,
-    DebugSessionRequestResult,
-    DebugSessionResponseParams,
-    DebugSessionResponseResult,
-    DebugSessionInputParams,
-    DebugAdapterCloseParams,
-    AppServerErrorName,
-    AppServerErrorData,
-    AppServerError,
 }
 
 #[cfg(test)]

@@ -9,9 +9,6 @@ on:
       version:
         type: string
         required: true
-      previous-version:
-        type: string
-        default: ""
       source:
         type: string
         default: release
@@ -19,16 +16,13 @@ on:
     inputs:
       product:
         type: choice
-        options: [all, ash-desktop, ash-code, ash-app-server]
+        options: [all, ash-code, ash-app-server]
         default: all
         required: true
       version:
         description: Released version or v-prefixed release tag
         type: string
         required: true
-      previous-version:
-        description: Older Desktop version for installation upgrade checks
-        type: string
 
 permissions:
   contents: read
@@ -42,11 +36,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version-file: .nvmrc
+          node-version: "24.21.0"
       - id: matrix
         env:
           PRODUCT: ${{ inputs.product }}
-        run: echo "matrix=$(node build/release/sanity.ts matrix --product "$PRODUCT")" >> "$GITHUB_OUTPUT"
+        run: echo "matrix=$(node build/release/sanity.mjs matrix --product "$PRODUCT")" >> "$GITHUB_OUTPUT"
 
   verify:
     needs: plan
@@ -68,18 +62,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version-file: .nvmrc
+          node-version: "24.21.0"
           architecture: ${{ matrix.arch }}
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
           python-version: "3.12"
-      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024
-        if: matrix.product == 'ash-desktop'
-        with:
-          install: false
-      - name: Install Desktop test dependencies
-        if: matrix.product == 'ash-desktop'
-        run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Locate Windows signature verifier
         if: runner.os == 'Windows'
         shell: pwsh
@@ -98,7 +85,6 @@ jobs:
           PRODUCT: ${{ matrix.product }}
           VERSION: ${{ inputs.version }}
           TARGET: ${{ matrix.target }}
-          PREVIOUS_VERSION: ${{ inputs.previous-version }}
           SOURCE: ${{ inputs.source || 'release' }}
         run: |
           args=(verify --product "$PRODUCT" --version "${VERSION#v}" --target "$TARGET" --output ".build/release-sanity/$PRODUCT/$TARGET")
@@ -107,10 +93,7 @@ jobs:
             release) ;;
             *) echo "Unsupported artifact source: $SOURCE" >&2; exit 1 ;;
           esac
-          if [ "$PRODUCT" = ash-desktop ] && [ -n "$PREVIOUS_VERSION" ]; then
-            args+=(--previous-version "$PREVIOUS_VERSION")
-          fi
-          node build/release/sanity.ts "${args[@]}"
+          node build/release/sanity.mjs "${args[@]}"
       - name: Upload report and failure diagnostics
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

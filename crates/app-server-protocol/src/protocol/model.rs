@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::ContextWindow;
 use ash_protocol::ModelCapabilities;
 use ash_protocol::ModelInfo;
@@ -9,7 +8,7 @@ use ash_protocol::ReasoningEffort;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -24,7 +23,7 @@ pub enum ContextReadScope {
 }
 
 /// Selects whether this read includes internal definitions for explicit developer inspection.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ContextReadDetail {
     Usage,
@@ -32,14 +31,14 @@ pub enum ContextReadDetail {
 }
 
 /// Inspect loaded context without starting a Turn or invoking a model.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContextReadParams {
     pub scope: ContextReadScope,
     pub detail: ContextReadDetail,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContextReadResult {
     pub context: ash_protocol::ModelContextInspection,
@@ -47,19 +46,17 @@ pub struct ContextReadResult {
     pub tool_definitions: Vec<ContextToolDefinition>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContextToolDefinition {
     pub name: String,
     pub description: String,
-    #[ts(type = "unknown")]
     pub parameters: serde_json::Value,
     pub strict: bool,
-    #[ts(type = "number")]
     pub tokens: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelCatalogEntry {
     pub model: ModelRef,
@@ -67,15 +64,12 @@ pub struct ModelCatalogEntry {
     pub description: Option<String>,
     /// Ash-curated picker recommendations, not invocation capabilities or account access.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<Vec<ash_protocol::ModelPurpose>>", optional)]
     pub recommended_for: Vec<ash_protocol::ModelPurpose>,
     /// Retirement evidence for this catalog row, without inferring availability from its date.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub retirement: Option<ash_protocol::ModelRetirement>,
     /// True only when this ID belongs to the last successful endpoint observation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub discovered: Option<bool>,
     pub context_window: Option<u32>,
     /// Context budget without a per-model preference, distinct from the effective budget and ceiling.
@@ -86,7 +80,6 @@ pub struct ModelCatalogEntry {
     pub selected_acceleration: Option<String>,
     /// Omitted when Ultra is unavailable, otherwise the independent switch state.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub ultra: Option<bool>,
     /// Effective choices after connection restrictions and per-option denials.
     pub acceleration_options: Vec<ash_protocol::ModelAccelerationOption>,
@@ -94,31 +87,25 @@ pub struct ModelCatalogEntry {
     pub maximum_context_window: Option<u32>,
     pub auto_compact_token_limit: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub available_context_window: Option<u32>,
     /// Hard input capacity after output and safety reservations, independent of auto-compaction.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub usable_context_window: Option<u32>,
     pub capabilities: ModelCapabilities,
     /// Provenance and access of this catalog row; never credentials or an execution endpoint.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub source: Option<ModelCatalogSource>,
     /// Published reference rates for the active public API connection. Empty means unknown.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<Vec<ash_protocol::ModelTokenPricing>>", optional)]
     pub pricing: Vec<ash_protocol::ModelTokenPricing>,
     pub supported_reasoning_efforts: Vec<ash_protocol::ModelReasoningEffortOption>,
     /// Catalog default, used when no reasoning effort is selected for the invocation.
     pub default_reasoning_effort: Option<ReasoningEffort>,
     /// Effort resolved for this connection when a Turn supplies no explicit choice.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub effective_reasoning_effort: Option<ReasoningEffort>,
     /// An active provider override, applied even when a Turn supplies an explicit effort.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub reasoning_effort_override: Option<ReasoningEffort>,
     pub default_personality: Option<Personality>,
     #[serde(default)]
@@ -174,45 +161,39 @@ impl ModelCatalogEntry {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelListParams {}
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelPreferencesUpdateParams {
     pub command_id: ash_protocol::CommandId,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub model: ModelRef,
     #[serde(default, skip_serializing_if = "ash_protocol::Patch::is_missing")]
     #[schemars(with = "Option<String>")]
-    #[ts(as = "Option<String>", optional = nullable)]
     pub acceleration: ash_protocol::Patch<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub long_context: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub ultra: Option<bool>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelListResult {
     pub models: Vec<ModelCatalogEntry>,
     /// Cached discovery state for each active connection; independent of invocation readiness.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<Vec<ModelCatalogStatus>>", optional)]
     pub catalog_statuses: Vec<ModelCatalogStatus>,
     /// Current external credential scopes captured with these cached model rows.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub catalog_scopes: Option<Vec<ModelCatalogScope>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelCatalogStatus {
     pub provider: String,
@@ -222,7 +203,7 @@ pub struct ModelCatalogStatus {
     pub issues: Vec<ModelCatalogIssue>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelCatalogIssue {
     RefreshFailed,
@@ -234,7 +215,7 @@ pub enum ModelCatalogIssue {
 }
 
 /// Opaque identity of a catalog authority; an absent identity means unavailable credentials.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelCatalogScope {
     pub connection: String,
@@ -246,10 +227,9 @@ pub struct ModelCatalogScope {
 mod tests;
 
 /// Source identity is server-owned and scoped to the actual connection; vendor labels cannot claim it.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelCatalogSource {
-    #[ts(type = "string")]
     pub provider_id: ash_protocol::ProviderId,
     pub connection_id: ash_protocol::ModelConnectionId,
     pub metadata: ash_protocol::ModelMetadataQuality,

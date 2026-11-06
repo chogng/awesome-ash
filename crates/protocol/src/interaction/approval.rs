@@ -4,13 +4,12 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 use crate::RiskLevel;
 use crate::SandboxDenialOutput;
 
 /// Advisory assessment retained with the exact policy-bound approval, never an execution grant.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ActionApprovalRiskAssessment {
     #[schemars(length(min = 1))]
@@ -22,7 +21,7 @@ pub struct ActionApprovalRiskAssessment {
 
 /// Capability kind displayed and approved through a durable Agent interaction.
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum ActionApprovalCapabilityKind {
@@ -37,7 +36,7 @@ pub enum ActionApprovalCapabilityKind {
 }
 
 /// One exact capability included in an action approval request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ActionApprovalCapability {
     pub kind: ActionApprovalCapabilityKind,
@@ -46,7 +45,7 @@ pub struct ActionApprovalCapability {
 }
 
 /// Host-materialized command displayed before granting reusable authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ActionApprovalCommand {
     pub program: String,
@@ -56,7 +55,7 @@ pub struct ActionApprovalCommand {
 /// Durable request for approval of one policy-bound action.
 ///
 /// `sandbox_denial` is present only for one exact retry after a safe sandbox denial.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ActionApprovalRequest {
     #[schemars(length(min = 1))]
@@ -70,18 +69,15 @@ pub struct ActionApprovalRequest {
     #[serde(default = "default_decisions")]
     pub allowed_decisions: Vec<ActionApprovalDecision>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub command: Option<ActionApprovalCommand>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub sandbox_denial: Option<SandboxDenialOutput>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub risk_assessment: Option<ActionApprovalRiskAssessment>,
 }
 
 /// User decision for one exact action approval interaction.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ActionApprovalDecision {
     ApproveOnce,
@@ -91,7 +87,7 @@ pub enum ActionApprovalDecision {
 }
 
 /// Durable response to an action approval request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ActionApprovalResponse {
     pub decision: ActionApprovalDecision,

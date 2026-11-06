@@ -9,7 +9,6 @@ use std::collections::BTreeMap;
 use std::collections::VecDeque;
 use std::sync::Arc;
 use std::sync::Mutex;
-use ts_rs::TS;
 
 mod metrics;
 pub use metrics::MetricDistribution;
@@ -21,7 +20,7 @@ pub use metrics::MetricTimer;
 pub use metrics::Metrics;
 
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum Activity {
@@ -30,7 +29,7 @@ pub enum Activity {
     Http,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum Outcome {
     Succeeded,
@@ -38,29 +37,24 @@ pub enum Outcome {
     Cancelled,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Observation {
     pub activity: Activity,
     pub outcome: Outcome,
-    #[ts(type = "number")]
     pub elapsed_ms: u64,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ActivitySummary {
-    #[ts(type = "number")]
     pub count: u64,
-    #[ts(type = "number")]
     pub failed: u64,
-    #[ts(type = "number")]
     pub cancelled: u64,
-    #[ts(type = "number")]
     pub elapsed_ms: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DiagnosticSnapshot {
     pub build: build_info::BuildInfo,

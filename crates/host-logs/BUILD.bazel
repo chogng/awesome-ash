@@ -4,7 +4,7 @@ ash_rust_crate(
     name = "host-logs",
     crate_name = "ash_host_logs",
     crate_features = ["export", "json-schema"],
-    extra_deps = ["@crates//:schemars", "@crates//:ts-rs"],
+    extra_deps = ["@crates//:schemars"],
 )
 
 ash_rust_binary(

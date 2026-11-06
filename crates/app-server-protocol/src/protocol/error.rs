@@ -1,9 +1,8 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub enum AppServerErrorName {
     SymphonyUnavailable,
     SymphonyNotFound,
@@ -227,16 +226,14 @@ pub enum AppServerErrorName {
     ExtensionHostQuotaExceeded,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
-#[ts(rename_all = "camelCase")]
 pub struct AppServerErrorData {
     pub kind: AppServerErrorName,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub struct AppServerError {
-    #[ts(type = "number")]
     pub code: i64,
     pub message: String,
     pub data: AppServerErrorData,

@@ -12,7 +12,6 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use std::collections::BTreeSet;
-use ts_rs::TS;
 
 const MAX_SCOPES: usize = 32;
 const MAX_TERMS: usize = 16;
@@ -22,12 +21,11 @@ const MAX_ITEM_BYTES: usize = 4096;
 const MAX_TOTAL_BYTES: usize = 16 * 1024;
 
 /// An exact UTF-8 byte range in one immutable Memory revision; it grants no read authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MemoryCitation {
     pub memory_id: MemoryId,
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub revision: u64,
     pub start_byte: u32,
     pub end_byte: u32,
@@ -71,7 +69,7 @@ impl MemoryCitation {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryCitationResult {
     pub citation: MemoryCitation,

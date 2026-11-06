@@ -16,8 +16,7 @@ macro_rules! identifier {
             PartialEq,
             PartialOrd,
             serde::Serialize,
-            ts_rs::TS,
-        )]
+            )]
         pub struct $name(#[schemars(length(min = 1))] String);
 
         impl $name {

@@ -2,7 +2,7 @@
 // Edit the owning language package, then run pnpm tree-sitter:generate.
 
 /// Grammar supported by the authoritative syntax-analysis service.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 pub enum SyntaxLanguageDto {
     #[serde(rename = "bat")]
     Bat,

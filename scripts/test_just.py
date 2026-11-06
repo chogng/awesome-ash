@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class JustTests(unittest.TestCase):
     @unittest.skipIf(os.name == "nt", "The desktop shell launcher runs on Unix")
-    def test_desktop_launch_modes_use_repository_commands_without_uv(self) -> None:
+    def test_desktop_launcher_uses_just_without_uv(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ash desktop launch ") as directory:
             folder = Path(directory)
             (folder / "scripts").mkdir()
@@ -25,13 +25,12 @@ class JustTests(unittest.TestCase):
             entry.write_text((ROOT / "scripts/ash.sh").read_text())
             commands = folder / "bin"
             commands.mkdir()
-            for command in ("just", "pnpm"):
+            for command in ("just",):
                 executable = commands / command
                 executable.write_text(f"#!/bin/sh\nprintf '%s\\n' '{command}' \"$@\"\n")
                 executable.chmod(0o755)
             for arguments, expected in [
                 ([], ["just", "ash"]),
-                (["--connected"], ["pnpm", "dev:ui:connected"]),
             ]:
                 with self.subTest(arguments=arguments):
                     result = subprocess.run(
@@ -44,7 +43,7 @@ class JustTests(unittest.TestCase):
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertEqual(result.stdout.splitlines(), expected)
 
-    @unittest.skipIf(os.name == "nt", "The pnpm probe uses a Unix shell")
+    @unittest.skipIf(os.name == "nt", "The Cargo probe uses a Unix shell")
     def test_product_recipes_route_to_their_hosts_and_forward_terminal_arguments(
         self,
     ) -> None:
@@ -57,14 +56,14 @@ class JustTests(unittest.TestCase):
             )
             commands = folder / "bin"
             commands.mkdir()
-            pnpm = commands / "pnpm"
-            pnpm.write_text('#!/bin/sh\nprintf "%s\\n" "pnpm" "$@"\n')
-            pnpm.chmod(0o755)
+            cargo = commands / "cargo"
+            cargo.write_text('#!/bin/sh\nprintf "%s\\n" "cargo" "$@"\n')
+            cargo.chmod(0o755)
             environment = {
                 **os.environ,
                 "PATH": str(commands) + os.pathsep + os.environ.get("PATH", ""),
             }
-            for recipe, expected in [("ash", "dev"), ("build-ash", "build")]:
+            for recipe, expected in [("ash", "run"), ("build-ash", "build")]:
                 with self.subTest(recipe=recipe):
                     result = subprocess.run(
                         ["just", "--justfile", str(folder / "justfile"), recipe],
@@ -74,7 +73,16 @@ class JustTests(unittest.TestCase):
                         check=False,
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
-                    self.assertEqual(result.stdout.splitlines(), ["pnpm", expected])
+                    self.assertEqual(
+                        result.stdout.splitlines(),
+                        [
+                            "cargo",
+                            expected,
+                            "--locked",
+                            "--manifest-path",
+                            "app/Cargo.toml",
+                        ],
+                    )
             arguments = ["two words", "", "--flag", "$value", "a'b"]
             result = subprocess.run(
                 [

@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::CommandId;
 use ash_protocol::SessionId;
 use serde::Deserialize;
@@ -8,7 +7,7 @@ use std::path::PathBuf;
 
 /// Explicit directory permission transported by the App Server protocol.
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum PermissionDto {
@@ -30,7 +29,7 @@ pub enum PermissionDto {
 }
 
 /// Source of the grant attached while selecting an environment directory.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -44,20 +43,19 @@ pub enum DirGrantDto {
     User {
         command_id: CommandId,
         #[schemars(range(min = 0))]
-        #[ts(type = "number")]
         expected_revision: u64,
         permissions: Vec<PermissionDto>,
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirSelector {
     pub session_id: SessionId,
     pub path: PathBuf,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvDirSetEntry {
     pub id: String,
@@ -67,19 +65,19 @@ pub struct EnvDirSetEntry {
 
 /// Reads effective permissions for an already active environment directory.
 /// This does not discover paths or grant directory-management authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvDirReadParams {
     pub dir_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvDirsSetParams {
     pub dirs: Vec<EnvDirSetEntry>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvDirDto {
     pub id: String,
@@ -87,13 +85,13 @@ pub struct EnvDirDto {
     pub permissions: Vec<PermissionDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnvDirsSetResult {
     pub dirs: Vec<EnvDirDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirDto {
     pub path: PathBuf,
@@ -102,7 +100,7 @@ pub struct SessionDirDto {
     pub contributions: DirContributionsDto,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirContributionsDto {
     pub skills: Vec<String>,
@@ -112,21 +110,20 @@ pub struct DirContributionsDto {
     pub diagnostics: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirListParams {
     pub session_id: SessionId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirListResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub dirs: Vec<SessionDirDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirAddParams {
     pub session_id: SessionId,
@@ -135,7 +132,7 @@ pub struct SessionDirAddParams {
 }
 
 /// Selects one Session execution directory and adds its explicit Session grant.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirMoveParams {
     pub session_id: SessionId,
@@ -143,34 +140,32 @@ pub struct SessionDirMoveParams {
     pub permissions: Vec<PermissionDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirMoveResult {
     pub cwd: PathBuf,
-    #[ts(type = "number")]
     pub revision: u64,
     pub dirs: Vec<SessionDirDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirectoryGrantSetParams {
     pub session_id: SessionId,
     pub path: PathBuf,
     #[schemars(range(min = 0))]
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub permissions: Vec<PermissionDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirRemoveParams {
     pub session_id: SessionId,
     pub path: PathBuf,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SessionDirMutationDto {
     Added,
@@ -180,22 +175,20 @@ pub enum SessionDirMutationDto {
     NotPresent,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirAddResult {
     /// Canonical path resolved by the server, including for an existing directory.
     pub path: PathBuf,
     pub mutation: SessionDirMutationDto,
-    #[ts(type = "number")]
     pub revision: u64,
     pub dirs: Vec<SessionDirDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDirMutationResult {
     pub mutation: SessionDirMutationDto,
-    #[ts(type = "number")]
     pub revision: u64,
     pub dirs: Vec<SessionDirDto>,
 }

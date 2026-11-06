@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::SessionId;
 use ash_protocol::ThreadId;
 use ash_protocol::TurnId;
@@ -7,7 +6,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 /// The originating connection can execute the application operations for this window.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AppToolsCapability {
     pub version: u32,
@@ -15,7 +14,7 @@ pub struct AppToolsCapability {
     pub desktop: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AppHostRequestParams {
     pub session_id: SessionId,
@@ -24,7 +23,7 @@ pub struct AppHostRequestParams {
     pub operation: AppHostOperation,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -52,7 +51,6 @@ pub enum AppHostOperation {
     TasksOutput {
         directory: String,
         run_id: String,
-        #[ts(type = "number")]
         cursor: u64,
         max_characters: u32,
     },
@@ -100,7 +98,7 @@ pub enum AppHostOperation {
 }
 
 /// Host results are bounded JSON text; tools keep the semantic result in their own contract.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AppHostResult {
     pub json: String,

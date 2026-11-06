@@ -1,9 +1,8 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsPackageRefDto {
     /// Source-qualified plugin identity: `<name>@<extension_packages>`.
@@ -12,26 +11,26 @@ pub struct ExtensionsPackageRefDto {
     pub digest: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsArtifactHandleDto {
     pub id: String,
     pub package: ExtensionsPackageRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsCapabilityRefDto {
     pub id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsResourceRefDto {
     pub id: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsCapabilityKindDto {
     Skill,
@@ -45,7 +44,7 @@ pub enum ExtensionsCapabilityKindDto {
     Asset,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsCapabilityDescriptorDto {
     pub reference: ExtensionsCapabilityRefDto,
@@ -56,7 +55,7 @@ pub struct ExtensionsCapabilityDescriptorDto {
     pub authentication_provider: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsAvailableCapabilityDto {
     pub kind: ExtensionsCapabilityKindDto,
@@ -66,7 +65,7 @@ pub struct ExtensionsAvailableCapabilityDto {
     pub authentication_provider: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsPackageSummaryDto {
     /// Source-qualified plugin identity returned unchanged to lifecycle requests.
@@ -77,18 +76,17 @@ pub struct ExtensionsPackageSummaryDto {
     pub description: String,
     /// Absent for legacy packages that have not declared their product windows.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub ui_targets: Option<Vec<ExtensionsUiTargetDto>>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsUiTargetDto {
     Ide,
     Agents,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSearchParams {
     pub query: String,
@@ -99,7 +97,7 @@ pub struct ExtensionsSearchParams {
     pub limit: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSearchResult {
     #[serde(default)]
@@ -107,7 +105,7 @@ pub struct ExtensionsSearchResult {
     pub packages: Vec<ExtensionsPackageSummaryDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsRecommendationPlatformDto {
     Macos,
@@ -117,14 +115,14 @@ pub enum ExtensionsRecommendationPlatformDto {
 }
 
 /// Read-only facts from the connected execution host; never exposes PATH or executable locations.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsRecommendationEnvironmentResult {
     pub platform: ExtensionsRecommendationPlatformDto,
     pub executables: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSearchPageParams {
     pub source_id: String,
@@ -136,7 +134,7 @@ pub struct ExtensionsSearchPageParams {
     pub cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSearchPageResult {
     pub packages: Vec<ExtensionsPackageSummaryDto>,
@@ -144,7 +142,7 @@ pub struct ExtensionsSearchPageResult {
     pub next_cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsGetParams {
     /// Exact `<name>@<extension_packages>` returned by search; unqualified names are rejected.
@@ -152,7 +150,7 @@ pub struct ExtensionsGetParams {
     pub version: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsPackageDetailsDto {
     pub package: ExtensionsPackageRefDto,
@@ -164,24 +162,23 @@ pub struct ExtensionsPackageDetailsDto {
     pub upstream: Option<ExtensionsUpstreamReferenceDto>,
     pub capabilities: Vec<ExtensionsAvailableCapabilityDto>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub ui_targets: Option<Vec<ExtensionsUiTargetDto>>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsPackageSourceDto {
     Official,
     ThirdParty,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsUpstreamRegistryDto {
     OfficialMcp,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsUpstreamReferenceDto {
     pub registry: ExtensionsUpstreamRegistryDto,
@@ -191,7 +188,7 @@ pub struct ExtensionsUpstreamReferenceDto {
     pub repository_url: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsDownloadParams {
     /// Exact `<name>@<extension_packages>` returned by search; unqualified names are rejected.
@@ -199,7 +196,7 @@ pub struct ExtensionsDownloadParams {
     pub version: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsInstallParams {
     /// Exact `<name>@<extension_packages>` returned by search; unqualified names are rejected.
@@ -207,29 +204,28 @@ pub struct ExtensionsInstallParams {
     pub version: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsUpdateParams {
     pub installation_id: String,
     pub version: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionsUpdatePolicyDto {
     pub auto_check_updates: bool,
     pub auto_update: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionsSetUpdatePolicyParams {
     pub policy: ExtensionsUpdatePolicyDto,
-    #[ts(type = "number")]
     pub expected_revision: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsAvailableUpdateDto {
     pub installation_id: String,
@@ -237,29 +233,27 @@ pub struct ExtensionsAvailableUpdateDto {
     pub available: ExtensionsPackageRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsUpdatesResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub policy: ExtensionsUpdatePolicyDto,
     pub can_manage: bool,
     pub checking: bool,
-    #[ts(type = "number | null")]
     pub last_checked_at: Option<u64>,
     pub available: Vec<ExtensionsAvailableUpdateDto>,
     pub updated: Vec<ExtensionsPackageRefDto>,
     pub failures: Vec<String>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsInstallationStateDto {
     Installed,
     PendingRemoval,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsInstalledPackageDto {
     pub installation_id: String,
@@ -268,16 +262,15 @@ pub struct ExtensionsInstalledPackageDto {
     pub capabilities: Vec<ExtensionsCapabilityDescriptorDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsListInstalledResult {
     pub instance_id: String,
-    #[ts(type = "number")]
     pub generation: u64,
     pub packages: Vec<ExtensionsInstalledPackageDto>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsEditorExtensionPolicyActionDto {
     Enable,
@@ -286,24 +279,23 @@ pub enum ExtensionsEditorExtensionPolicyActionDto {
     Revoke,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsEditorExtensionPolicyParams {
     pub installation_id: String,
     pub package_digest: String,
-    #[ts(type = "number")]
     pub expected_revision: u64,
     pub action: ExtensionsEditorExtensionPolicyActionDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsEditorExecutionKindDto {
     Node,
     Native,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsEditorExtensionPolicyDto {
     pub installation_id: String,
@@ -312,30 +304,27 @@ pub struct ExtensionsEditorExtensionPolicyDto {
     pub entrypoint: Option<String>,
     /// Execution host selected by the verified source adapter, never inferred from a filename.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub execution_kind: Option<ExtensionsEditorExecutionKindDto>,
     pub enabled: bool,
     pub granted: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsEditorExtensionsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub extensions: Vec<ExtensionsEditorExtensionPolicyDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionsBuiltInProviderEnablementParams {
     pub id: String,
     pub enabled: bool,
-    #[ts(type = "number")]
     pub expected_revision: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsBuiltInProviderDto {
     pub id: String,
@@ -343,45 +332,43 @@ pub struct ExtensionsBuiltInProviderDto {
     pub running: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsBuiltInProvidersResult {
-    #[ts(type = "number")]
     pub revision: u64,
     /// Whether this authenticated connection may change backend provider enablement.
     pub can_change_enablement: bool,
     pub providers: Vec<ExtensionsBuiltInProviderDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsChanged {
     pub instance_id: String,
-    #[ts(type = "number")]
     pub generation: u64,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsUninstallModeDto {
     IfUnused,
     WhenUnused,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsUninstallParams {
     pub installation_id: String,
     pub mode: ExtensionsUninstallModeDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsAcquireCapabilityParams {
     pub capability: ExtensionsCapabilityRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsCapabilityLeaseDto {
     pub id: String,
@@ -389,7 +376,7 @@ pub struct ExtensionsCapabilityLeaseDto {
     pub installation_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
 pub enum ExtensionsActivationSpecDto {
     Skill(ExtensionsSkillActivationSpecDto),
@@ -401,14 +388,14 @@ pub enum ExtensionsActivationSpecDto {
     Executable(ExtensionsExecutableActivationSpecDto),
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSkillActivationSpecDto {
     pub contract_version: String,
     pub resource: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsMcpActivationSpecDto {
     pub contract_version: String,
@@ -416,7 +403,7 @@ pub struct ExtensionsMcpActivationSpecDto {
     pub network_hosts: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum ExtensionsMcpTransportDto {
     Stdio {
@@ -428,7 +415,7 @@ pub enum ExtensionsMcpTransportDto {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsConnectorActivationSpecDto {
     pub contract_version: String,
@@ -436,35 +423,35 @@ pub struct ExtensionsConnectorActivationSpecDto {
     pub mcp: Option<ExtensionsCapabilityRefDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsThemeActivationSpecDto {
     pub contract_version: String,
     pub manifest: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsLanguageActivationSpecDto {
     pub contract_version: String,
     pub manifest: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsLocalizationActivationSpecDto {
     pub contract_version: String,
     pub catalog: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionsExecutableRuntimeDto {
     Direct,
     Node,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsExecutableActivationSpecDto {
     pub contract_version: String,
@@ -472,40 +459,40 @@ pub struct ExtensionsExecutableActivationSpecDto {
     pub entrypoint: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsAcquiredCapabilityDto {
     pub lease: ExtensionsCapabilityLeaseDto,
     pub spec: ExtensionsActivationSpecDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsReleaseCapabilityParams {
     pub lease_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsOpenResourceParams {
     pub lease_id: String,
     pub resource: ExtensionsResourceRefDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsResourceContentDto {
     pub media_type: String,
     pub data_base64: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionRegistryKindDto {
     Ash,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSourceDto {
     pub id: String,
@@ -514,30 +501,27 @@ pub struct ExtensionsSourceDto {
     pub product_owned: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtensionsSourcesResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub sources: Vec<ExtensionsSourceDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionsAddSourceParams {
     pub source_id: String,
     pub metadata_base_url: String,
     pub targets_base_url: String,
     pub trusted_root_json: String,
-    #[ts(type = "number")]
     pub expected_revision: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionsSetSourceEnabledParams {
     pub source_id: String,
     pub enabled: bool,
-    #[ts(type = "number")]
     pub expected_revision: u64,
 }

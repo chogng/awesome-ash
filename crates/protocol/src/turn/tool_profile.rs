@@ -4,11 +4,10 @@ use crate::ToolName;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Semantic capability, independent of a tool's provider and execution host.
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum ToolCategory {
@@ -32,7 +31,7 @@ pub enum ToolCategory {
 
 /// A product or caller composes a scope from capability groups and exact tools.
 /// An absent scope retains the host catalog; an explicit empty scope permits no tools.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ToolScope {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -101,14 +100,14 @@ impl ToolScope {
 }
 
 /// Declared product composition; planned products never grant tools.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolProductStatus {
     Ready,
     Planned,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolProductProfile {
     pub id: String,
@@ -117,7 +116,7 @@ pub struct ToolProductProfile {
 }
 
 /// Reusable product-authored membership, independent of category and provider grouping.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolSetDefinition {
     pub id: String,
@@ -125,7 +124,7 @@ pub struct ToolSetDefinition {
 }
 
 /// Immutable model-visible tool surface selected for one Turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolProfileSnapshot {
     pub id: String,

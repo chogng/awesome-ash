@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::environment::SessionDirSelector;
 use crate::protocol::fs::FsDeleteMode;
 use crate::protocol::fs::FsExistingTargetBehavior;
@@ -10,7 +9,7 @@ use serde_json::Value;
 use std::path::PathBuf;
 
 /// Cross-file language operation requested for one source position.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageLocationKindDto {
     Declaration,
@@ -21,7 +20,7 @@ pub enum LanguageLocationKindDto {
 }
 
 /// One zero-based UTF-16 editor position.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguagePositionDto {
     pub line_index: u32,
@@ -29,7 +28,7 @@ pub struct LanguagePositionDto {
 }
 
 /// One ordered, end-exclusive UTF-16 editor range.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageRangeDto {
     pub start: LanguagePositionDto,
@@ -37,19 +36,16 @@ pub struct LanguageRangeDto {
 }
 
 /// Authoritative source snapshot submitted before one language request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentDto {
     /// directory folder that owns this document in a multi-root directory.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     pub path: PathBuf,
     pub language_id: String,
-    #[ts(type = "number")]
     pub revision: u64,
     #[schemars(length(max = 10_485_760))]
     pub text: String,
@@ -57,39 +53,35 @@ pub struct LanguageDocumentDto {
 
 /// Lists enabled servers and accepts the client's effective settings for this directory.
 /// Settings are a connection-owned runtime projection, never a persisted profile update.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageServersParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub settings: Option<std::collections::BTreeMap<String, Value>>,
 }
 
 /// One enabled server and its editor language routes. Executable paths remain private.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageServerDescriptorDto {
     pub id: String,
     pub language_ids: Vec<String>,
     /// Absent until this connection has started the server in this directory.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub state: Option<LanguageServerStateDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageServersResult {
     pub servers: Vec<LanguageServerDescriptorDto>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageServerControlActionDto {
     Restart,
@@ -102,23 +94,20 @@ pub enum LanguageServerControlActionDto {
 
 /// Controls only this connection's server in an authorized workspace directory. Omitting
 /// serverId applies to servers already started there; listing never installs or starts one.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageServerControlParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub server_id: Option<String>,
     pub action: LanguageServerControlActionDto,
 }
 
 /// Updates the language server with one authoritative editor document snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSynchronizeParams {
     pub document: LanguageDocumentDto,
@@ -126,14 +115,12 @@ pub struct LanguageSynchronizeParams {
 
 /// Reports the exact content committed by a successful save. It may differ from a newer dirty
 /// editor snapshot; didSave must not overwrite that open document's current text or revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageSaveParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     pub path: PathBuf,
     #[schemars(length(max = 10_485_760))]
@@ -141,20 +128,18 @@ pub struct LanguageSaveParams {
 }
 
 /// Releases one directory document from the language-server session.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCloseParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     pub path: PathBuf,
 }
 
 /// Binds one cancellable language request to a client-generated operation identity.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageOperationParams<P> {
     #[schemars(length(min = 1, max = 128))]
@@ -163,7 +148,7 @@ pub struct LanguageOperationParams<P> {
 }
 
 /// Requests cancellation of one connection-owned language operation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageCancelParams {
     #[schemars(length(min = 1, max = 128))]
@@ -171,7 +156,7 @@ pub struct LanguageCancelParams {
 }
 
 /// Observable outcome of a language cancellation request.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageCancelStatusDto {
     Requested,
@@ -180,14 +165,14 @@ pub enum LanguageCancelStatusDto {
 }
 
 /// Stable terminal classification for one language cancellation command.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageCancelResult {
     pub status: LanguageCancelStatusDto,
 }
 
 /// Hover request against exactly one submitted document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHoverParams {
     pub document: LanguageDocumentDto,
@@ -195,17 +180,16 @@ pub struct LanguageHoverParams {
 }
 
 /// Fresh hover content expressed in editor-native UTF-16 coordinates.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHoverResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub contents: Option<String>,
     pub range: Option<LanguageRangeDto>,
 }
 
 /// Why the editor requested completion candidates.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageCompletionTriggerKindDto {
     Invoke,
@@ -214,7 +198,7 @@ pub enum LanguageCompletionTriggerKindDto {
 }
 
 /// Completion request against exactly one submitted document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCompletionsParams {
     pub document: LanguageDocumentDto,
@@ -224,7 +208,7 @@ pub struct LanguageCompletionsParams {
 }
 
 /// Presentation-neutral completion category understood by editor products.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageCompletionItemKindDto {
     Text,
@@ -249,7 +233,7 @@ pub enum LanguageCompletionItemKindDto {
 }
 
 /// Whether completion insertion text is literal text or snippet syntax.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageCompletionInsertTextFormatDto {
     PlainText,
@@ -257,7 +241,7 @@ pub enum LanguageCompletionInsertTextFormatDto {
 }
 
 /// One bounded completion candidate with one safe primary document edit.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCompletionItemDto {
     pub label: String,
@@ -273,31 +257,28 @@ pub struct LanguageCompletionItemDto {
     pub insert_text: String,
     pub additional_text_edits: Vec<LanguageTextEditDto>,
     pub command: Option<LanguageCommandDto>,
-    #[ts(type = "unknown")]
     pub provider_data: Option<Value>,
 }
 
 /// Deferred completion details requested for one exact document snapshot.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageResolveCompletionParams {
     pub document: LanguageDocumentDto,
-    #[ts(type = "unknown")]
     pub provider_data: Value,
 }
 
 /// Presentation details added by `completionItem/resolve`.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCompletionDetailsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub detail: Option<String>,
     pub documentation: Option<String>,
 }
 
 /// One language-server command attached to an accepted completion.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageExecuteCommandParams {
     pub document: LanguageDocumentDto,
@@ -305,10 +286,9 @@ pub struct LanguageExecuteCommandParams {
 }
 
 /// Fresh completion candidates for exactly one source document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCompletionsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub is_incomplete: bool,
     pub can_resolve: bool,
@@ -316,14 +296,14 @@ pub struct LanguageCompletionsResult {
 }
 
 /// Pull diagnostics against exactly one submitted document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentDiagnosticsParams {
     pub document: LanguageDocumentDto,
 }
 
 /// Whether a pull request replaced diagnostics or confirmed the current report.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageDiagnosticReportKindDto {
     Full,
@@ -331,30 +311,27 @@ pub enum LanguageDiagnosticReportKindDto {
 }
 
 /// Fresh pull-diagnostic result for exactly one source document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentDiagnosticsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub kind: LanguageDiagnosticReportKindDto,
     pub diagnostics: Vec<LanguageCodeActionDiagnosticDto>,
 }
 
 /// Requests one complete directory diagnostic report for a language-server route.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectoryDiagnosticsParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     pub language_id: String,
 }
 
 /// Diagnostics for one directory-relative resource.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectoryDiagnosticSnapshotDto {
     pub path: PathBuf,
@@ -362,7 +339,7 @@ pub struct LanguageDirectoryDiagnosticSnapshotDto {
 }
 
 /// Complete directory diagnostic report from one language server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectoryDiagnosticsResult {
     pub supported: bool,
@@ -370,7 +347,7 @@ pub struct LanguageDirectoryDiagnosticsResult {
 }
 
 /// Cross-file request against exactly one submitted document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageLocationsParams {
     pub document: LanguageDocumentDto,
@@ -381,7 +358,7 @@ pub struct LanguageLocationsParams {
 }
 
 /// One directory-relative target returned in editor-native UTF-16 coordinates.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageLocationDto {
     pub path: PathBuf,
@@ -390,16 +367,15 @@ pub struct LanguageLocationDto {
 }
 
 /// Fresh cross-file targets for exactly one source document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageLocationsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub locations: Vec<LanguageLocationDto>,
 }
 
 /// Call- or type-hierarchy operation requested by an editor.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageHierarchyKindDto {
     PrepareCall,
@@ -411,7 +387,7 @@ pub enum LanguageHierarchyKindDto {
 }
 
 /// One hierarchy symbol, including opaque server data required for follow-up requests.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHierarchyItemDto {
     pub name: String,
@@ -420,12 +396,11 @@ pub struct LanguageHierarchyItemDto {
     pub path: PathBuf,
     pub range: LanguageRangeDto,
     pub selection_range: LanguageRangeDto,
-    #[ts(type = "unknown")]
     pub data: Option<Value>,
 }
 
 /// Hierarchy request against exactly one submitted document revision.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHierarchyParams {
     pub document: LanguageDocumentDto,
@@ -435,7 +410,7 @@ pub struct LanguageHierarchyParams {
 }
 
 /// One hierarchy result and optional call-site ranges.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHierarchyEntryDto {
     pub item: LanguageHierarchyItemDto,
@@ -444,23 +419,20 @@ pub struct LanguageHierarchyEntryDto {
 }
 
 /// Fresh hierarchy entries for exactly one source document revision.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageHierarchyResultDto {
-    #[ts(type = "number")]
     pub revision: u64,
     pub entries: Vec<LanguageHierarchyEntryDto>,
 }
 
 /// Project-wide symbol search for one language-server family.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectorySymbolsParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub session_directory: Option<SessionDirSelector>,
     pub language_id: String,
     #[schemars(length(max = 1024))]
@@ -468,7 +440,7 @@ pub struct LanguageDirectorySymbolsParams {
 }
 
 /// One project-wide symbol with an exact directory location.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectorySymbolDto {
     pub name: String,
@@ -479,14 +451,14 @@ pub struct LanguageDirectorySymbolDto {
 }
 
 /// Bounded project-wide symbol result.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectorySymbolsResult {
     pub symbols: Vec<LanguageDirectorySymbolDto>,
 }
 
 /// Prepare-rename request against one exact source snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguagePrepareRenameParams {
     pub document: LanguageDocumentDto,
@@ -494,21 +466,21 @@ pub struct LanguagePrepareRenameParams {
 }
 
 /// Rename target range and initial input text, or `None` when unavailable.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageRenamePreparationDto {
     pub range: LanguageRangeDto,
     pub placeholder: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguagePrepareRenameResult {
     pub preparation: Option<LanguageRenamePreparationDto>,
 }
 
 /// directory rename request against one exact source snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageRenameParams {
     pub document: LanguageDocumentDto,
@@ -518,7 +490,7 @@ pub struct LanguageRenameParams {
 }
 
 /// One UTF-16 text replacement.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageTextEditDto {
     pub range: LanguageRangeDto,
@@ -526,7 +498,7 @@ pub struct LanguageTextEditDto {
 }
 
 /// Named editor preferences for one formatting request.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageFormattingOptionsDto {
     pub tab_size: u32,
@@ -535,7 +507,7 @@ pub struct LanguageFormattingOptionsDto {
 }
 
 /// Whole-document formatting against one exact editor snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentFormattingParams {
     pub document: LanguageDocumentDto,
@@ -543,7 +515,7 @@ pub struct LanguageDocumentFormattingParams {
 }
 
 /// Range formatting against one exact editor snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageRangeFormattingParams {
     pub document: LanguageDocumentDto,
@@ -552,7 +524,7 @@ pub struct LanguageRangeFormattingParams {
 }
 
 /// Formatting after one negotiated trigger character in an exact editor snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageOnTypeFormattingParams {
     pub document: LanguageDocumentDto,
@@ -563,16 +535,15 @@ pub struct LanguageOnTypeFormattingParams {
 }
 
 /// Validated UTF-16 formatting edits for the submitted snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageFormattingResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub edits: Vec<LanguageTextEditDto>,
 }
 
 /// Why the editor requested signature help.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageSignatureHelpTriggerKindDto {
     Invoke,
@@ -581,7 +552,7 @@ pub enum LanguageSignatureHelpTriggerKindDto {
 }
 
 /// Signature-help request against one exact editor snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSignatureHelpParams {
     pub document: LanguageDocumentDto,
@@ -589,12 +560,11 @@ pub struct LanguageSignatureHelpParams {
     pub trigger_kind: LanguageSignatureHelpTriggerKindDto,
     pub trigger_character: Option<String>,
     #[serde(default)]
-    #[ts(as = "Option<bool>", optional)]
     pub is_retrigger: bool,
 }
 
 /// One parameter in a callable signature.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageParameterInformationDto {
     pub label: String,
@@ -602,7 +572,7 @@ pub struct LanguageParameterInformationDto {
 }
 
 /// One callable signature returned by a language server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSignatureInformationDto {
     pub label: String,
@@ -612,17 +582,16 @@ pub struct LanguageSignatureInformationDto {
 }
 
 /// Fresh signature help for the submitted document snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSignatureHelpResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub signatures: Vec<LanguageSignatureInformationDto>,
     pub active_signature: Option<u32>,
 }
 
 /// Inlay-hint request against one exact editor snapshot and UTF-16 range.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageInlayHintsParams {
     pub document: LanguageDocumentDto,
@@ -630,7 +599,7 @@ pub struct LanguageInlayHintsParams {
 }
 
 /// Presentation-neutral inlay-hint category.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageInlayHintKindDto {
     Type,
@@ -639,7 +608,7 @@ pub enum LanguageInlayHintKindDto {
 }
 
 /// One non-mutating inlay hint in editor-native UTF-16 coordinates.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageInlayHintDto {
     pub position: LanguagePositionDto,
@@ -651,16 +620,15 @@ pub struct LanguageInlayHintDto {
 }
 
 /// Fresh bounded inlay hints for the submitted snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageInlayHintsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub hints: Vec<LanguageInlayHintDto>,
 }
 
 /// Linked-editing request against one exact editor snapshot and UTF-16 position.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageLinkedEditingRangesParams {
     pub document: LanguageDocumentDto,
@@ -668,24 +636,23 @@ pub struct LanguageLinkedEditingRangesParams {
 }
 
 /// Fresh linked ranges whose text must remain identical in one editor transaction.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageLinkedEditingRangesResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub ranges: Vec<LanguageRangeDto>,
     pub word_pattern: Option<String>,
 }
 
 /// Full-document semantic-token request against one exact editor snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSemanticTokensParams {
     pub document: LanguageDocumentDto,
 }
 
 /// One semantic token in editor-native UTF-16 coordinates.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSemanticTokenDto {
     pub range: LanguageRangeDto,
@@ -694,22 +661,21 @@ pub struct LanguageSemanticTokenDto {
 }
 
 /// Fresh semantic tokens and the opaque server result identity for one source revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageSemanticTokensResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub result_id: Option<String>,
     pub tokens: Vec<LanguageSemanticTokenDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentFeaturesParams {
     pub document: LanguageDocumentDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentSymbolDto {
     pub name: String,
@@ -720,73 +686,67 @@ pub struct LanguageDocumentSymbolDto {
     pub children: Vec<LanguageDocumentSymbolDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentSymbolsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub symbols: Vec<LanguageDocumentSymbolDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCommandDto {
     pub id: String,
     pub title: String,
-    #[ts(type = "Array<unknown>")]
     pub arguments: Vec<Value>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeLensDto {
     pub range: LanguageRangeDto,
     pub command: Option<LanguageCommandDto>,
-    #[ts(type = "unknown")]
     pub provider_data: Option<Value>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeLensesResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub lenses: Vec<LanguageCodeLensDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageResolveCodeLensParams {
     pub document: LanguageDocumentDto,
     pub lens: LanguageCodeLensDto,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentLinkDto {
     pub range: LanguageRangeDto,
     pub target: Option<String>,
     pub tooltip: Option<String>,
-    #[ts(type = "unknown")]
     pub provider_data: Option<Value>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentLinksResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub links: Vec<LanguageDocumentLinkDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageResolveDocumentLinkParams {
     pub document: LanguageDocumentDto,
     pub link: LanguageDocumentLinkDto,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageColorDto {
     pub red: u8,
@@ -795,22 +755,21 @@ pub struct LanguageColorDto {
     pub alpha: u8,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentColorDto {
     pub range: LanguageRangeDto,
     pub color: LanguageColorDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDocumentColorsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub colors: Vec<LanguageDocumentColorDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageColorPresentationsParams {
     pub document: LanguageDocumentDto,
@@ -818,7 +777,7 @@ pub struct LanguageColorPresentationsParams {
     pub color: LanguageColorDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageColorPresentationDto {
     pub label: String,
@@ -826,15 +785,14 @@ pub struct LanguageColorPresentationDto {
     pub additional_text_edits: Vec<LanguageTextEditDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageColorPresentationsResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub presentations: Vec<LanguageColorPresentationDto>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageFoldingRangeKindDto {
     Comment,
@@ -842,7 +800,7 @@ pub enum LanguageFoldingRangeKindDto {
     Region,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageFoldingRangeDto {
     pub start_line_index: u32,
@@ -851,16 +809,15 @@ pub struct LanguageFoldingRangeDto {
     pub collapsed_text: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageFoldingRangesResult {
-    #[ts(type = "number")]
     pub revision: u64,
     pub ranges: Vec<LanguageFoldingRangeDto>,
 }
 
 /// Text replacements for one exact directory content baseline.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageTextDocumentEditDto {
     pub path: PathBuf,
@@ -869,9 +826,8 @@ pub struct LanguageTextDocumentEditDto {
 }
 
 /// One ordered text or resource operation returned by a language server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "kind")]
-#[ts(tag = "kind")]
 pub enum LanguageDirectoryEditEntryDto {
     TextDocument {
         document: LanguageTextDocumentEditDto,
@@ -893,13 +849,13 @@ pub enum LanguageDirectoryEditEntryDto {
 }
 
 /// Ordered directory edit spanning text documents and directory resources.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDirectoryEditDto {
     pub entries: Vec<LanguageDirectoryEditEntryDto>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageDiagnosticSeverityDto {
     Error,
@@ -909,32 +865,29 @@ pub enum LanguageDiagnosticSeverityDto {
 }
 
 /// Diagnostic context submitted with a code-action request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeActionDiagnosticDto {
     pub range: LanguageRangeDto,
     pub severity: LanguageDiagnosticSeverityDto,
     pub message: String,
-    #[ts(type = "unknown")]
     pub code: Option<Value>,
     pub source: Option<String>,
 }
 
 /// Fresh language-server diagnostics for one exact directory document revision.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageDiagnosticsNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub path: PathBuf,
-    #[ts(type = "number")]
     pub revision: u64,
     pub diagnostics: Vec<LanguageCodeActionDiagnosticDto>,
 }
 
 /// Presentation severity retained from an LSP window message.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageServerMessageSeverityDto {
     Error,
@@ -944,7 +897,7 @@ pub enum LanguageServerMessageSeverityDto {
 }
 
 /// Origin retained for filtering language-server output.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageServerMessageSourceDto {
     Protocol,
@@ -953,11 +906,10 @@ pub enum LanguageServerMessageSourceDto {
 }
 
 /// One language-server log or user-visible message.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerMessageNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub server: String,
     pub severity: LanguageServerMessageSeverityDto,
@@ -967,11 +919,10 @@ pub struct LanguageServerMessageNotification {
 }
 
 /// Current work-done progress state for one server-owned token.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerProgressNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub server: String,
     pub token: String,
@@ -982,7 +933,7 @@ pub struct LanguageServerProgressNotification {
 }
 
 /// Product-visible lifecycle state of one configured language server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type")]
 pub enum LanguageServerStateDto {
     Starting,
@@ -992,7 +943,6 @@ pub enum LanguageServerStateDto {
     BackingOff {
         attempt: u32,
         #[serde(rename = "retryAfterMillis")]
-        #[ts(type = "number")]
         retry_after_millis: u64,
     },
     CrashLoop {
@@ -1007,18 +957,17 @@ pub enum LanguageServerStateDto {
 }
 
 /// One authoritative language-server lifecycle transition.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageServerStateNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub server: String,
     pub state: LanguageServerStateDto,
 }
 
 /// Code-action request against one exact source snapshot and selection.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeActionsParams {
     pub document: LanguageDocumentDto,
@@ -1028,7 +977,7 @@ pub struct LanguageCodeActionsParams {
 }
 
 /// One code action. `provider_data` must be returned unchanged for resolution.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeActionDto {
     pub title: String,
@@ -1036,27 +985,25 @@ pub struct LanguageCodeActionDto {
     pub is_preferred: bool,
     pub disabled_reason: Option<String>,
     pub edit: Option<LanguageDirectoryEditDto>,
-    #[ts(type = "unknown")]
     pub provider_data: Value,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageCodeActionsResult {
     pub actions: Vec<LanguageCodeActionDto>,
 }
 
 /// Resolve request for one action returned by the same language server.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LanguageResolveCodeActionParams {
     pub document: LanguageDocumentDto,
-    #[ts(type = "unknown")]
     pub provider_data: Value,
 }
 
 /// Negotiated operations supported by one language-server incarnation.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum LanguageServerFeatureDto {
     Hover,
@@ -1094,21 +1041,19 @@ pub enum LanguageServerFeatureDto {
 }
 
 /// Requests new diagnostic pulls for open documents owned by this connection and server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageDiagnosticsRefreshNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub server: String,
 }
 
 /// Capabilities negotiated by this connection's exact server incarnation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LanguageServerCapabilitiesNotification {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub server: String,
     pub language_ids: Vec<String>,

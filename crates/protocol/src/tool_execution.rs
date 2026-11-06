@@ -2,10 +2,9 @@ use crate::ContentPart;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// How a sandboxed process terminated before its captured output was returned.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", content = "code", rename_all = "camelCase")]
 pub enum ProcessExitStatus {
     Code(i32),
@@ -13,7 +12,7 @@ pub enum ProcessExitStatus {
 }
 
 /// Provider-independent process result retained across executor and Core boundaries.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProcessExecutionOutput {
     exit_status: ProcessExitStatus,
@@ -63,7 +62,7 @@ impl ProcessExecutionOutput {
 }
 
 /// Whether Core may automatically execute the same exact Tool Call after sandbox review.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolReplaySafety {
     SafeToRetry,
@@ -74,7 +73,7 @@ pub enum ToolReplaySafety {
 ///
 /// Producers must not use this for an ordinary non-zero exit. Captured streams must already be
 /// bounded and secret-free before this value crosses the executor boundary.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SandboxDenialOutput {
     reason: String,
@@ -116,7 +115,7 @@ impl SandboxDenialOutput {
 }
 
 /// The terminal or uncertain result returned from a Core-managed Tool execution attempt.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", content = "detail", rename_all = "camelCase")]
 pub enum ToolExecutionOutput {
     Success(String),

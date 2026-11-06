@@ -3,9 +3,8 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CallRole {
     Owner,
@@ -23,7 +22,7 @@ impl CallRole {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -37,7 +36,7 @@ pub enum MediaState {
     Closed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallMember {
     pub id: String,
@@ -45,7 +44,7 @@ pub struct CallMember {
 }
 
 /// A shared document reference. Its room independently authorizes document access.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallDocument {
     pub server_url: String,
@@ -55,7 +54,7 @@ pub struct CallDocument {
     pub title: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -67,17 +66,14 @@ pub enum CallDocumentChange {
     Unshare { server_url: String, room_id: String },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallSnapshot {
     pub id: String,
     /// A channel call inherits its members; independent invitations are disabled.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub channel_id: Option<String>,
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub media_epoch: u64,
     pub media_room: String,
     pub media_state: MediaState,
@@ -87,7 +83,7 @@ pub struct CallSnapshot {
     pub documents: Vec<CallDocument>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -99,22 +95,13 @@ pub enum CallControl {
     Unmute,
     Deafen,
     Undeafen,
-    ShareScreen {
-        target: ScreenTarget,
-    },
+    ShareScreen { target: ScreenTarget },
     StopScreenShare,
-    SelectDevice {
-        operation_id: String,
-        #[ts(type = "number")]
-        revision: u64,
-    },
-    Volume {
-        track_id: String,
-        volume: f32,
-    },
+    SelectDevice { operation_id: String, revision: u64 },
+    Volume { track_id: String, volume: f32 },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     content = "id",
@@ -126,7 +113,7 @@ pub enum ScreenTarget {
     Window(String),
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CallConnection {
     Connecting,
@@ -136,7 +123,7 @@ pub enum CallConnection {
     Failed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallParticipant {
     pub id: String,
@@ -144,11 +131,10 @@ pub struct CallParticipant {
     pub muted: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CallStatus {
     pub resource_id: String,
-    #[ts(type = "number")]
     pub sequence: u64,
     pub connection: CallConnection,
     pub call: crate::CallSnapshot,

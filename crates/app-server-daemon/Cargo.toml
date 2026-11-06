@@ -15,7 +15,6 @@ name = "ash_app_server_daemon"
 path = "src/lib.rs"
 
 [dependencies]
-ash-utils-process = { workspace = true }
 exec-server-protocol = { workspace = true }
 ash-utils-home-dir = { workspace = true }
 remote = { package = "ash-remote", path = "../remote" }

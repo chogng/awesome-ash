@@ -19,10 +19,9 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// A normalized, provider-independent item produced or consumed during one Thread turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -31,7 +30,6 @@ use ts_rs::TS;
 pub enum ThreadItem {
     UserAudioAttachment {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         client_id: Option<CommandId>,
         item_id: ItemId,
         turn_id: TurnId,
@@ -41,7 +39,6 @@ pub enum ThreadItem {
         /// The submitting command's ID, shared by all input parts of that submission.
         /// Older stored items have no ID and cannot acknowledge a pending client submission.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         client_id: Option<CommandId>,
         item_id: ItemId,
         turn_id: TurnId,
@@ -49,7 +46,6 @@ pub enum ThreadItem {
     },
     UserContext {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         client_id: Option<CommandId>,
         item_id: ItemId,
         turn_id: TurnId,
@@ -57,12 +53,10 @@ pub enum ThreadItem {
         content: String,
         /// Optional HTTPS link shown with the saved attachment.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         source_url: Option<String>,
     },
     UserImage {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         client_id: Option<CommandId>,
         item_id: ItemId,
         turn_id: TurnId,
@@ -70,7 +64,6 @@ pub enum ThreadItem {
     },
     UserImageAttachment {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         client_id: Option<CommandId>,
         item_id: ItemId,
         turn_id: TurnId,
@@ -81,7 +74,6 @@ pub enum ThreadItem {
         turn_id: TurnId,
         text: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         phase: Option<crate::MessagePhase>,
     },
     Reasoning {

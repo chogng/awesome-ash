@@ -7,11 +7,8 @@ case "${1-}" in
 	"")
 		exec just ash
 		;;
-	--connected)
-		exec pnpm dev:ui:connected
-		;;
 	*)
-		printf 'Unknown Ash launch mode: %s\n' "$1" >&2
+		printf 'Unknown Ash argument: %s\n' "$1" >&2
 		exit 2
 		;;
 esac

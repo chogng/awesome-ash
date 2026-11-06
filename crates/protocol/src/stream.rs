@@ -5,13 +5,12 @@ use serde::Deserialize;
 use serde::Deserializer;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 /// Stable identity for one transient stream-emitter incarnation.
 ///
 /// A new value is created whenever the emitter restarts. Its sequence is meaningful only within
 /// that instance, so consumers must discard a previous cursor when this value changes.
-#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
+#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct StreamInstanceId(#[schemars(length(min = 1))] String);
 
 impl StreamInstanceId {
@@ -40,10 +39,9 @@ impl<'de> Deserialize<'de> for StreamInstanceId {
 }
 
 /// Ephemeral ordering cursor for updates that are not part of durable aggregate history.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StreamCursor {
     pub stream_instance_id: StreamInstanceId,
-    #[ts(type = "number")]
     pub sequence: u64,
 }

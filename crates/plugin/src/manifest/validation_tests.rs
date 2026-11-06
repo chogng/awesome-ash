@@ -545,7 +545,7 @@ fn javascript_terminal_providers_preserve_the_admitted_capability_ceiling() {
 #[test]
 fn sdk_example_manifest_declares_the_supported_javascript_contract() {
     let manifest = PluginManifest::from_json(include_bytes!(
-        "../../../../examples/extensions/inspect/.ash-plugin/plugin.json"
+        "../../../../test/fixtures/extensions/inspect/.ash-plugin/plugin.json"
     ))
     .unwrap();
     assert_eq!(

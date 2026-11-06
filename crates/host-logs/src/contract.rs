@@ -5,7 +5,6 @@ use serde::Serialize;
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     tag = "op",
     rename_all = "camelCase",
@@ -38,7 +37,6 @@ pub enum HostLogRequest {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     tag = "kind",
     rename_all = "camelCase",
@@ -65,7 +63,6 @@ pub enum HostLogResponse {
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum HostLogFailure {
     InvalidRequest,
@@ -75,10 +72,8 @@ pub enum HostLogFailure {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostLogEntry {
-    #[cfg_attr(feature = "export", ts(type = "number"))]
     pub timestamp_millis: i64,
     pub level: HostLogLevel,
     pub category: String,
@@ -89,7 +84,6 @@ pub struct HostLogEntry {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum HostLogLevel {
     Trace,
@@ -101,17 +95,15 @@ pub enum HostLogLevel {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostLogCursor {
     pub generation: String,
-    #[cfg_attr(feature = "export", ts(type = "number"))]
+
     pub offset: u64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostLogFile {
     pub id: String,
@@ -123,7 +115,6 @@ pub struct HostLogFile {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum HostLogFormat {
     Jsonl,
@@ -132,7 +123,6 @@ pub enum HostLogFormat {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostLogReadResult {
     pub text: String,

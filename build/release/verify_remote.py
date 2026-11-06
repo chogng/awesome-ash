@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify a local or published Remote release through Desktop bootstrap and loopback SSH."""
+"""Verify a local or published Remote release through the Rust Remote installer and loopback SSH."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from build.release.remote import archive_record, read_binding  # noqa: E402
 from build.remote_smoke import remote_fixture_directory, verify  # noqa: E402
 
 
@@ -204,152 +205,133 @@ def accept(
     package: Path, report: Path, binding: Path | None, catalog: Path | None
 ) -> None:
     package, report = package.resolve(), report.resolve()
-    source = (
-        ["--binding", str(binding.resolve())]
-        if binding is not None
-        else ["--catalog-dir", str(catalog.resolve())]
-    )
-    assert not (package / "ash-resources/capabilities").exists()
+    metadata = json.loads((package / "ash-package.json").read_text())
     report.parent.mkdir(parents=True, exist_ok=True)
+    if (package / "ash-resources/capabilities").exists():
+        raise ValueError("Expected a standalone Remote package")
     with remote_fixture_directory(
         prefix="arr-" if os.name == "nt" else "ash-release-ssh-"
     ) as temporary:
         root = Path(temporary).resolve()
         suffix = ".exe" if os.name == "nt" else ""
+        executable = package / f"bin/ash-remote{suffix}"
+        environment = {
+            key: value
+            for key, value in os.environ.items()
+            if not key.startswith("ASH_")
+        }
+        environment["ASH_HOME"] = str(root / "local-profile")
 
-        def run(*arguments: str) -> None:
-            try:
-                subprocess.run(arguments, cwd=ROOT, check=True, capture_output=True)
-            except subprocess.CalledProcessError as error:
-                sys.stderr.write(
-                    (error.stdout + error.stderr).decode("utf-8", errors="replace")
-                )
-                raise
+        def run(arguments: list[str]) -> subprocess.CompletedProcess:
+            result = subprocess.run(
+                [str(executable), *arguments],
+                cwd=ROOT,
+                env=environment,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=900,
+            )
+            with (report.parent / "remote-installer.log").open(
+                "a", encoding="utf-8"
+            ) as log:
+                log.write(result.stdout + result.stderr)
+            result.check_returncode()
+            return result
+
+        if binding is not None:
+            source = read_binding(binding, metadata)
+            artifact = json.loads(
+                run(
+                    [
+                        "fetch-runtime",
+                        "--catalog-url",
+                        source["url"],
+                        "--catalog-sha256",
+                        source["sha256"],
+                        "--target",
+                        metadata["target"],
+                        "--cache-root",
+                        str(root / "cache"),
+                    ]
+                ).stdout
+            )
+        else:
+            archive = catalog / f"ash-remote-{metadata['target']}.tar.gz"
+            artifact, archive_metadata = archive_record(archive)
+            if metadata != archive_metadata:
+                raise ValueError("Remote archive differs from the client package")
+            artifact["archivePath"] = str(archive.resolve())
+        if (artifact["version"], artifact["target"]) != (
+            metadata["version"],
+            metadata["target"],
+        ):
+            raise ValueError(
+                "Remote release artifact differs from the client version or target"
+            )
 
         with ssh_fixture(root, report.parent) as ssh:
-            try:
-                script = root / "remoteReleaseAcceptance.js"
-                run(
-                    sys.executable,
-                    "-B",
-                    "build/protocol/generate.py",
-                    "--package-root",
-                    str(package),
+
+            def install(expected: str) -> Path:
+                result = run(
+                    [
+                        "install",
+                        "--host",
+                        "ash-release-fixture",
+                        "--ssh",
+                        str(ssh),
+                        "--install-root",
+                        (root / "installed").as_posix(),
+                        "--archive",
+                        artifact["archivePath"],
+                        "--version",
+                        artifact["version"],
+                        "--target",
+                        artifact["target"],
+                        "--archive-size",
+                        str(artifact["archiveSize"]),
+                        "--unpacked-size",
+                        str(artifact["unpackedSize"]),
+                        "--sha256",
+                        artifact["sha256"],
+                        "--progress",
+                        "json-lines",
+                    ]
                 )
-                run(
-                    str(
-                        ROOT
-                        / "node_modules/bun"
-                        / ("bun.exe" if os.name == "nt" else "bun")
-                    ),
-                    "check",
-                    "-p",
-                    "test/sanity/tsconfig.json",
-                    "--all",
-                )
-                run(
-                    str(
-                        ROOT
-                        / "node_modules/bun"
-                        / ("bun.exe" if os.name == "nt" else "bun")
-                    ),
-                    "build",
-                    "test/sanity/remoteReleaseAcceptance.ts",
-                    "--target=node",
-                    "--outfile",
-                    str(script),
-                )
-                bootstrap_report = report.with_name("desktop-bootstrap.json")
-                with (report.parent / "desktop-bootstrap.log").open("w") as output:
-                    subprocess.run(
-                        [
-                            "node",
-                            str(script),
-                            "--package",
-                            str(package),
-                            *source,
-                            "--ssh",
-                            str(ssh),
-                            "--host",
-                            "ash-release-fixture",
-                            "--root",
-                            str(root / "bootstrap"),
-                            "--report",
-                            str(bootstrap_report),
-                        ],
-                        cwd=ROOT,
-                        stdout=output,
-                        stderr=subprocess.STDOUT,
-                        check=True,
-                        timeout=900,
-                        env={
-                            k: v
-                            for k, v in os.environ.items()
-                            if not k.startswith("ASH_")
-                        },
+                records = [
+                    json.loads(line)
+                    for line in result.stderr.splitlines()
+                    if line.startswith("{")
+                ]
+                if not records or records[-1].get("disposition") != expected:
+                    raise RuntimeError(
+                        f"Expected Remote installer disposition {expected}"
                     )
-                bootstrap = json.loads(bootstrap_report.read_text())
-                installed = Path(bootstrap["runtime"]).parent.parent
-                smoke_report = report.with_name("published-agent-smoke.json")
-                verify(installed, smoke_report, ssh, "ash-release-fixture")
-                assert not (root / "bootstrap/local-profile/capabilities").exists()
-                assert not (root / "remote-profile/capabilities").exists()
-                report.write_text(
-                    json.dumps(
-                        {
-                            "status": "passed",
-                            "binding": json.loads(binding.read_text())
-                            if binding is not None
-                            else None,
-                            "source": "published" if binding is not None else "local",
-                            "desktopBootstrap": bootstrap,
-                            "editingTerminalAgent": json.loads(
-                                smoke_report.read_text()
-                            ),
-                            "mediaPackagesInstalled": False,
-                        },
-                        indent=2,
-                    )
-                    + "\n"
+                return Path(result.stdout.strip()).resolve()
+
+            installed = install("installed")
+            if install("reused") != installed:
+                raise RuntimeError(
+                    "Remote installer selected a different executable on reconnect"
                 )
-            finally:
-                # Keep file-list diagnostics before temporary installs are removed.
-                # Runtime activation revalidates immutability after initialize.
-                manifests = []
-                for manifest in root.rglob("ash-package.json"):
-                    metadata = json.loads(manifest.read_text(encoding="utf-8"))
-                    expected = set(metadata["files"])
-                    observed = {
-                        path.relative_to(manifest.parent).as_posix()
-                        for path in manifest.parent.rglob("*")
-                        if path.is_file()
-                        and path != manifest
-                        and path.relative_to(manifest.parent).as_posix() != ".lease"
-                    }
-                    manifests.append(
-                        {
-                            "package": str(manifest.parent),
-                            "unexpectedFiles": sorted(observed - expected),
-                            "missingFiles": sorted(expected - observed),
-                        }
-                    )
-                (report.parent / "package-integrity.json").write_text(
-                    json.dumps(manifests, indent=2) + "\n"
+            smoke_report = report.with_name("published-agent-smoke.json")
+            verify(installed.parent.parent, smoke_report, ssh, "ash-release-fixture")
+            report.write_text(
+                json.dumps(
+                    {
+                        "status": "passed",
+                        "binding": json.loads(binding.read_text())
+                        if binding is not None
+                        else None,
+                        "source": "published" if binding is not None else "local",
+                        "runtime": str(installed),
+                        "reused": True,
+                        "editingTerminalAgent": json.loads(smoke_report.read_text()),
+                    },
+                    indent=2,
                 )
-                for profile in (
-                    root / "bootstrap/local-profile",
-                    root / "remote-profile",
-                ):
-                    subprocess.run(
-                        [
-                            str(package / f"bin/ash-app-server-daemon{suffix}"),
-                            "stop",
-                        ],
-                        env={**os.environ, "ASH_HOME": str(profile)},
-                        capture_output=True,
-                        timeout=30,
-                        check=False,
-                    )
+                + "\n"
+            )
     print(report)
 
 

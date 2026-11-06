@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::issues::IssueComment;
 use crate::protocol::issues::IssueRepository;
 use crate::protocol::issues::IssueState;
@@ -8,7 +7,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 /// Reads settings for one exact account without changing the profile's primary grant.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubManagedSettingsParams {
     pub operation_id: String,
@@ -16,14 +15,14 @@ pub struct GitHubManagedSettingsParams {
     pub mode: GitHubManagedSettingsReadMode,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubManagedSettingsReadMode {
     Automatic,
     Retry,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubManagedSettingsFailure {
     AuthenticationRequired,
@@ -35,7 +34,7 @@ pub enum GitHubManagedSettingsFailure {
     TimedOut,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "state",
     rename_all = "camelCase",
@@ -43,22 +42,18 @@ pub enum GitHubManagedSettingsFailure {
 )]
 pub enum GitHubManagedSettingsRefresh {
     Ready {
-        #[ts(type = "number")]
         last_attempt_at: u64,
-        #[ts(type = "number")]
         last_success_at: u64,
     },
     Failed {
-        #[ts(type = "number")]
         last_attempt_at: u64,
-        #[ts(type = "number | null")]
         last_success_at: Option<u64>,
         failure: GitHubManagedSettingsFailure,
     },
 }
 
 /// Grant-scoped provider snapshot; UI policy mappings remain in the client registry.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GitHubManagedSettingsResult {
     pub settings: Option<serde_json::Value>,
@@ -66,7 +61,7 @@ pub struct GitHubManagedSettingsResult {
 }
 
 /// Source supplied by the host for an agent-produced artifact.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestArtifactOrigin {
     pub chat: String,
@@ -74,72 +69,67 @@ pub struct GitHubPullRequestArtifactOrigin {
 }
 
 /// A durable PR identity; live state and account credentials are resolved separately.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestReference {
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub is_artifact: Option<bool>,
     /// Server-assigned identity of this PR artifact generation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub artifact_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub artifact_origin: Option<GitHubPullRequestArtifactOrigin>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubSessionPullRequestsParams {
     pub session_id: crate::protocol::common::SessionId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubSessionPullRequestParams {
     pub session_id: crate::protocol::common::SessionId,
     pub reference: GitHubPullRequestReference,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GitHubSessionPullRequestsResult {
     pub references: Vec<GitHubPullRequestReference>,
 }
 
 /// A durable Issue identity; live state and account credentials are resolved separately.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssueReference {
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubSessionIssuesParams {
     pub session_id: crate::protocol::common::SessionId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubSessionIssueParams {
     pub session_id: crate::protocol::common::SessionId,
     pub reference: GitHubIssueReference,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GitHubSessionIssuesResult {
     pub references: Vec<GitHubIssueReference>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubMergeMethod {
     Merge,
@@ -147,7 +137,7 @@ pub enum GitHubMergeMethod {
     Rebase,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubReviewEvent {
     Approve,
@@ -155,7 +145,7 @@ pub enum GitHubReviewEvent {
     Comment,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubCancelStatus {
     Requested,
@@ -163,47 +153,41 @@ pub enum GitHubCancelStatus {
     Completed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNumberParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPageParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub page: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssueListParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub state: IssueState,
@@ -211,7 +195,7 @@ pub struct GitHubIssueListParams {
     pub page: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssueListResult {
     pub issues: Vec<IssueSummary>,
@@ -219,12 +203,11 @@ pub struct GitHubIssueListResult {
     pub notice: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssueCreateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub title: String,
@@ -233,15 +216,13 @@ pub struct GitHubIssueCreateParams {
     pub assignees: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssueUpdateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub title: Option<String>,
     pub body: Option<String>,
@@ -250,78 +231,69 @@ pub struct GitHubIssueUpdateParams {
     pub assignees: Option<Vec<String>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubIssue {
     pub issue: IssueSummary,
     pub body: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommentListResult {
     pub comments: Vec<IssueComment>,
     pub next_page: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommentCreateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub body: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommentUpdateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub comment_id: u64,
     pub body: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommentDeleteParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub comment_id: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestListParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub state: IssueState,
     pub page: u32,
     /// GitHub head selector (`owner:branch`) for branch-associated PR discovery.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub head: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequest {
-    #[ts(type = "number")]
     pub number: u64,
     pub title: String,
     pub body: String,
@@ -337,19 +309,18 @@ pub struct GitHubPullRequest {
     pub auto_merge: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestListResult {
     pub pull_requests: Vec<GitHubPullRequest>,
     pub next_page: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestCreateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub title: String,
@@ -359,15 +330,13 @@ pub struct GitHubPullRequestCreateParams {
     pub draft: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestUpdateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub title: Option<String>,
     pub body: Option<String>,
@@ -375,22 +344,19 @@ pub struct GitHubPullRequestUpdateParams {
     pub base: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestFile {
     pub filename: String,
     pub status: String,
-    #[ts(type = "number")]
     pub additions: u64,
-    #[ts(type = "number")]
     pub deletions: u64,
-    #[ts(type = "number")]
     pub changes: u64,
     pub patch: Option<String>,
     pub previous_filename: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestFilesResult {
     pub files: Vec<GitHubPullRequestFile>,
@@ -398,10 +364,9 @@ pub struct GitHubPullRequestFilesResult {
     pub limit_reached: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestReview {
-    #[ts(type = "number")]
     pub id: u64,
     pub body: String,
     pub state: String,
@@ -410,22 +375,20 @@ pub struct GitHubPullRequestReview {
     pub submitted_at: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestReviewsResult {
     pub reviews: Vec<GitHubPullRequestReview>,
     pub next_page: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestReviewParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub commit: String,
     pub event: GitHubReviewEvent,
@@ -434,14 +397,14 @@ pub struct GitHubPullRequestReviewParams {
     pub comments: Vec<GitHubReviewCommentInput>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum GitHubDiffSide {
     Left,
     Right,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewCommentInput {
     pub path: String,
@@ -450,40 +413,37 @@ pub struct GitHubReviewCommentInput {
     pub body: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewDiffParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub commit: String,
     pub page: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewDiffResult {
     pub base_commit: String,
     pub files: GitHubPullRequestFilesResult,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubFileReadParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub commit: String,
     pub path: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum GitHubFileContent {
     Text { text: String },
@@ -491,69 +451,61 @@ pub enum GitHubFileContent {
     TooLarge,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThreadsParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThreadReadParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub thread_id: String,
     pub cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThreadReplyParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub thread_id: String,
     pub body: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubReviewThreadState {
     Resolved,
     Unresolved,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThreadResolveParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub thread_id: String,
     pub state: GitHubReviewThreadState,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewComment {
     pub id: String,
@@ -564,14 +516,14 @@ pub struct GitHubReviewComment {
     pub can_delete: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewCommentsResult {
     pub comments: Vec<GitHubReviewComment>,
     pub next_cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThread {
     pub id: String,
@@ -584,28 +536,26 @@ pub struct GitHubReviewThread {
     pub comments: GitHubReviewCommentsResult,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewThreadsResult {
     pub threads: Vec<GitHubReviewThread>,
     pub next_cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubPullRequestMergeParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub commit: String,
     pub method: GitHubMergeMethod,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubMergeResult {
     pub commit: String,
@@ -613,30 +563,28 @@ pub struct GitHubMergeResult {
     pub message: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubChecksParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub commit: String,
     pub page: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommitParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub sha: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommit {
     pub sha: String,
@@ -644,13 +592,11 @@ pub struct GitHubCommit {
     pub message: String,
     pub author: String,
     pub committed_at: String,
-    #[ts(type = "number")]
     pub additions: u64,
-    #[ts(type = "number")]
     pub deletions: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCommitStatus {
     pub context: String,
@@ -659,10 +605,9 @@ pub struct GitHubCommitStatus {
     pub target_url: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckRun {
-    #[ts(type = "number")]
     pub id: u64,
     pub name: String,
     pub status: String,
@@ -670,7 +615,7 @@ pub struct GitHubCheckRun {
     pub details_url: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubChecksResult {
     pub state: String,
@@ -679,7 +624,7 @@ pub struct GitHubChecksResult {
     pub next_page: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryResult {
     pub default_branch: String,
@@ -690,50 +635,49 @@ pub struct GitHubRepositoryResult {
     pub allow_auto_merge: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubLabel {
     pub name: String,
     pub color: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubLabelsResult {
     pub labels: Vec<GitHubLabel>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubLabelParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub name: String,
     pub color: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubAssigneesResult {
     pub assignees: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCancelParams {
     pub operation_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCancelResult {
     pub status: GitHubCancelStatus,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubAccount {
     pub id: String,
@@ -743,14 +687,14 @@ pub struct GitHubAccount {
     pub credential_revision: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubAccountsResult {
     pub accounts: Vec<GitHubAccount>,
 }
 
 /// Credentials are accepted only as explicit user input and never returned or formatted in diagnostics.
-#[derive(Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubAccountConnectParams {
     pub operation_id: String,
@@ -768,69 +712,63 @@ impl std::fmt::Debug for GitHubAccountConnectParams {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubAccountListParams {
     pub operation_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewCommentEditParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub comment_id: String,
     pub body: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewCommentDeleteParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub comment_id: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubReviewerChange {
     Request,
     Remove,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubReviewersChangeParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub change: GitHubReviewerChange,
     pub users: Vec<String>,
     pub teams: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRequestedReviewers {
     pub users: Vec<String>,
     pub teams: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNotificationsParams {
     pub operation_id: String,
@@ -839,7 +777,7 @@ pub struct GitHubNotificationsParams {
     pub page: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNotificationReadParams {
     pub operation_id: String,
@@ -847,14 +785,14 @@ pub struct GitHubNotificationReadParams {
     pub thread_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNotificationsReadParams {
     pub operation_id: String,
     pub account_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNotification {
     pub id: String,
@@ -867,19 +805,18 @@ pub struct GitHubNotification {
     pub url: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubNotificationsResult {
     pub notifications: Vec<GitHubNotification>,
     pub next_page: Option<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubForkCreateParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub organization: Option<String>,
@@ -887,7 +824,7 @@ pub struct GitHubForkCreateParams {
     pub branches: GitHubForkBranches,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubForkResult {
     pub full_name: String,
@@ -895,7 +832,7 @@ pub struct GitHubForkResult {
     pub default_branch: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubNotificationFilter {
     Unread,
@@ -903,32 +840,32 @@ pub enum GitHubNotificationFilter {
     Participating,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubForkBranches {
     All,
     Default,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubRepositoryVisibility {
     Private,
     Public,
 }
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubShareReferenceKind {
     Commit,
     Branch,
 }
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubShareTarget {
     GitHub,
     VscodeDev,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositorySearchParams {
     pub operation_id: String,
@@ -936,7 +873,7 @@ pub struct GitHubRepositorySearchParams {
     pub query: String,
     pub page: u32,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryCreateParams {
     pub operation_id: String,
@@ -945,12 +882,11 @@ pub struct GitHubRepositoryCreateParams {
     pub description: String,
     pub visibility: GitHubRepositoryVisibility,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRemoteRepository {
     pub repository: IssueRepository,
     pub description: Option<String>,
-    #[ts(type = "number")]
     pub stars: u64,
     pub private: bool,
     pub default_branch: String,
@@ -958,53 +894,52 @@ pub struct GitHubRemoteRepository {
     pub clone_url: String,
     pub ssh_url: String,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositorySearchResult {
     pub repositories: Vec<GitHubRemoteRepository>,
     pub next_page: Option<u32>,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryBranchesParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub page: u32,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryBranch {
     pub name: String,
     pub default: bool,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryBranchesResult {
     pub branches: Vec<GitHubRepositoryBranch>,
     pub next_page: Option<u32>,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubBranchProtectionRule {
     pub include: Vec<String>,
     pub exclude: Vec<String>,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubBranchProtectionResult {
     pub default_branch: Option<String>,
     pub rules: Vec<GitHubBranchProtectionRule>,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubShareLines {
     pub start: u32,
     pub end: u32,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubShareLinkParams {
     pub path_kind: GitHubSharePathKind,
@@ -1017,49 +952,43 @@ pub struct GitHubShareLinkParams {
     pub lines: Option<GitHubShareLines>,
     pub notebook_cell: Option<u32>,
 }
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubShareLinkResult {
     pub url: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubSharePathKind {
     File,
     Directory,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub commit: String,
-    #[ts(type = "number")]
     pub check_id: u64,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckDetailsParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
-    #[ts(type = "number")]
     pub number: u64,
     pub commit: String,
-    #[ts(type = "number")]
     pub check_id: u64,
     pub page: u32,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckAnnotation {
     pub path: String,
@@ -1069,7 +998,7 @@ pub struct GitHubCheckAnnotation {
     pub message: String,
     pub title: Option<String>,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckDetailsResult {
     pub title: String,
@@ -1079,38 +1008,36 @@ pub struct GitHubCheckDetailsResult {
     pub next_page: Option<u32>,
     pub actions_job: bool,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubCheckLogResult {
     pub url: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryTreeParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub reference: String,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryTreeResult {
     pub sha: String,
     pub entries: Vec<GitHubRepositoryTreeEntry>,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryTreeEntry {
     pub path: String,
     pub kind: GitHubRepositoryEntryKind,
     pub sha: String,
-    #[ts(type = "number")]
     pub size: u64,
 }
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum GitHubRepositoryEntryKind {
     File,
@@ -1118,17 +1045,16 @@ pub enum GitHubRepositoryEntryKind {
     SymbolicLink,
     Submodule,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryBlobParams {
     pub operation_id: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub account_id: Option<String>,
     pub repository: IssueRepository,
     pub sha: String,
 }
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GitHubRepositoryBlobResult {
     pub sha: String,

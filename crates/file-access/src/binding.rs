@@ -6,13 +6,12 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::path::Path;
 use std::path::PathBuf;
-use ts_rs::TS;
 
 /// Durable Session binding to one canonical directory.
 ///
 /// Product hosts use the path to reopen the directory and must recompute the ID before granting
 /// permissions. The ID is never a substitute for containment or a current grant.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DirBinding {
     pub id: DirId,

@@ -2,7 +2,6 @@
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 /// Permission kind that can be granted for one directory scope.
 #[derive(
@@ -17,7 +16,6 @@ use ts_rs::TS;
     PartialOrd,
     Serialize,
     schemars::JsonSchema,
-    ts_rs::TS,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum DirectoryCapability {
@@ -81,7 +79,7 @@ impl fmt::Display for DirectoryCapability {
 }
 
 /// Maximum lifetime of an approved grant. Session grants are not durable across host restarts.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub enum PermissionGrantDuration {
     Turn,
@@ -89,14 +87,14 @@ pub enum PermissionGrantDuration {
 }
 
 /// Requested capabilities for one exact directory in the named execution environment.
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RequestedDirectoryGrant {
     pub path: String,
     pub permissions: Vec<DirectoryCapability>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PermissionRequest {
     pub environment_id: String,
@@ -107,7 +105,7 @@ pub struct PermissionRequest {
 }
 
 /// The user can approve any subset and shorten the requested lifetime. Empty sets decline.
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PermissionResponse {
     pub duration: PermissionGrantDuration,

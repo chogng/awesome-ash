@@ -28,7 +28,6 @@ pub use direct_package::DirectPackageLanguageServerProvider;
 pub use error::LspServerResolverError;
 pub use node_package::NodePackageLanguageServerProvider;
 pub use node_runtime::ManagedNodeRuntime;
-pub use node_runtime::ManagedNodeRuntimeSource;
 pub use provider::LanguageServerProvider;
 pub use provider::LanguageServerProviderError;
 pub use provider::LspServerLaunch;

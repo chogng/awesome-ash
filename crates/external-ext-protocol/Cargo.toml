@@ -10,14 +10,13 @@ name = "external_ext_protocol"
 
 [dependencies]
 schemars = { workspace = true, optional = true }
-ts-rs = { workspace = true, features = ["no-serde-warnings", "serde-json-impl"], optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 
 [features]
 json-schema = ["dep:schemars"]
-export = ["json-schema", "dep:ts-rs"]
+export = ["json-schema"]
 
 [lints]
 workspace = true

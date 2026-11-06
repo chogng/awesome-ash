@@ -1,7 +1,6 @@
 # Workbench Pane Composite
 
-> 本文是 Ash Desktop Browser Workbench 中 pane-like Part 的结构、槽位、命名和状态投影的 canonical 文档。
-> Renderer 控件与 CSS 状态所有权以 [`ui-styling-ownership.md`](ui-styling-ownership.md) 为准；Command、MenuId 与 Context Key 组合以 [`menu-system.md`](menu-system.md) 为准；Workbench 整体拓扑和持久化边界以 [`desktop-architecture.md`](desktop-architecture.md) 为准。
+> 历史参考。下文记录旧工作台面板的结构、槽位、命名和状态投影。原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
 
 ## 快速理解
 

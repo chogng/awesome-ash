@@ -114,34 +114,6 @@ fn command_registration_preserves_optional_icon_and_menu_metadata() {
 }
 
 #[test]
-fn generated_typescript_uses_camel_case_registration_fields() {
-    let typescript = crate::typescript_files()
-        .into_iter()
-        .filter(|(path, _)| {
-            path.file_stem()
-                .is_some_and(|name| name.to_string_lossy().starts_with("ExtensionHost"))
-        })
-        .map(|(_, contents)| contents)
-        .collect::<String>();
-
-    assert!(typescript.contains("languageIds: Array<string>"));
-    assert!(typescript.contains("debuggerType: string"));
-    assert!(typescript.contains("taskType: string"));
-    assert!(typescript.contains("\"kind\": \"testProfileProvider\""));
-    assert!(typescript.contains("providerId: string"));
-    assert!(typescript.contains("channelId: string"));
-    assert!(typescript.contains("uriPattern: string"));
-    assert!(typescript.contains("presentationKind: string"));
-    assert!(typescript.contains("\"kind\": \"externalUriOpener\""));
-    assert!(!typescript.contains("\"kind\": \"testController\""));
-    assert!(!typescript.contains("controllerId"));
-    assert!(!typescript.contains("language_ids"));
-    assert!(!typescript.contains("debugger_type"));
-    assert!(!typescript.contains("task_type"));
-    assert!(!typescript.contains("provider_id"));
-}
-
-#[test]
 fn invoke_read_uses_disjoint_tagged_terminal_states() {
     let pending = ExtensionHostInvokeReadResult::Pending;
     let succeeded = ExtensionHostInvokeReadResult::Succeeded {

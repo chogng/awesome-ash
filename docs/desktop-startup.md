@@ -1,4 +1,6 @@
-# Desktop 前端启动测量
+# Electron Desktop 启动测量
+
+> 历史测量。下文命令和数据对应当时的 Electron 工作台。原生窗口的首帧与输入性能验收见 [Ash UI](desktop-architecture.md#实施顺序与验收)。
 
 结论：复用 App Server 的窗口启动中，入口脚本执行和 Workbench 首屏创建是主要的前端耗时。聊天输入框只装载实际使用的编辑器扩展后，首屏 Workbench 创建缩短约 7–9 ms。首次工作区授权属于另一段等待，不能和前端执行混在一起判断收益。用同一套 Playwright 场景比较端到端就绪时间和渲染进程阶段，再决定是否保留优化。
 

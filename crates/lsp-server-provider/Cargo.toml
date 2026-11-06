@@ -15,14 +15,12 @@ ash-http-client = { workspace = true }
 ash-package-store = { workspace = true, features = ["installation"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
-sha2 = { workspace = true }
 thiserror = { workspace = true }
 ash-install-context = { workspace = true }
 ash-lsp = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }
-tokio = { workspace = true, features = ["macros", "rt", "time"] }
 
 [lints]
 workspace = true

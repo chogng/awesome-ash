@@ -1,0 +1,429 @@
+import assert from "node:assert/strict";
+import { execFile, spawn } from "node:child_process";
+import { once } from "node:events";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import test from "node:test";
+import { promisify } from "node:util";
+import { pathToFileURL } from "node:url";
+import { isProcessRunning, ProcessRun, withProcessRun } from "./processes.mjs";
+const repository = resolve(import.meta.dirname, "../..");
+for (const fails of [false, true]) {
+  test(`process runs remove worker temporary files after ${fails ? "failure" : "success"}`, async () => {
+    let temporary = "";
+    let directory = "";
+    const failure = new Error("deliberate worker failure");
+    const action = withProcessRun(repository, async (run, environment) => {
+      directory = environment.ASH_SMOKE_RUN_DIRECTORY;
+      const result = await run.command(
+        process.execPath,
+        [
+          "--input-type=module",
+          "-e",
+          `
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+const directory = await mkdtemp(join(tmpdir(), 'ash-abandoned-worker-'));
+await writeFile(join(directory, 'fixture.txt'), 'test-owned contents');
+console.log(directory);
+process.exit(${fails ? 17 : 0});
+`,
+        ],
+        environment,
+        true,
+      );
+      assert.equal(result.code, fails ? 17 : 0);
+      temporary = result.output.trim();
+      assert.ok(temporary);
+      assert.equal(
+        await readFile(join(temporary, "fixture.txt"), "utf8"),
+        "test-owned contents",
+      );
+      if (fails) throw failure;
+    });
+    try {
+      if (fails) await assert.rejects(action, (error) => error === failure);
+      else await action;
+      await assert.rejects(readFile(join(temporary, "fixture.txt")), {
+        code: "ENOENT",
+      });
+      await assert.rejects(stat(directory), {
+        code: "ENOENT",
+      });
+    } finally {
+      if (temporary)
+        await rm(temporary, {
+          recursive: true,
+          force: true,
+        });
+    }
+  });
+}
+test("process runs propagate worker failures after cleanup", async () => {
+  const failure = new Error("worker failed after cleanup");
+  await assert.rejects(
+    withProcessRun(repository, async (run) => {
+      await run.close();
+      throw failure;
+    }),
+    (error) => error === failure,
+  );
+});
+test("a cleanup failure preserves the original worker failure", async () => {
+  const failure = new Error("worker failed before cleanup");
+  await assert.rejects(
+    withProcessRun(repository, async (_run, environment) => {
+      await writeFile(
+        join(environment.ASH_SMOKE_RUN_DIRECTORY, "resource-invalid.json"),
+        "{",
+      );
+      throw failure;
+    }),
+    (error) =>
+      error instanceof AggregateError &&
+      error.errors.includes(failure) &&
+      error.errors.some((item) => item instanceof SyntaxError),
+  );
+});
+test(
+  "Windows process discovery ignores an inherited incompatible PowerShell module path",
+  {
+    skip: process.platform !== "win32",
+    timeout: 90_000,
+  },
+  async (t) => {
+    const directory = await mkdtemp(join(tmpdir(), "ash-process-modules-"));
+    t.after(() =>
+      rm(directory, {
+        recursive: true,
+        force: true,
+      }),
+    );
+    const environment = Object.fromEntries(
+      Object.entries(process.env).filter(
+        ([name]) => name.toUpperCase() !== "PSMODULEPATH",
+      ),
+    );
+    const { stdout } = await promisify(execFile)(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        `
+import { ProcessRun } from ${JSON.stringify(pathToFileURL(join(repository, "build/release/processes.mjs")).href)};
+await new ProcessRun(process.cwd()).close();
+console.log('process-snapshot-ok');
+`,
+      ],
+      {
+        cwd: repository,
+        env: {
+          ...environment,
+          PSModulePath: join(directory, "missing-modules"),
+        },
+        windowsHide: true,
+        timeout: 60_000,
+      },
+    );
+    assert.match(stdout, /process-snapshot-ok/u);
+  },
+);
+test(
+  "Windows cleanup ignores an exited process retained by another process handle",
+  {
+    skip: process.platform !== "win32",
+    timeout: 60_000,
+  },
+  async (t) => {
+    const child = spawn(
+      process.execPath,
+      [
+        "-e",
+        'process.on("message", () => process.exit(0)); setInterval(() => {}, 1000);',
+      ],
+      {
+        windowsHide: true,
+        stdio: ["ignore", "ignore", "ignore", "ipc"],
+      },
+    );
+    const run = new ProcessRun(repository, undefined, 100);
+    let holder;
+    t.after(async () => {
+      if (holder) {
+        holder.stdin.end("release\n");
+        if (holder.exitCode === null) await once(holder, "exit");
+      }
+      if (child.exitCode === null) child.kill();
+      await run.close();
+    });
+    await run.own(child);
+    holder = spawn(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `$held = [System.Diagnostics.Process]::GetProcessById(${child.pid}); $handle = $held.Handle; [Console]::WriteLine('ready'); [Console]::ReadLine() | Out-Null; $held.Dispose()`,
+      ],
+      {
+        windowsHide: true,
+        stdio: ["pipe", "pipe", "pipe"],
+      },
+    );
+    await new Promise((resolveReady, reject) => {
+      holder.stdout.once("data", () => resolveReady());
+      holder.once("error", reject);
+      holder.once("exit", (code) => {
+        if (code !== 0) reject(new Error(`Handle holder exited with ${code}`));
+      });
+    });
+    const exited = once(child, "exit");
+    child.send("exit");
+    await exited;
+    assert.equal(isProcessRunning(child.pid), false);
+    await run.close();
+  },
+);
+test(
+  "Windows process ownership tracks and cleans a live parent and child",
+  {
+    skip: process.platform !== "win32",
+    timeout: 60_000,
+  },
+  async (t) => {
+    const child = spawn(
+      process.execPath,
+      [
+        "-e",
+        `
+const { spawn } = require('node:child_process');
+const helper = spawn(process.execPath, ['-e', 'process.send(process.pid); setInterval(() => {}, 1000)'], { windowsHide: true, stdio: ['ignore', 'ignore', 'ignore', 'ipc'] });
+helper.once('message', pid => process.send(pid));
+setInterval(() => {}, 1000);
+`,
+      ],
+      {
+        windowsHide: true,
+        stdio: ["ignore", "ignore", "ignore", "ipc"],
+      },
+    );
+    const ready = new Promise((resolveReady) =>
+      child.once("message", (pid) => resolveReady(Number(pid))),
+    );
+    const run = new ProcessRun(repository, undefined, 100);
+    let holder;
+    t.after(async () => {
+      try {
+        await run.close();
+      } finally {
+        if (holder?.exitCode === null) {
+          holder.stdin.end("check\n");
+          await once(holder, "close");
+        }
+      }
+    });
+    const helper = await ready;
+    await run.own(child);
+    holder = spawn(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `$held = @(${child.pid}, ${helper}) | ForEach-Object { [System.Diagnostics.Process]::GetProcessById($_) }; $handles = @($held | ForEach-Object { $_.Handle }); try { [Console]::WriteLine('ready'); [Console]::ReadLine() | Out-Null; @($held | ForEach-Object { $_.Refresh(); $_.HasExited }) | ConvertTo-Json -Compress } finally { $held | ForEach-Object { $_.Dispose() } }`,
+      ],
+      {
+        windowsHide: true,
+        stdio: ["pipe", "pipe", "pipe"],
+      },
+    );
+    let output = "";
+    holder.stdout.on("data", (chunk) => {
+      output += chunk;
+    });
+    await new Promise((resolveReady, reject) => {
+      holder.stdout.once("data", () => resolveReady());
+      holder.once("error", reject);
+      holder.once("exit", (code) => {
+        if (code !== 0) reject(new Error(`Handle holder exited with ${code}`));
+      });
+    });
+    await run.close();
+    const closed = once(holder, "close");
+    holder.stdin.end("check\n");
+    const [code] = await closed;
+    assert.equal(code, 0, output);
+    assert.deepEqual(
+      JSON.parse(output.trim().split(/\r?\n/u).at(-1)),
+      [true, true],
+      "Both original process objects have exited",
+    );
+  },
+);
+for (const ignoresSignal of [false, true]) {
+  test(
+    `owned process trees exit when the root ${ignoresSignal ? "ignores" : "handles"} termination`,
+    {
+      skip: process.platform === "win32",
+      timeout: 15_000,
+    },
+    async (t) => {
+      const child = spawn(
+        process.execPath,
+        [
+          "-e",
+          `
+const { spawn } = require('node:child_process');
+${ignoresSignal ? 'process.on("SIGTERM", () => {});' : ""}
+const child = spawn(process.execPath, ['-e', 'process.on("SIGTERM", () => {}); process.send(process.pid); setInterval(() => {}, 1000)'], { stdio: ['ignore', 'ignore', 'ignore', 'ipc'] });
+child.on('message', pid => process.send(pid));
+setInterval(() => {}, 1000);
+`,
+        ],
+        {
+          detached: true,
+          stdio: ["ignore", "ignore", "ignore", "ipc"],
+        },
+      );
+      const ready = new Promise((resolveReady) =>
+        child.once("message", (pid) => resolveReady(Number(pid))),
+      );
+      const run = new ProcessRun(repository, undefined, 100);
+      t.after(async () => {
+        await run.close();
+      });
+      await run.own(child);
+      const descendant = await ready;
+      await run.stop("SIGTERM");
+      for (const pid of [child.pid, descendant])
+        assert.equal(await isAlive(pid), false, `Leaked PID ${pid}`);
+      await assert.rejects(
+        run.command(
+          process.execPath,
+          ["-e", 'throw Error("unexpected command")'],
+          process.env,
+        ),
+        /refusing to start/,
+      );
+    },
+  );
+}
+test(
+  "command completion cleans helpers that outlive their root",
+  {
+    skip: process.platform === "win32",
+    timeout: 15_000,
+  },
+  async (t) => {
+    const directory = await mkdtemp(join(repository, "test/.process-command-"));
+    const marker = join(directory, "pid");
+    const run = new ProcessRun(repository);
+    t.after(async () => {
+      await run.close();
+      await rm(directory, {
+        recursive: true,
+        force: true,
+      });
+    });
+    const result = await run.command(
+      process.execPath,
+      [
+        "-e",
+        `
+const { spawn } = require('node:child_process');
+const { writeFileSync } = require('node:fs');
+const child = spawn(process.execPath, ['-e', 'process.send(process.pid); setInterval(() => {}, 1000)'], { stdio: ['ignore', 'ignore', 'ignore', 'ipc'] });
+child.once('message', pid => { writeFileSync(${JSON.stringify(marker)}, String(pid)); process.exit(0); });
+`,
+      ],
+      process.env,
+    );
+    assert.equal(result.code, 0);
+    const pid = Number(await readFile(marker, "utf8"));
+    assert.equal(
+      await isAlive(pid),
+      true,
+      "The fixture must leave its helper running",
+    );
+    await run.close();
+    assert.equal(await isAlive(pid), false);
+  },
+);
+for (const rootExits of [false, true]) {
+  test(
+    `a supervisor cleans detached registered resources after its worker exits (resource root exits: ${rootExits})`,
+    {
+      skip: process.platform === "win32",
+      timeout: 20_000,
+    },
+    async (t) => {
+      const directory = await mkdtemp(join(repository, "test/.process-owner-"));
+      t.after(() =>
+        rm(directory, {
+          recursive: true,
+          force: true,
+        }),
+      );
+      const marker = join(directory, "pid");
+      const worker = join(directory, "worker.mjs");
+      await writeFile(
+        worker,
+        `
+import { execFile, spawn } from 'node:child_process';
+import { writeFile } from 'node:fs/promises';
+import { registerRunResource } from ${JSON.stringify(join(repository, "build/release/processes.mjs"))};
+const resource = await registerRunResource();
+const child = spawn(process.execPath, ['-e', ${JSON.stringify(
+          rootExits
+            ? `
+const { spawn } = require('node:child_process');
+const helper = spawn(process.execPath, ['-e', 'process.send(process.pid); setInterval(() => {}, 1000)'], { stdio: ['ignore', 'ignore', 'ignore', 'ipc'] });
+helper.once('message', pid => process.send(pid));
+process.once('message', () => process.exit(0));
+`
+            : "setInterval(() => {}, 1000)",
+        )}], { detached: true, stdio: ['ignore', 'ignore', 'ignore', 'ipc'] });
+const helper = ${rootExits} ? new Promise(resolve => child.once('message', resolve)) : Promise.resolve(child.pid);
+await resource.process(child);
+await writeFile(${JSON.stringify(marker)}, String(await helper));
+if (${rootExits}) {
+  const exited = new Promise(resolve => child.once('exit', resolve));
+  child.send('exit');
+  await exited;
+}
+process.exit(0);
+`,
+      );
+      const run = new ProcessRun(repository, directory);
+      let pid;
+      t.after(async () => {
+        await run.close();
+        if (pid && (await isAlive(pid))) process.kill(pid, "SIGKILL");
+      });
+      const result = await run.command(process.execPath, [worker], {
+        ...process.env,
+        ASH_SMOKE_RUN_DIRECTORY: directory,
+      });
+      assert.equal(result.code, 0);
+      pid = Number(await readFile(marker, "utf8"));
+      await run.close();
+      assert.equal(await isAlive(pid), false);
+    },
+  );
+}
+async function isAlive(pid) {
+  try {
+    const { stdout } = await promisify(execFile)("ps", [
+      "-p",
+      String(pid),
+      "-o",
+      "stat=",
+    ]);
+    return !stdout.trim().startsWith("Z");
+  } catch (error) {
+    if (error.code === 1) return false;
+    throw error;
+  }
+}

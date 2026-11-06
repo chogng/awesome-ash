@@ -251,10 +251,7 @@ fn product_debug_workflow_deployment(
                 })
                 .map(|(key, value)| (key.into(), value.into())),
         );
-        if let Some(node) = std::env::var_os("ASH_ELECTRON_RUN_AS_NODE_PATH") {
-            environment.insert("ASH_DEBUG_NODE_PATH".into(), node);
-            environment.insert("ASH_DEBUG_ELECTRON".into(), "1".into());
-        } else if let Some(root) = directory.parent() {
+        if let Some(root) = directory.parent() {
             environment.insert(
                 "ASH_DEBUG_NODE_PATH".into(),
                 root.join("ash-resources/node/bin")

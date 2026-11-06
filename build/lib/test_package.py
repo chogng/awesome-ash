@@ -16,7 +16,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from build.builtin import copy_builtin_extensions
 from build.lib.package_test_support import (
-    prepare_builtin_fixture,
     copy_debug_runtime_fixture,
 )
 from build.lib.targets import TARGETS
@@ -70,9 +69,6 @@ class PackageTests(unittest.TestCase):
         boundary.start()
         self.addCleanup(boundary.stop)
         boundary = patch("build.app_server.generate_protocol", return_value=False)
-        boundary.start()
-        self.addCleanup(boundary.stop)
-        boundary = patch("build.app_server._prepare_builtin_extensions")
         boundary.start()
         self.addCleanup(boundary.stop)
         boundary = patch(
@@ -338,9 +334,7 @@ class PackageTests(unittest.TestCase):
         "java",
         "javascript",
         "json",
-        "json-language-features",
         "julia",
-        "keymap-sublime",
         "language-pack-zh-cn",
         "log",
         "lua",
@@ -355,11 +349,9 @@ class PackageTests(unittest.TestCase):
         "python",
         "r",
         "remote-ssh",
-        "remote-workspace",
         "ruby",
         "rust",
         "shellscript",
-        "snapshot",
         "sql",
         "swift",
         "theme-defaults",
@@ -871,7 +863,7 @@ class PackageTests(unittest.TestCase):
                 self.assertTrue((output / resource).is_file())
             self.assertIn("ash-resources/protocol-sources.json", metadata["files"])
             self.assertIn(
-                "ash-resources/protocol/typescript/AppServerProtocolDecoder.ts",
+                "ash-resources/protocol/json/schema.json",
                 metadata["files"],
             )
             self.assertEqual(
@@ -926,6 +918,10 @@ class PackageTests(unittest.TestCase):
                 and not json.loads((path / "package.json").read_text(encoding="utf-8"))
                 .get("ashRuntime", {})
                 .get("client")
+                and json.loads((path / "package.json").read_text(encoding="utf-8")).get(
+                    "ashDistribution"
+                )
+                != "marketplace"
             ),
         )
         seen_ids = set()
@@ -1004,7 +1000,7 @@ class PackageTests(unittest.TestCase):
             (dependencies / "markdown-library").mkdir()
             (dependencies / "markdown-library/index.js").write_text("dependency")
             output = root / "packaged-extensions"
-            prepared = prepare_builtin_fixture(root)["markdown"]
+            prepared = package
             copy_builtin_extensions(root, output)
 
             self.assertEqual(
@@ -1017,38 +1013,6 @@ class PackageTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "not a regular unlinked file"):
                 copy_builtin_extensions(root, root / "rejected-extensions")
 
-    def test_builtin_language_pack_includes_its_prepared_catalog(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            package = root / "extensions/language-pack-zh-cn"
-            package.mkdir(parents=True)
-            (package / "package.json").write_text(
-                json.dumps(
-                    {
-                        "publisher": "ash",
-                        "name": "language-pack-zh-cn",
-                        "version": "1.0.0",
-                        "contributes": {"localizations": [{"languageId": "zh-CN"}]},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            prepared = (
-                root
-                / ".build/desktop/localization/extensions/ash.language-pack-zh-cn/localization"
-            )
-            prepared.mkdir(parents=True)
-            catalog = '{"locale":"zh-CN","bundles":{"ash":{"example":"示例"}}}'
-            (prepared / "package.json").write_text(catalog, encoding="utf-8")
-            prepare_builtin_fixture(root)
-            copy_builtin_extensions(root, root / "output")
-            self.assertEqual(
-                (
-                    root / "output/language-pack-zh-cn/localization/package.json"
-                ).read_text(encoding="utf-8"),
-                catalog,
-            )
-
     def test_builtin_rust_package_keeps_resources_and_excludes_browser_sources(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -1056,20 +1020,18 @@ class PackageTests(unittest.TestCase):
             (package / "browser").mkdir(parents=True)
             (package / "src").mkdir()
             (package / "package.json").write_text(
-                '{"name":"git","browser":"./browser/extension.ts",'
-                '"ashRuntime":{"kind":"rust"}}',
+                '{"name":"git","ashRuntime":{"kind":"rust"}}',
                 encoding="utf-8",
             )
-            (package / "browser/extension.ts").write_text(
+            (package / "browser/extension.js").write_text(
                 "export function activate() {}"
             )
             (package / "src/main.rs").write_text("fn main() {}")
             (package / "Cargo.toml").write_text("[package]")
             (package / "package.nls.json").write_text('{"name":"Git"}')
-            prepare_builtin_fixture(root)
             copy_builtin_extensions(root, root / "output")
             self.assertEqual(
-                ["browser", "package.json", "package.nls.json"],
+                ["package.json", "package.nls.json"],
                 sorted(path.name for path in (root / "output/git").iterdir()),
             )
 
@@ -1082,7 +1044,7 @@ class PackageTests(unittest.TestCase):
             dependencies.mkdir(parents=True)
             (package / "package.json").write_text('{"name":"markdown"}')
             (dependencies / "cycle").symlink_to(package, target_is_directory=True)
-            prepared = prepare_builtin_fixture(root)["markdown"]
+            prepared = package
             copy_builtin_extensions(root, root / "output")
             self.assertFalse((root / "output/markdown/node_modules").exists())
             (prepared / "linked.js").symlink_to(prepared / "package.json")

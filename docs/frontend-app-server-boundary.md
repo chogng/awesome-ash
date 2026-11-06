@@ -1,66 +1,14 @@
-# 前端 Service 与 Rust App Server 的连接边界
+# 原生桌面与 App Server 的连接边界
 
-结论：Workbench 通过前端领域 Service 使用业务能力；领域 API 把调用交给同一窗口的 App Server 协议客户端。Electron Main 负责取得连接、启动连接载体和转发消息，不按业务方法分发请求。`electron-main/` 不是所有 `xxxApi` 的归属目录，Service 也不负责启动 Rust 进程。
-
-## 一次业务调用经过哪里
+当前 Desktop 入口负责打开系统窗口。以下是接入首个后端工作流时的职责分工。 [Desktop 架构](desktop-architecture.md)
 
 ```text
-Workbench / 编辑器调用方
-  → 前端领域 Service（需要时提供接口、状态、事件和生命周期）
-  → 该领域的 API 适配层（把领域操作映射为协议请求）
-  → Renderer 中共用的 AppServerProtocolClient（初始化、请求配对、通知、关闭）
-  → Electron MessagePort → Main 透明转发 → Rust App Server
-  → 对应 Rust 领域能力
+工作台视图 → 产品领域接口 → 协议适配 → ash-app-server-client → App Server
 ```
 
-前端 Service 是调用方的稳定契约。它决定 UI 看见什么状态和错误、如何订阅变化，以及何时释放资源；如果一个能力只是简单的领域 API，并无需要管理的前端状态，也不必为了目录整齐新建 Service。领域适配层负责类型与协议的转换，不保存另一份后端持久状态。多个领域 API 复用一个窗口的协议客户端，不能各自启动进程或建立连接。
+- **工作台视图**持有焦点、草稿和选择等交互状态，通过领域接口读取数据、订阅变化和提交意图。Ash UI 和 Kit 接收视图数据及动作回调。
+- **产品领域接口**为调用方提供业务操作、状态和错误；协议适配集中转换生成的请求、响应和通知。多个领域接口复用宿主提供的连接。
+- **桌面宿主**装配并管理连接，负责启动、取消、重连和关闭。桌面通过共享 App Server 接入后台，Rust 客户端提供初始化、请求配对、通知和关闭；本地运行包的进程入口是独立的 `ash-app-server`。 [Rust 客户端](../crates/app-server-client/README.md)
+- **App Server 和后端领域**负责权限、执行及持久化。Session、Thread、Turn 和审批状态从后端投影到界面。 [App Server API](app-server-api.md#唯一外部门禁)
 
-例如 [Workbench 装配](../src/ash/workbench/browser/workbench.ts)将 `api.localGit` 注册为 `ILocalGitService`；[Git adapter](../src/ash/platform/git/browser/appServerLocalGitService.ts)将 `readRepositoryContexts()` 映射为 `git/repositoryContexts` 请求；[Renderer API 装配](../src/ash/workbench/browser/webRendererApi.ts)让 Git、账户、会话等领域契约共用协议客户端。普通 UI 不需要知道请求 ID、JSON-RPC 消息或连接端口。
-
-Workbench 拥有跨领域的 Renderer 服务装配：`browser/webRendererApi.ts` 组合连接后的领域 adapter 并管理 Web 接入，`browser/rendererApi.ts` 组合断连能力集合，`electron-browser/rendererApi.ts` 装配桌面宿主并持有窗口连接服务的生命周期。三处装配由 Workbench 和 Sessions 的启动入口使用；领域 adapter 与 Electron 平台能力仍留在各自的 `platform` owner，不能反向导入 Workbench。`platform/agentHost` 不再拥有整套 Renderer 服务的装配入口，已有 Agent 领域 adapter 与协议实现保持各自职责。
-
-桌面连接职责落在 VS Code 已有的对应路径：`platform/agentHost/electron-browser/localAgentHostService.ts` 取得本地 MessagePort、注册单次 socket lease，并在协议不兼容时请求宿主修复运行包；`platform/agentHost/browser/remoteAgentHostServiceImpl.ts` 连接扩展解析的远端端点，并在本地连接恢复后重新初始化远端扩展。每个服务拥有自己的协议客户端，领域消费者在重连后继续使用同一对象。Workbench 只传入窗口能力、远端解析与扩展初始化回调，不持有重试定时器或连接错误处理。
-
-`appServerProtocolClient.ts` 中的 `AppServerConnectionRecovery` 统一串行化连接操作、按 100/500/2000 ms 最多重试三次，并将关闭原因与恢复失败交给连接服务注入的 `ILogService` 记录。协议状态及代次仍由 `AppServerProtocolClient` 唯一拥有；恢复调度器只拥有当前任务、定时器和重试次数。初次启动失败返回调用方；成功连接后的失败才自动重试，释放服务会取消定时器和状态订阅。恢复状态通过 `IAppServerApi.recovery` 提供给 Workbench：耗尽后显示一次可键盘操作的“重新连接”通知，重试和恢复成功会关闭它；命令面板提供同一恢复操作。Main 的 powerMonitor channel 按窗口订阅转发 suspend/resume，连接调度器在休眠时暂停重试，唤醒后保留健康连接或恢复已断开的连接，关闭窗口释放 OS 事件订阅。Web 复用同一调度器并保留原五分钟指数退避；授权撤销和工作区范围变化进入不可自动恢复状态，提示重新打开授权链接。恢复只更换连接并由既有消费者重新订阅，不重放结果未知的业务请求。这些连接接口与原有 App Server 传输保留 Ash 协议语义，不实现 VS Code 的 AHP 服务契约。
-
-会话命名经现有 Session/Thread 领域 API 进入 Core 的 Thread title 事件，Session 标题由后端根 Thread 派生。首次提交接受后，Chat 用首条文本的空白归一化结果（最多 80 个字符）请求初始名称；此操作失败不影响已接受的请求，也不重放消息。手动命名和自动命名都带命令收据，Core 在持久化边界阻止迟到的自动名称覆盖手动名称。命令面板中的“重命名会话”和“重命名对话”分别操作根 Thread 和捕获的当前 Thread，目录订阅负责跨窗口更新。归档会话的永久删除使用现有 Session Delete 清理流程；前端先选择归档会话并确认，再更新目录代次，避免迟到的读取重新插入已删除会话。
-
-`platform/agentHost/common/agentService.ts` 的 `IAgentConnection` 聚合一条后端连接已有的领域端口；注册表、文件路由和 Sessions Provider scope 借用这个契约。`workbench/browser/rendererApi.ts` 的 `IWorkbenchHost` 只作为启动装配参数，不注册为全局服务。消费者分别注入 `IAppServerApi`、`IRemoteAgentHostService`、`IWorkbenchEnvironmentService` 等领域服务；本机目录和 profile 目录随窗口环境提供，临时断连不改变 `IAppServerApi.isAvailable` 表示的宿主支持能力。额外 SSH、WSL、Tunnel 连接的创建、复用和释放由 `platform/agentHost/electron-browser/remoteAgentHostService.ts` 唯一拥有，`AgentHostConnectionsService` 只提供包含当前窗口连接的查询投影。远端 Provider scope 只覆盖 `IAgentConnection` 及对应领域服务，窗口服务仍从父作用域取得，不创建另一份连接表或业务状态。
-
-文件变更由文件 adapter 转成 `IFileApi.onDidChangeFiles` 领域事件，`AgentHostFileSystemProvider` 直接订阅所属连接并将相对路径投影到授权目录；Provider 释放时一并释放监听。Workbench 与 Sessions 的文件消费者不解析原始文件协议通知。窗口目录授权恢复产生的重新扫描仍由窗口 owner 提供，作为连接事件之外的附加失效信号。
-
-## 目录按职责选择
-
-| 位置                                                                                                    | 放什么                                                               | 不放什么                                               |
-| ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------ |
-| `platform/<领域>/common/`、`workbench/services/<领域>/common/` 或 `workbench/contrib/<功能>/common/`    | 前端领域接口和类型                                                   | 传输消息、生成协议类型                                 |
-| `platform/<领域>/browser/`、`workbench/services/<领域>/browser/` 或 `workbench/contrib/<功能>/browser/` | 领域 API 适配层、Service 实现                                        | 进程启动、通用连接状态                                 |
-| `platform/agentHost/browser/`                                                                           | 协议客户端、请求配对、初始化、通知、恢复调度及远端连接服务           | 具体领域的业务状态                                     |
-| `platform/agentHost/electron-browser/`                                                                  | Renderer 的 MessagePort 传输及本地连接服务                           | Rust 进程管理                                          |
-| `platform/agentHost/electron-main/`                                                                     | 窗口连接、端口取得和透明转发，以及本地与远程启动器共用的连接载体契约 | daemon 包选择、业务方法路由、领域 Service              |
-| `platform/app-server-daemon/`                                                                           | 本地 daemon 连接程序、包路径与摘要校验、环境变量和开发构建重启       | JSON-RPC 请求配对、领域状态、Rust 进程管理的第二份实现 |
-| `workbench/browser/`、`workbench/electron-browser/`                                                     | Web、断连与桌面 Renderer 的领域服务装配和宿主生命周期                | 领域协议转换、共享后端持久状态                         |
-| `code/electron-main/`                                                                                   | Electron 应用、窗口与上述组件的装配                                  | 领域协议解析                                           |
-| `crates/`                                                                                               | 协议入口及各 Rust 领域的执行与持久状态                               | 前端编辑器对象和窗口 UI                                |
-
-领域属于 `platform` 还是 `workbench`，取决于它的真实调用方及 `base → platform → editor → workbench` 依赖方向。Workbench 中，非特定功能的核心 Service 放在 `services/`；Git 这样的功能专属 Service 放在 `contrib/git/`，即使它调用 App Server。`browser/` 表示可在浏览器环境使用的实现；只有需要 Electron IPC 的部分进入 `electron-browser/`。Main 若需提供系统窗口等宿主能力，应使用明确的宿主接口，不能因此成为业务协议的入口。
-
-## 谁启动后端
-
-桌面启动时，[Electron 应用入口](../src/ash/code/electron-main/app.ts)调用 [daemon 创建入口](../src/ash/platform/app-server-daemon/electron-main/appServerDaemonLauncher.ts)，再装配窗口的连接转发组件。daemon 模块选择包、校验摘要、构造明确的环境变量；发布版运行 `ash-app-server-daemon connect`，开发版运行 `connect-selected`。[开发重载器](../src/ash/platform/app-server-daemon/electron-main/developmentAppServerReloader.ts)负责选择新的开发构建并明确重启后台。[连接转发组件](../src/ash/platform/agentHost/electron-main/appServerConnectionRelay.ts)把连接程序的消息与 Renderer 的 MessagePort 对接。[Rust daemon 客户端](../crates/app-server-daemon/src/client.rs)复用同一 profile 选中的受管理 App Server，首次没有后台包时从完整的随包后端安装，再转发当前连接的输入输出。
-
-窗口有各自的连接程序和协议客户端，后端服务进程可由多个窗口共用。关闭窗口只释放其连接，不停止共享后台；明确重启后台会影响同一 profile 的所有连接。实际进程管理、启动互斥和版本选择由 Rust daemon 拥有，TypeScript 模块只调用它。SSH 连接与远程运行包继续属于 `platform/remote`。
-
-Web 页面使用另一条接入路径：浏览器直接连接经过认证的 App Server WebSocket，不经过 Electron Main；领域 Service 与 API 的职责仍相同。详细连接生命周期见[前端连接与浏览器能力](design/app-server-connection.md)。
-
-工作区切换由 [Workspace 运行时适配器](../src/ash/platform/workspaces/electron-main/appServerWorkspaceTransition.ts)执行：先持久化目录授权，再替换本窗口的连接与本地环境或 SSH 根目录，确认后更新目录；失败时恢复原连接和目录，两次失败都保留在错误中。`code/electron-main/app.ts` 只装配适配器及窗口上下文，不再拥有这套切换与回滚算法。此操作不停止 profile 共用的后台服务。
-
-## 与 VS Code 的关系
-
-`platform/agentHost` 是 Ash 前端的后端接入 owner，承接 Renderer 协议客户端、传输、Main 连接转发和 [App Server 文件 provider](../src/ash/platform/agentHost/common/agentHostFileSystemProvider.ts)。它使用 Rust 生成的 app-server 协议，不运行 VS Code 的 Node agent runtime，也不引入 AHP 的 action/state 协议。`AppServer*` 名称标明这项实现使用的后端；没有相同协议与状态语义的接口，不通过改名伪装成上游契约。
-
-Workbench 和 Agents 的文件操作继续经过同一个 `IFileService` 契约。文件 provider 将 URI 转为授权目录内的路径，保留 revision 条件写入、连接资源分块与释放，以及 `fs/changed` 失效通知；text model、dirty buffer、undo 和保存冲突仍由前端编辑器拥有。[Sessions 文件适配](../src/ash/sessions/contrib/providers/agentHost/browser/sessionFileService.ts)只绑定原 Session 目录和搜索目标，切换选中 Session 不会重定向已经打开文件的保存位置。Sessions Provider 仍使用后端 Session/Thread 身份，不建立另一份持久状态。
-
-VS Code 的 Service 是前端取得能力的一种接口形式，也不意味着 Service 实现自己创建进程。其 Electron Main 创建 shared process（`src/vs/platform/sharedProcess/electron-main/sharedProcess.ts`）；扩展宿主由 Main 中的 `ExtensionHostStarter` 创建，Renderer 通过注册的远程 Service 请求它。Ash 可以借鉴“调用接口与进程生命周期分开”的边界，但 Rust App Server 是 Ash 自己的业务后端，不对应 VS Code 的某一个通用后端进程。
-
-新增能力时，先确定 Rust 领域与前端调用方的契约，再实现领域 API 映射；有真实调用方需要稳定的前端领域契约时才增加 Service，不按协议方法数量创建。进程、连接和协议客户端继续复用上述各自的归属组件。
+连接恢复后重新获取领域快照并建立订阅。结果未知的修改请求由领域契约决定能否安全重试。窗口关闭时释放窗口订阅和关联任务，共用的后台进程由其生命周期所有者管理。连接和文件 I/O 在 UI 事件循环之外执行。

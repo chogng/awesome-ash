@@ -3,20 +3,17 @@ use crate::ReasoningEffort;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Advisor preference; chat inheritance is resolved before freezing a Turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AdvisorConfig {
     /// An absent model inherits the initiating chat's model and reasoning effort.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model: Option<ModelRef>,
     #[serde(default = "default_enabled")]
     pub enabled: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub reasoning_effort: Option<ReasoningEffort>,
     #[serde(default = "default_max_calls")]
     #[schemars(range(min = 1, max = 16))]
@@ -74,7 +71,7 @@ const fn default_max_output_tokens() -> u32 {
 }
 
 /// Durable conversation preference; defaults are resolved before each Turn starts.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

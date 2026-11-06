@@ -67,10 +67,6 @@ pub(crate) struct ExecutableIdentity {
     package_build_id: Option<String>,
     #[serde(default)]
     development_root: Option<PathBuf>,
-    #[serde(default)]
-    runtime_binding: Option<crate::runtime::ElectronRuntimeBinding>,
-    #[serde(default)]
-    runtime_availability: Option<crate::runtime::RuntimeAvailability>,
 }
 
 impl ExecutableIdentity {
@@ -95,8 +91,6 @@ impl ExecutableIdentity {
             && self.sha256 == other.sha256
             && self.package_build_id == other.package_build_id
             && self.development_root == other.development_root
-            && self.runtime_binding == other.runtime_binding
-            && self.runtime_availability == other.runtime_availability
     }
 }
 
@@ -130,12 +124,9 @@ impl ProcessRecord {
         if let Some(identity) = &process_start_identity {
             digest.update(identity.as_bytes());
         }
-        let mut executable_identity = binary_identity(
+        let executable_identity = binary_identity(
             &dunce::canonicalize(std::env::current_exe().map_err(io_error)?).map_err(io_error)?,
         )?;
-        // The process owns the launch-time binding, even after another installation is selected.
-        executable_identity.runtime_binding = crate::runtime::frozen_binding()?;
-        executable_identity.runtime_availability = crate::runtime::frozen_availability()?;
         Ok(Self {
             pid,
             instance_id: format!("{:x}", digest.finalize()),
@@ -144,16 +135,6 @@ impl ProcessRecord {
             executable_identity: Some(executable_identity),
         })
     }
-}
-
-pub(crate) fn executable_identity(path: &Path) -> Result<ExecutableIdentity, String> {
-    let mut identity = binary_identity(path)?;
-    identity.runtime_binding = crate::runtime::binding_for_backend(path)?;
-    identity.runtime_availability = identity
-        .runtime_binding
-        .as_ref()
-        .map(|binding| binding.availability());
-    Ok(identity)
 }
 
 pub(crate) fn binary_identity(path: &Path) -> Result<ExecutableIdentity, String> {
@@ -180,8 +161,6 @@ pub(crate) fn binary_identity(path: &Path) -> Result<ExecutableIdentity, String>
             .and_then(Path::parent)
             .filter(|root| root.join("ash-development.json").is_file())
             .map(Path::to_path_buf),
-        runtime_binding: None,
-        runtime_availability: None,
     })
 }
 
@@ -238,7 +217,7 @@ pub(crate) fn resolve_backend_executable(
     }
     let path = dunce::canonicalize(backend_executable).map_err(io_error)?;
     let package_lease = acquire_package_lease_for_executable(&path).map_err(io_error)?;
-    let identity = executable_identity(&path)?;
+    let identity = binary_identity(&path)?;
     if let PackageDigest::Expected(expected) = package_digest {
         identity.verify_package_digest(expected)?;
     }
@@ -450,33 +429,6 @@ pub(crate) fn spawn_backend(
         command.env(PRODUCT_SERVICES_ENV, path);
     } else {
         command.env_remove(PRODUCT_SERVICES_ENV);
-    }
-    if let Some(binding) = &backend.identity.runtime_binding {
-        crate::runtime::clear_binding(&mut command);
-        binding.apply(
-            &mut command,
-            backend
-                .identity
-                .runtime_availability
-                .as_ref()
-                .ok_or("Electron binding has no availability state")?,
-        )?;
-    } else if backend.identity.package_build_id.is_some() {
-        let metadata: serde_json::Value = serde_json::from_slice(
-            &fs::read(
-                backend_executable
-                    .parent()
-                    .unwrap()
-                    .parent()
-                    .unwrap()
-                    .join("ash-package.json"),
-            )
-            .map_err(io_error)?,
-        )
-        .map_err(|error| error.to_string())?;
-        if metadata["javascriptRuntime"]["kind"] == "packagedNode" {
-            crate::runtime::clear_binding(&mut command);
-        }
     }
     detach_command(&mut command)?;
     let child = command.spawn().map_err(io_error)?;

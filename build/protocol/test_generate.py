@@ -117,15 +117,7 @@ class ProtocolPreparationTests(unittest.TestCase):
         contents = {
             "metadata.json": '{"major":1,"schemaHash":"sha256:' + "a" * 64 + '"}',
             "json/schema.json": "{}",
-            "typescript/index.ts": "export type Contract = string;",
-            "typescript/protocol.ts": "export const APP_SERVER_PROTOCOL_MAJOR = 1;",
         }
-        from build.protocol.artifacts import REQUIRED_ARTIFACTS
-
-        # These fixtures model export completeness; production decoder behavior is
-        # verified from the real Rust export by the frontend and protocol suites.
-        for name in REQUIRED_ARTIFACTS:
-            contents.setdefault(name, "export {};\n")
         for name, value in contents.items():
             path = output / name
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -140,7 +132,7 @@ class ProtocolPreparationTests(unittest.TestCase):
     def test_frontend_cold_preparation_fails_without_discovery_or_compilation(self):
         from build.protocol.generate import generate_protocol
 
-        with self.assertRaisesRegex(RuntimeError, "pnpm protocol:generate"):
+        with self.assertRaisesRegex(RuntimeError, "just generate-protocol"):
             generate_protocol(root=self.root, allow_build=False)
         self.discovery.assert_not_called()
         self.exporter.assert_not_called()
@@ -152,7 +144,7 @@ class ProtocolPreparationTests(unittest.TestCase):
         self.prepare()
         self.discovery.reset_mock()
         self.exporter.reset_mock()
-        output = self.root / ".build/protocol/typescript/index.ts"
+        output = self.root / ".build/protocol/json/schema.json"
         modified = output.stat().st_mtime_ns
         generate_protocol(root=self.root, allow_build=False)
         self.discovery.assert_not_called()
@@ -164,12 +156,10 @@ class ProtocolPreparationTests(unittest.TestCase):
 
         for change in [
             lambda: (self.contract / "src/lib.rs").write_text("changed"),
-            lambda: (self.root / ".build/protocol/typescript/index.ts").write_text(
+            lambda: (self.root / ".build/protocol/json/schema.json").write_text(
                 "tampered"
             ),
-            lambda: (
-                self.root / ".build/protocol/typescript/AppServerProtocolDecoder.ts"
-            ).unlink(),
+            lambda: (self.root / ".build/protocol/metadata.json").unlink(),
         ]:
             with self.subTest(change=change):
                 self.prepare()
@@ -189,11 +179,11 @@ class ProtocolPreparationTests(unittest.TestCase):
         generate_protocol(root=self.root, package_root=package, allow_build=False)
         self.discovery.assert_not_called()
         self.exporter.assert_not_called()
-        self.assertTrue((self.root / ".build/protocol/typescript/index.ts").is_file())
+        self.assertTrue((self.root / ".build/protocol/json/schema.json").is_file())
 
     def test_cold_preparation_and_cache_hits_do_not_write_source_or_run_cargo(self):
         self.prepare()
-        output = self.root / ".build/protocol/typescript/index.ts"
+        output = self.root / ".build/protocol/json/schema.json"
         modified = output.stat().st_mtime_ns
         self.prepare()
         self.discovery.assert_called_once()
@@ -209,7 +199,7 @@ class ProtocolPreparationTests(unittest.TestCase):
         changes = [
             lambda: (self.contract / "src/lib.rs").write_text("changed"),
             lambda: (self.contract / "src/new.rs").write_text("new contract"),
-            lambda: (self.root / ".build/protocol/typescript/index.ts").write_text(
+            lambda: (self.root / ".build/protocol/json/schema.json").write_text(
                 "tampered"
             ),
             lambda: (self.root / ".build/protocol/json/schema.json").unlink(),
@@ -225,12 +215,12 @@ class ProtocolPreparationTests(unittest.TestCase):
         self.prepare()
         self.assertEqual(self.discovery.call_count, 2)
 
-    def test_matching_cache_cannot_reuse_a_contract_missing_its_decoder(self):
+    def test_matching_cache_cannot_reuse_a_contract_missing_its_metadata(self):
         from build.protocol.artifacts import artifact_digests
 
         self.prepare()
         output = self.root / ".build/protocol"
-        (output / "typescript/AppServerProtocolDecoder.ts").unlink()
+        (output / "metadata.json").unlink()
         cache_path = self.root / ".build/protocol-inputs.json"
         cache = json.loads(cache_path.read_text())
         # Even a cache whose digest inventory matches must satisfy completeness.
@@ -239,26 +229,21 @@ class ProtocolPreparationTests(unittest.TestCase):
         self.exporter.reset_mock()
         self.prepare()
         self.exporter.assert_called_once()
-        self.assertTrue((output / "typescript/AppServerProtocolDecoder.ts").is_file())
+        self.assertTrue((output / "metadata.json").is_file())
 
-    def test_partial_maps_or_decoder_never_replace_the_previous_contract(self):
+    def test_partial_exports_never_replace_the_previous_contract(self):
         from build.protocol.artifacts import artifact_digests
 
         self.prepare()
         output = self.root / ".build/protocol"
         original = artifact_digests(output)
         (self.contract / "src/lib.rs").write_text("changed")
-        for name in [
-            "AppServerRequestMap.ts",
-            "AppServerServerRequestMap.ts",
-            "AppServerProtocolDecoder.ts",
-            "AppServerProtocolSchema0.ts",
-        ]:
+        for name in ["metadata.json", "json/schema.json"]:
             with self.subTest(missing=name):
 
                 def partial(command, **options):
                     self.export(command, **options)
-                    (Path(command[-1]) / "typescript" / name).unlink()
+                    (Path(command[-1]) / name).unlink()
 
                 self.exporter.side_effect = partial
                 with self.assertRaisesRegex(RuntimeError, "complete contract"):
@@ -269,7 +254,7 @@ class ProtocolPreparationTests(unittest.TestCase):
         self,
     ):
         self.prepare()
-        output = self.root / ".build/protocol/typescript/index.ts"
+        output = self.root / ".build/protocol/json/schema.json"
         cache = self.root / ".build/protocol-inputs.json"
         original = cache.read_bytes()
         (self.contract / "src/lib.rs").write_text("changed")
@@ -277,7 +262,7 @@ class ProtocolPreparationTests(unittest.TestCase):
         with self.assertRaises(subprocess.CalledProcessError):
             self.prepare()
         self.assertEqual(cache.read_bytes(), original)
-        self.assertEqual(output.read_text(), "export type Contract = string;")
+        self.assertEqual(output.read_text(), "{}")
         self.exporter.side_effect = lambda *args, **kwargs: None
         with self.assertRaisesRegex(RuntimeError, "complete contract"):
             self.prepare()
@@ -340,10 +325,10 @@ class ProtocolPreparationTests(unittest.TestCase):
             self.discovery.assert_not_called()
             self.exporter.assert_not_called()
             expected = (
-                package / "ash-resources/protocol/typescript/index.ts"
+                package / "ash-resources/protocol/json/schema.json"
             ).read_bytes()
             self.assertEqual(
-                expected, (other / ".build/protocol/typescript/index.ts").read_bytes()
+                expected, (other / ".build/protocol/json/schema.json").read_bytes()
             )
             modified = (other / ".build/protocol/metadata.json").stat().st_mtime_ns
             generate_protocol(root=other, cargo="no-cargo-installed")
@@ -387,7 +372,7 @@ class ProtocolPreparationTests(unittest.TestCase):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as temporary:
                 bad = Path(temporary) / "package"
                 shutil.copytree(package, bad)
-                artifact = bad / "ash-resources/protocol/typescript/index.ts"
+                artifact = bad / "ash-resources/protocol/json/schema.json"
                 if mode == "tampered":
                     artifact.write_text("tampered")
                 elif mode == "missing":

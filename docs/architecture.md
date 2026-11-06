@@ -108,7 +108,7 @@ flowchart TD
 
 外部扩展采用 `external-ext` 接入与监管、`external-js-ext` JS 执行和独立 `external-ext-protocol` 通信契约；作者 SDK 位于根 `sdk/typescript`（`@ash/sdk`）与 `sdk/rust`（`ash-external-ext-sdk`）。Plugin bundle 只是可选来源，扩展运行层不直接依赖 `core-plugins`；当前包安装 owner 保持原职责。Ash 作者 API 与现有消费者已统一使用自有契约，详细分工见[共享接入与语言适配](editor-extensions.md#共享接入与语言适配的-crate-边界)。
 
-目标扩展有两类：TS/JS 作者使用 `@ash/sdk` / `ash.*`，Desktop 复用 Electron，共享后端由独立 Rust/V8 宿主执行；Rust 能力由独立 Rust 程序执行。共享后端保留 Rust + V8，Code Mode 服务 App、远程与 TUI，不依赖 Electron 或 Node。Ash 不再以 VS Code 扩展或 Node API 兼容为目标；旧作者兼容层、Open VSX 下载和 VSIX 运行入口已删除；历史metadata只用于停用和卸载，JS引擎与独立Node依赖的迁移另行验证。共享核心保留 Agent 权威状态、通用资源机制与最终权限裁决；具体服务商认证、API 和产品工作流由可选 Provider 拥有。App 与 TUI 按能力契约选择和消费扩展，App 默认预装的 GitHub 登录不成为 TUI 的启动依赖。跨客户端复用不要求把 Provider 实现放回核心。完整边界、GitHub 示例和实现缺口见 [扩展架构与编辑器接入](editor-extensions.md#0-确定的产品方向)。
+目标扩展有两类：TS/JS 作者使用 `@ash/sdk` / `ash.*`，共享后端由独立 Rust/V8 宿主执行；Rust 能力由独立 Rust 程序执行。共享后端保留 Rust + V8，Code Mode 服务 App、远程与 TUI，不依赖 Electron 或 Node。Ash 不再以 VS Code 扩展或 Node API 兼容为目标；旧作者兼容层、Open VSX 下载和 VSIX 运行入口已删除；历史metadata只用于停用和卸载，JS引擎与独立Node依赖的迁移另行验证。共享核心保留 Agent 权威状态、通用资源机制与最终权限裁决；具体服务商认证、API 和产品工作流由可选 Provider 拥有。App 与 TUI 按能力契约选择和消费扩展，App 默认预装的 GitHub 登录不成为 TUI 的启动依赖。跨客户端复用不要求把 Provider 实现放回核心。完整边界、GitHub 示例和实现缺口见 [扩展架构与编辑器接入](editor-extensions.md#0-确定的产品方向)。
 
 | 系统              | 回答的核心问题                       | 应当拥有                                                                                                       | 重点审计边界                                                 | 权威文档                                                                                                                                                        |
 | ----------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -190,8 +190,8 @@ flowchart TD
 - **对话与持久化**：Session/Thread 归约器、Store、逻辑序列、写入租约、恢复事务和 rollout；
 - **协议与接口**：Rust 权威类型、JSON Schema、TypeScript、模式哈希、App Server 分发与订阅；
 - **工具与 MCP**：外部工具客户端、MCP Server、批准和持久化结果的纵向切片；
-- **产品入口**：CLI/TUI 进程内客户端、Desktop JSONL 客户端和 Electron 可信 IPC；
-- **产品资源**：统一图标来源、Desktop 注册表和 Rust 类型化目录；
+- **产品入口**：CLI/TUI 客户端和原生 Desktop 窗口。桌面后端接入见 [前后端连接](frontend-app-server-boundary.md)；
+- **产品资源**：仓库共用的 [图标原稿](icons.md)；
 - **领域基础**：配置、供应商注册表、秘密存储、资源发现和跨平台沙箱。
 
 计划文档不能覆盖当前 API 或已经实现的领域边界。当前行为与计划发生冲突时，应先修正权威契约

@@ -20,6 +20,7 @@ use std::io::BufRead;
 use std::io::BufReader;
 use std::io::Read;
 use std::io::Write;
+use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::Mutex;
@@ -116,10 +117,6 @@ impl external_ext_sdk::Extension for Extension {
                         .unwrap_or_default()
                         .into(),
                     kind: kind.into(),
-                    error: messages["error.configuration"]
-                        .as_str()
-                        .unwrap_or_default()
-                        .into(),
                 },
             )?;
         }
@@ -185,7 +182,6 @@ impl external_ext_sdk::Extension for Extension {
 struct Configurations {
     title: String,
     kind: String,
-    error: String,
 }
 
 fn configure_browser_paths(properties: &mut BTreeMap<String, Value>) {
@@ -197,50 +193,14 @@ fn configure_browser_paths(properties: &mut BTreeMap<String, Value>) {
         .or_insert_with(|| json!({"/@fs/": if cfg!(windows) { "" } else { "/" }}));
 }
 
-enum NodeRuntime {
-    Node(PathBuf),
-    Electron {
-        executable: PathBuf,
-        launcher: PathBuf,
-    },
-}
-
-impl NodeRuntime {
-    fn apply(
-        self,
-        properties: &mut BTreeMap<String, Value>,
-        error: &str,
-    ) -> Result<(), ExtensionError> {
-        if properties.contains_key("runtimeExecutable") || properties.contains_key("runtimeVersion")
-        {
-            return Ok(());
-        }
-        let executable = match self {
-            Self::Node(executable) => executable,
-            Self::Electron {
-                executable,
-                launcher,
-            } => {
-                // js-debug clears ELECTRON_RUN_AS_NODE when launching a target. A
-                // provider-owned launcher restores Node mode after that boundary.
-                let environment = properties.entry("env".into()).or_insert(json!({}));
-                environment
-                    .as_object_mut()
-                    .ok_or_else(|| invalid(error))?
-                    .insert(
-                        "ASH_JS_DEBUG_NODE_RUNTIME".into(),
-                        json!(executable.to_string_lossy()),
-                    );
-                launcher
-            }
-        };
-        properties.insert(
-            "runtimeExecutable".into(),
-            json!(executable.to_string_lossy()),
-        );
-        Ok(())
+fn configure_node_runtime(properties: &mut BTreeMap<String, Value>, node: &Path) {
+    if !properties.contains_key("runtimeVersion") {
+        properties
+            .entry("runtimeExecutable".into())
+            .or_insert_with(|| json!(node.to_string_lossy()));
     }
 }
+
 impl ConfigurationProvider for Configurations {
     fn resolve_configuration(
         &self,
@@ -295,15 +255,7 @@ impl ConfigurationProvider for Configurations {
                     .or_insert(json!([program]));
             }
             if let Some(node) = std::env::var_os("ASH_DEBUG_NODE_PATH") {
-                let runtime = if std::env::var_os("ASH_DEBUG_ELECTRON").is_some() {
-                    NodeRuntime::Electron {
-                        executable: node.into(),
-                        launcher: std::env::current_exe().map_err(|_| invalid(&self.error))?,
-                    }
-                } else {
-                    NodeRuntime::Node(node.into())
-                };
-                runtime.apply(&mut request.configuration.properties, &self.error)?;
+                configure_node_runtime(&mut request.configuration.properties, Path::new(&node));
             }
             request
                 .configuration
@@ -453,7 +405,7 @@ impl Server {
             ],
             &resources,
         );
-        let mut environment: BTreeMap<String, String> = std::env::vars()
+        let environment: BTreeMap<String, String> = std::env::vars()
             .filter(|(key, _)| {
                 !matches!(
                     key.as_str(),
@@ -461,9 +413,6 @@ impl Server {
                 )
             })
             .collect();
-        if std::env::var_os("ASH_DEBUG_ELECTRON").is_some() {
-            environment.insert("ELECTRON_RUN_AS_NODE".into(), "1".into());
-        }
         let mut child = ash_sandboxing::PreparedCommand::unrestricted(&command)
             .spawn(&environment.into_iter().collect::<Vec<_>>())
             .map_err(|_| invalid(error))?;

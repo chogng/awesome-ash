@@ -1,6 +1,6 @@
 # Stanza：单一文本内核、可装配能力与产品边界
 
-> 本文说明 editor、文档扩展、Workbench、文件服务与 App Server 之间的系统边界。目录与装配入口见 [`src/ash/editor/README.md`](../src/ash/editor/README.md)，行式编辑与富文档的机制契约分别见 [`text-engine.md`](../src/ash/editor/text-engine.md) 和 [Academy 扩展规范](../extensions/academy/document-engine.md)。当前工作见[根 TODO](../TODO.md)，演进依赖见[编辑器设计](design/editor-roadmap.md)。
+> 历史参考。下文的 Stanza 实现、源码路径和 Workbench 装配对应旧工作台。编辑器目标见 [编辑器设计](design/editor-roadmap.md)，原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
 
 ## 核心模型与产品装配
 

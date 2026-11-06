@@ -1,11 +1,10 @@
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::ThreadId;
 use ash_protocol::TurnId;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentReadParams {
     pub path: String,
@@ -14,7 +13,7 @@ pub struct TextDocumentReadParams {
     pub read_access: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum TextDocumentReadResult {
     Document { snapshot: String, text: String },
@@ -22,7 +21,7 @@ pub enum TextDocumentReadResult {
     Failed { message: String },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum TextDocumentChangeDto {
     Create {
@@ -43,7 +42,7 @@ pub enum TextDocumentChangeDto {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentApplyParams {
     pub thread_id: ThreadId,
@@ -52,7 +51,7 @@ pub struct TextDocumentApplyParams {
     pub changes: Vec<TextDocumentChangeDto>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TextDocumentTurnOutcome {
     Completed,
@@ -61,7 +60,7 @@ pub enum TextDocumentTurnOutcome {
 }
 
 /// Sent only to the document connection that owns this Turn, after its tools finish.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentTurnFinished {
     pub thread_id: ThreadId,
@@ -69,7 +68,7 @@ pub struct TextDocumentTurnFinished {
     pub outcome: TextDocumentTurnOutcome,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum TextDocumentApplyResult {
     Applied,
@@ -79,20 +78,20 @@ pub enum TextDocumentApplyResult {
     OutcomeUnknown { message: String },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentReleaseParams {
     #[schemars(length(max = 128))]
     pub snapshots: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentListParams {
     pub root: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentDto {
     /// Path relative to the requested root, using forward slashes. The root's
@@ -101,7 +100,7 @@ pub struct TextDocumentContentDto {
     pub text: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum TextDocumentListResult {
     Documents {

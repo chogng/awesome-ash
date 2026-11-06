@@ -3,7 +3,6 @@ use std::fmt;
 use std::net::SocketAddr;
 
 use crate::JsonSchema;
-use crate::TS;
 #[cfg(any(test, feature = "json-schema"))]
 use schemars::Schema;
 #[cfg(any(test, feature = "json-schema"))]
@@ -16,15 +15,12 @@ const LISTEN_INFO_KIND: &str = "app-server-listen-info";
 const LISTEN_INFO_VERSION: u32 = 1;
 
 /// Machine-readable startup record emitted after an App Server listener is ready.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
-#[ts(rename_all = "camelCase")]
 pub struct AppServerListenInfo {
     #[schemars(schema_with = "listen_info_kind_schema")]
-    #[ts(type = "\"app-server-listen-info\"")]
     kind: String,
     #[schemars(schema_with = "listen_info_version_schema")]
-    #[ts(type = "1")]
     version: u32,
     endpoint: String,
 }

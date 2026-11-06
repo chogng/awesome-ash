@@ -209,18 +209,13 @@ jobs:
         shell: bash
         run: ${{ matrix.python }} -B scripts/test-python.py code
 
-      - name: Set up Node and pnpm for package contract tests
-        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
-        with:
-          install: false
-
       - name: Test build tooling
         shell: bash
         run: ${{ matrix.python }} -B scripts/test-python.py build
 
       - name: Verify App Server protocol artifacts
         shell: bash
-        run: ${{ matrix.python }} -B scripts/cargo.py test -p ash-app-server-protocol --lib tests::schema_fixtures_match_the_generators --locked --target "${{ matrix.target }}" -- --exact
+        run: ${{ matrix.python }} -B scripts/cargo.py test -p ash-app-server-protocol --lib tests::schema_hash_is_stable_sha256_of_the_generated_schema --locked --target "${{ matrix.target }}" -- --exact
 
       - name: Test Linux managed network boundary
         if: runner.os == 'Linux'
@@ -387,70 +382,11 @@ jobs:
             ".build/releases/ash-app-server-${{ matrix.target }}.update.json" \
             ".build/release-artifacts/${{ matrix.target }}/"
 
-      - name: Install Desktop packaging dependencies
-        if: github.event_name == 'release' && matrix.release_package != false && runner.os == 'macOS'
-        shell: bash
-        run: pnpm install --frozen-lockfile
-
-      - name: Download matching Remote release binding
-        if: github.event_name == 'release' && matrix.release_package != false && runner.os == 'macOS'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          name: remote-server-release-binding
-          path: .build/remote-release
-
-      - name: Package and verify macOS Desktop
-        if: github.event_name == 'release' && matrix.release_package != false && runner.os == 'macOS'
-        shell: bash
-        env:
-          ASH_MACOS_SIGNING_IDENTITY: ${{ vars.ASH_MACOS_SIGNING_IDENTITY }}
-          ASH_UPDATE_PUBLIC_KEY: ${{ vars.ASH_UPDATE_PUBLIC_KEY }}
-          ASH_REMOTE_RELEASE_BINDING: ${{ github.workspace }}/.build/remote-release/remote-release.json
-        run: pnpm run package:desktop:darwin
-
-      - name: Notarize and stage macOS Desktop
-        if: github.event_name == 'release' && matrix.release_package != false && runner.os == 'macOS'
-        shell: bash
-        env:
-          ASH_UPDATE_PUBLIC_KEY: ${{ vars.ASH_UPDATE_PUBLIC_KEY }}
-          ASH_UPDATE_SIGNING_KEY: ${{ secrets.ASH_UPDATE_SIGNING_KEY }}
-        run: |
-          arch="$(node -p 'process.arch')"
-          bundle="dist/Ash-darwin-${arch}/Ash.app"
-          archive=".build/releases/Ash-darwin-${arch}.zip"
-          ditto -c -k --sequesterRsrc --keepParent "$bundle" "$archive"
-          python3 -B build/darwin/notarize.py "$archive"
-          xcrun stapler staple "$bundle"
-          xcrun stapler validate "$bundle"
-          rm "$archive"
-          ditto -c -k --sequesterRsrc --keepParent "$bundle" "$archive"
-          .build/cargo/debug/ash-update-sign \
-            --repository chogng/ash \
-            --product ash-desktop \
-            --channel latest \
-            --version "${GITHUB_REF_NAME#v}" \
-            --release-tag "$GITHUB_REF_NAME" \
-            --target "${{ matrix.target }}" \
-            --format zip \
-            --archive "$archive" \
-            --output ".build/releases/ash-desktop-${{ matrix.target }}.update.json" \
-            --public-key "$ASH_UPDATE_PUBLIC_KEY"
-          cp "$archive" ".build/releases/ash-desktop-${{ matrix.target }}.update.json" ".build/release-artifacts/${{ matrix.target }}/"
-
       - name: Bind final packages and archive Rust symbols
         if: github.event_name == 'release' && matrix.release_package != false
         shell: bash
         run: |
-          desktop=()
           capabilities=(--package-dir ".build/releases/runtime-${{ matrix.target }}" --package-dir ".build/releases/ash-code-${{ matrix.target }}")
-          if [[ "${{ runner.os }}" == "macOS" ]]; then
-            arch="$(node -p 'process.arch')"
-            capabilities+=(--package-dir "dist/Ash-darwin-${arch}/Ash.app/Contents/Resources")
-            desktop=(--desktop "dist/Ash-darwin-${arch}/Ash.app/Contents/Resources" --archive "ash-desktop=.build/releases/Ash-darwin-${arch}.zip")
-          elif [[ "${{ matrix.target }}" == "x86_64-pc-windows-msvc" ]]; then
-            capabilities+=(--package-dir "dist/Ash-win32-x64/resources")
-            desktop=(--desktop "dist/Ash-win32-x64/resources" --archive "ash-desktop=dist/AshSetup-${GITHUB_REF_NAME#v}-win32-x64.exe")
-          fi
           ${{ matrix.python }} -B build/release/capabilities.py stage \
             "${capabilities[@]}" --archives-dir .build/releases \
             --output ".build/release-artifacts/${{ matrix.target }}"
@@ -459,7 +395,7 @@ jobs:
             --package "ash-app-server=.build/releases/runtime-${{ matrix.target }}" \
             --archive "ash-code=.build/releases/ash-code-${{ matrix.target }}.${{ matrix.archive }}" \
             --archive "ash-app-server=.build/releases/ash-app-server-${{ matrix.target }}.${{ matrix.archive }}" \
-            "${desktop[@]}" --output ".build/release-artifacts/${{ matrix.target }}"
+            --output ".build/release-artifacts/${{ matrix.target }}"
 
       - name: Upload staged release packages for sanity checks
         if: github.event_name == 'release' && matrix.release_package != false

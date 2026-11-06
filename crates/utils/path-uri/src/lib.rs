@@ -14,7 +14,6 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::str::FromStr;
 use thiserror::Error;
-use ts_rs::TS;
 use url::Url;
 
 pub const FILE_SCHEME: &str = "file";
@@ -25,9 +24,8 @@ const OPAQUE_PATH_PREFIX: &str = "file:///%00/ash/opaque-path/";
 /// The URI retains POSIX, Windows drive, or UNC spelling independently of the
 /// operating system running Ash. Lexical operations do not access the host
 /// filesystem, resolve symlinks, or apply filesystem case-folding.
-#[derive(Clone, Debug, Eq, Hash, JsonSchema, PartialEq, TS)]
+#[derive(Clone, Debug, Eq, Hash, JsonSchema, PartialEq)]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct PathUri(#[schemars(with = "String")] Url);
 
 impl PathUri {
@@ -185,9 +183,8 @@ impl<'de> Deserialize<'de> for PathUri {
 }
 
 /// Path grammar used to interpret or render a [`PathUri`].
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
-#[ts(rename_all = "snake_case")]
 pub enum PathConvention {
     Posix,
     Windows,

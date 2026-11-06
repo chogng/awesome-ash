@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::language::LanguageDocumentDto;
 use crate::protocol::language::LanguageRangeDto;
 use serde::Deserialize;
@@ -7,7 +6,7 @@ use serde::Serialize;
 use std::path::PathBuf;
 
 /// Lifecycle state of the directory-side declaration projection.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodebaseSymbolsStateDto {
     Empty,
@@ -18,14 +17,12 @@ pub enum CodebaseSymbolsStateDto {
 }
 
 /// Published counters for the current or most recent usable symbol generation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSymbolsStatusResult {
     pub state: CodebaseSymbolsStateDto,
     pub root_id: String,
-    #[ts(type = "number")]
     pub generation: u64,
-    #[ts(type = "number")]
     pub source_generation: u64,
     pub indexed_source_count: usize,
     pub indexed_symbol_count: usize,
@@ -33,7 +30,7 @@ pub struct CodebaseSymbolsStatusResult {
 }
 
 /// Performs one bounded local fuzzy lookup against directory declarations.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSymbolsSearchParams {
     #[schemars(length(max = 8192))]
@@ -43,7 +40,7 @@ pub struct CodebaseSymbolsSearchParams {
 }
 
 /// Language-neutral category of a syntactically declared symbol.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SymbolKindDto {
     Constant,
@@ -61,7 +58,7 @@ pub enum SymbolKindDto {
 }
 
 /// One revision-verified local symbol match in editor-native UTF-16 coordinates.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSymbolsSearchHitDto {
     pub name: String,
@@ -78,7 +75,7 @@ pub struct CodebaseSymbolsSearchHitDto {
 }
 
 /// Bounded verified matches paired with the symbol generation that served them.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodebaseSymbolsSearchResult {
     pub status: CodebaseSymbolsStatusResult,
@@ -88,24 +85,23 @@ pub struct CodebaseSymbolsSearchResult {
 }
 
 /// Publishes the latest immutable editor text for one directory-relative document.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOverlaySynchronizeParams {
     pub document: LanguageDocumentDto,
 }
 
 /// Releases one editor document from the ephemeral code-intelligence overlay.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOverlayCloseParams {
     pub path: PathBuf,
 }
 
 /// Content-free summary of the current in-memory editor overlay.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOverlayStatusResult {
-    #[ts(type = "number")]
     pub generation: u64,
     pub dirty_document_count: usize,
 }

@@ -15,7 +15,6 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 mod execution_kind;
 mod instructions;
@@ -39,7 +38,7 @@ pub use tool_profile::ToolScope;
 pub use tool_profile::ToolSetDefinition;
 
 /// The Core decision for a validated model response, retained for replay and trace inspection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnLoopDecision {
     pub action: TurnLoopAction,
@@ -49,7 +48,7 @@ pub struct TurnLoopDecision {
     pub tool_call_count: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TurnLoopAction {
     ExecuteTools,
@@ -59,7 +58,7 @@ pub enum TurnLoopAction {
     Superseded,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TurnLoopReason {
     ToolRequests,
@@ -75,7 +74,7 @@ pub enum TurnLoopReason {
 }
 
 /// Canonical readable state for one user-intent-driven Agent execution.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Turn {
     pub turn_id: TurnId,
@@ -89,19 +88,14 @@ pub struct Turn {
     ///
     /// Historical Turns written before instruction snapshots were introduced omit this field.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub instructions: Option<TurnInstructions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model: Option<ModelRef>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub reasoning_effort: Option<crate::ReasoningEffort>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub advisor: Option<crate::AdvisorConfig>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub tool_profile: Option<ToolProfileSnapshot>,
     #[serde(default)]
     pub tool_mode: ToolMode,
@@ -110,21 +104,16 @@ pub struct Turn {
     #[serde(default)]
     pub usage: ModelUsageSummary,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub context_usage: Option<ModelContextUsage>,
     pub items: Vec<ThreadItem>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub plan: Option<PlanUpdate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub pending_interaction: Option<PendingInteraction>,
     /// Calls with durable execution-start evidence, including calls that have since finished.
     /// Older snapshots omit this field; consumers must give results and pending interactions precedence.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub started_tool_call_ids: Option<Vec<ToolCallId>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub error: Option<StableTurnError>,
 }

@@ -78,7 +78,7 @@ def build_development_server(
                 prepare_development_package(parse_arguments([]), root=root)
                 if prepare
                 else current_package(
-                    development_root(root, spec.target, "host-provided-node")
+                    development_root(root, spec.target, "packaged-node")
                 )
             )
             if live_directory() is not None:

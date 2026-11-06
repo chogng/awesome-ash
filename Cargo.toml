@@ -454,7 +454,6 @@ ra_ap_vfs = "=0.0.358"
 sha1 = "0.10.6"
 strum = "0.27"
 strum_macros = "0.27"
-ts-rs = { version = "12.0.1", features = ["serde-compat"] }
 tokio = { version = "1.53.3", features = ["net", "rt", "time"] }
 v8 = "=152.2.0"
 tokio-rustls = { version = "0.26.4", default-features = false, features = ["logging", "tls12"] }

@@ -47,6 +47,25 @@ fn clients_with_different_versions_keep_the_profile_backend_selection() {
 }
 
 #[test]
+fn packaged_runtime_replaces_a_retired_host_bound_selection() {
+    let directory = TempDir::new().unwrap();
+    let old = package(directory.path(), "old", "0.1.0");
+    let new = package(directory.path(), "new", "0.2.0");
+    let profile = directory.path().join("profile");
+    let store = ash_package_store::PackageStore::open(profile.join("app-server-packages")).unwrap();
+    store
+        .publish_with_installation(
+            old.parent().unwrap().parent().unwrap(),
+            json!({"executable": "/retired-desktop", "electronVersion": "44.4.5"}),
+        )
+        .unwrap();
+
+    let selected = selected_backend(&profile, &new).unwrap();
+    assert_eq!(fs::read(selected).unwrap(), b"0.2.0");
+    assert!(store.current().unwrap().unwrap().installation.is_none());
+}
+
+#[test]
 fn failed_explicit_install_keeps_the_previous_pin() {
     let directory = TempDir::new().unwrap();
     let first = package(directory.path(), "client-one", "0.1.0");

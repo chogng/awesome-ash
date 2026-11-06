@@ -1,10 +1,6 @@
 # MenuId 与 UI Action 组合系统
 
-> 本文是 Ash Desktop Renderer 中 Command、MenuId、Context Key、MenuService 与菜单型
-> Toolbar 组合关系的 canonical 文档。
-> Renderer 组件和 CSS 状态所有权以 [`ui-styling-ownership.md`](ui-styling-ownership.md)
-> 为准；Desktop 的进程与产品边界以
-> [`desktop-architecture.md`](desktop-architecture.md) 为准。
+> 历史参考。下文记录旧工作台的 Command、MenuId、Context Key、MenuService 与菜单型 Toolbar。原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
 
 ## 快速理解
 

@@ -4,12 +4,8 @@ ash_rust_crate(
     name = "app-server-protocol",
     crate_name = "ash_app_server_protocol",
     crate_features = ["export", "json-schema"],
-    data = [
-        "src/typescript_decoder.template.ts",
-        "src/typescript_web.template.ts",
-    ],
     # Bazel derives the handshake hash from Rust; no local Cargo output is an input.
-    extra_deps = ["@crates//:schemars", "@crates//:sha2", "@crates//:ts-rs"],
+    extra_deps = ["@crates//:schemars", "@crates//:sha2"],
 )
 
 ash_rust_binary(

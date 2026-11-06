@@ -31,14 +31,6 @@ use ash_protocol::SkillRef;
 use ash_protocol::SkillSourceId;
 use ash_protocol::ThreadEvent;
 use std::collections::BTreeSet;
-use std::path::Path;
-
-fn generated_typescript() -> String {
-    typescript_files()
-        .into_iter()
-        .map(|(_, contents)| contents)
-        .collect::<String>()
-}
 
 #[test]
 fn document_reads_require_the_callback_proof_and_preserve_it_on_disk_reads() {
@@ -293,42 +285,6 @@ fn registry_method_and_notification_names_are_unique() {
 }
 
 #[test]
-fn issue_browser_and_agent_session_types_are_declared_without_workflow_methods() {
-    let output = generated_typescript();
-    for name in [
-        "IssueConfigDto",
-        "IssueConfigureParams",
-        "IssueRepository",
-        "IssueSummary",
-        "IssueState",
-        "IssueListParams",
-        "IssueListResult",
-        "IssueReadParams",
-        "IssueReadResult",
-        "IssueComment",
-    ] {
-        assert!(
-            output.contains(&format!("export type {name} =")),
-            "missing {name}"
-        );
-    }
-    assert!(output.contains(
-        "\"issue/configure\": { params: IssueConfigureParams; response: ConfigCommandResult }"
-    ));
-    for removed in [
-        "issue/workflow/",
-        "issue/assignment/",
-        "issue/assignments/",
-        "issue/task/",
-        "issue/pr/",
-        "issue/plan",
-    ] {
-        assert!(!output.contains(removed));
-    }
-    assert!(output.contains("AgentRoleSelection"));
-}
-
-#[test]
 fn turn_input_items_preserve_ordered_text_context_image_and_skill_shapes() {
     let input = vec![
         InputItem::Issue { number: 3 },
@@ -472,28 +428,6 @@ fn slash_command_definition_preserves_discovery_and_argument_shape() {
 }
 
 #[test]
-fn frontend_session_requirements_are_exported_from_the_rust_compatibility_owner() {
-    let requirements = crate::protocol::initialize::REQUIRED_SESSION_CAPABILITIES
-        .iter()
-        .map(|requirement| match requirement {
-            crate::protocol::initialize::CapabilityRequirement::Enabled(name) => *name,
-            crate::protocol::initialize::CapabilityRequirement::Contract { .. } => {
-                panic!("unexpected session contract requirement")
-            }
-        })
-        .collect::<Vec<_>>();
-    let files = typescript_files()
-        .into_iter()
-        .collect::<std::collections::BTreeMap<_, _>>();
-    let protocol = &files[Path::new("protocol.ts")];
-    assert!(protocol.contains(&format!(
-        "export const APP_SERVER_REQUIRED_SESSION_CAPABILITIES = {} as const;",
-        serde_json::to_string(&requirements).unwrap()
-    )));
-    assert!(files[Path::new("index.ts")].contains("APP_SERVER_REQUIRED_SESSION_CAPABILITIES"));
-}
-
-#[test]
 fn rpc_envelopes_preserve_json_rpc_2_shape() {
     let request = JsonRpcRequest::new(
         JsonRpcId::Number(7),
@@ -556,180 +490,6 @@ fn rpc_envelopes_preserve_json_rpc_2_shape() {
         serde_json::to_value(failure).unwrap(),
         serde_json::json!({"jsonrpc": "2.0", "id": null, "error": {"code": -32600, "message": "InvalidRequest", "data": null}}),
     );
-}
-
-#[test]
-fn dto_driven_typescript_preserves_model_ref_and_patch_shape() {
-    let typescript = generated_typescript();
-
-    assert!(typescript.contains("export type ModelRef = { provider: string, model: string, };"));
-    for field in [
-        "export type ModelCatalogEntry = { model: ModelRef, display_name: string,",
-        "context_window: number | null,",
-        "default_context_window: number | null,",
-        "long_context: boolean | null,",
-        "selected_acceleration: string | null,",
-        "maximum_context_window: number | null,",
-        "capabilities: ModelCapabilities,",
-        "description: string | null,",
-        "supported_reasoning_efforts: Array<ModelReasoningEffortOption>,",
-        "default_reasoning_effort: ReasoningEffort | null,",
-        "effective_reasoning_effort?: ReasoningEffort | null,",
-    ] {
-        assert!(typescript.contains(field), "missing catalog field: {field}");
-    }
-
-    assert!(
-        typescript
-            .contains("export type ApprovalReviewModelSelection = { \"type\": \"automatic\" }")
-    );
-    assert!(typescript.contains("model: ModelRef | null"));
-    assert!(typescript.contains("model?: ModelRef | null"));
-    assert!(typescript.contains("modelReasoningEffort?: ReasoningEffort | null"));
-    assert!(typescript.contains("approvalReviewModel: ApprovalReviewModelSelection"));
-    assert!(typescript.contains("approvalReviewModel?: ApprovalReviewModelSelection | null"));
-    assert!(
-        typescript.contains("export type ActionApprovalDecision = \"approveOnce\" | \"approveForSession\" | \"approveAndSaveRule\" | \"decline\"")
-    );
-    assert!(typescript.contains("{ \"type\": \"approval\", request: ActionApprovalRequest, }"));
-    assert!(typescript.contains("{ \"type\": \"approval\", response: ActionApprovalResponse, }"));
-    assert!(typescript.contains("expectedRevision: number"));
-    assert!(typescript.contains("export type ProviderConfigDto ="));
-    assert!(typescript.contains("export type ModelContextConfigDto ="));
-    assert!(typescript.contains("modelContext?: { [key in string]: ModelContextConfigDto }"));
-    assert!(typescript.contains(r#""provider/configure": { method: "provider/configure" }"#));
-    assert!(typescript.contains(r#""provider/list": { method: "provider/list" }"#));
-    assert!(typescript.contains(r#""provider/apiKey/set": { method: "provider/apiKey/set" }"#));
-    assert!(typescript.contains("export type ProviderCatalogEntryDto ="));
-    assert!(typescript.contains("export type McpServerConfigDto ="));
-    assert!(typescript.contains("credentialRef: string"));
-    assert!(typescript.contains("export type SkillSourceConfigDto ="));
-    assert!(typescript.contains("export type PluginRequestDto ="));
-    assert!(typescript.contains("export type HookConfigDto ="));
-    assert!(typescript.contains("export type LanguageServerModeDto = \"disabled\" | \"enabled\";"));
-    assert!(typescript.contains(r#""mcp/server/upsert": { method: "mcp/server/upsert" }"#));
-    assert!(typescript.contains(r#""skill/source/add": { method: "skill/source/add" }"#));
-    assert!(typescript.contains(r#""plugin/request/upsert": { method: "plugin/request/upsert" }"#));
-    assert!(typescript.contains(r#""hook/upsert": { method: "hook/upsert" }"#));
-    assert!(typescript.contains("export type SkillName = string;"));
-    assert!(typescript.contains("export type SkillSourceId = string;"));
-    assert!(typescript.contains("export type ContentDigest = string;"));
-    assert!(typescript.contains("export type SkillRef ="));
-    assert!(typescript.contains("export type FrozenSkillActivation ="));
-    assert!(typescript.contains("export type ContextCheckpoint ="));
-    assert!(typescript.contains(r#"{ "type": "skill", skill: SkillRef, }"#));
-    assert!(typescript.contains(r#""skills/list": { method: "skills/list" }"#));
-    assert!(typescript.contains(r#""skill/resource/open": { method: "skill/resource/open" }"#));
-    assert!(typescript.contains(r#""skills/changed": { method: "skills/changed" }"#));
-    assert!(typescript.contains(r#""git/statusChanged": { method: "git/statusChanged" }"#));
-    assert!(!typescript.contains("preferredModel:"));
-    assert!(typescript.contains(r#""type": "toolResult""#));
-    assert!(typescript.contains("export type ToolName = string;"));
-    assert!(typescript.contains("items: Array<ThreadItem>"));
-    assert!(!typescript.contains("items?: Array<ThreadItem>"));
-    assert!(typescript.contains("export type Session ="));
-    assert!(typescript.contains("parentSequence: number"));
-    assert!(typescript.contains("export type ToolExecutionAuthority ="));
-    assert!(typescript.contains(r#"{ "type": "autoReviewed", assessmentId: string, }"#));
-    assert!(typescript.contains("export type ProcessExecutionOutput ="));
-    assert!(typescript.contains("export type SandboxDenialOutput ="));
-    assert!(typescript.contains("replaySafety: ToolReplaySafety"));
-    assert!(typescript.contains("dataBase64: string"));
-    assert!(typescript.contains("decodedLength: number"));
-    assert!(!typescript.contains(
-        "ResourceReadResult = { resourceId: string, offset: number, data: Array<number>"
-    ));
-    assert!(typescript.contains("export const APP_SERVER_METHODS:"));
-    assert!(typescript.contains(r#""session/create": { method: "session/create" }"#));
-    assert!(typescript.contains(r#""session/request": { method: "session/request" }"#));
-    assert!(typescript.contains(r#""session/thread/read": { method: "session/thread/read" }"#));
-    assert!(
-        typescript
-            .contains(r#""session/thread/subscribe": { method: "session/thread/subscribe" }"#)
-    );
-    assert!(
-        typescript
-            .contains(r#""session/thread/unsubscribe": { method: "session/thread/unsubscribe" }"#)
-    );
-    assert!(!typescript.contains(r#""turn/start": { method: "turn/start" }"#));
-    assert!(!typescript.contains(r#""turn/shell/start": { method: "turn/shell/start" }"#));
-    assert!(typescript.contains(
-        r#"export type InputItem = { "type": "issue", number: number, } | { "type": "text", text: string, } | { "type": "context", name: string, content: string,"#
-    ));
-    assert!(typescript.contains(
-        r#"sourceUrl?: string | null, } | { "type": "hostResource", name: string, resource: HostResourceRef, } | { "type": "toolSelection", disabled: Array<ToolName>,"#
-    ));
-    assert!(typescript.contains("threadRecapModel?: ModelRef | null"));
-    assert!(typescript.contains("recap?: string | null"));
-    assert!(typescript.contains(
-        r#"{ "type": "threadRecapUpdated", threadId: ThreadId, turnId: TurnId, text: string, }"#
-    ));
-    assert!(typescript.contains("scope?: ToolScope | null,"));
-    assert!(!typescript.contains("InputItemKind"));
-    assert!(typescript.contains(r#"{ "type": "userImage""#));
-    assert!(typescript.contains(r#"{ "type": "userImageAttachment""#));
-    assert!(
-        !typescript
-            .contains(r#""turn/interaction/resolve": { method: "turn/interaction/resolve" }"#)
-    );
-    assert!(typescript.contains(r#""fs/getMetadata": { method: "fs/getMetadata" }"#));
-    assert!(typescript.contains(r#""fs/readDirectory": { method: "fs/readDirectory" }"#));
-    assert!(typescript.contains(r#""fs/readFile": { method: "fs/readFile" }"#));
-    assert!(typescript.contains(r#""fs/readBinaryFile": { method: "fs/readBinaryFile" }"#));
-    assert!(typescript.contains(r#""fs/writeFile": { method: "fs/writeFile" }"#));
-    assert!(typescript.contains("export type SessionDirSelector ="));
-    assert!(typescript.contains("export type DirContributionsDto ="));
-    assert!(typescript.contains(r#""fs/changed": { method: "fs/changed" }"#));
-    assert!(typescript.contains(r#""grep/search/start": { method: "grep/search/start" }"#));
-    assert!(typescript.contains(r#""codebase/search": { method: "codebase/search" }"#));
-    assert!(typescript.contains(r#""codebase/retrieve": { method: "codebase/retrieve" }"#));
-    assert!(typescript.contains(r#""codebase/cloud/status": { method: "codebase/cloud/status" }"#));
-    assert!(
-        typescript.contains(r#""codebase/cloud/preview": { method: "codebase/cloud/preview" }"#)
-    );
-    assert!(
-        typescript
-            .contains(r#""codebase/cloud/authorize": { method: "codebase/cloud/authorize" }"#)
-    );
-    assert!(typescript.contains(r#""codebase/cloud/sync": { method: "codebase/cloud/sync" }"#));
-    assert!(typescript.contains(r#""codebase/cloud/revoke": { method: "codebase/cloud/revoke" }"#));
-    assert!(typescript.contains(r#""terminal/profile/list": { method: "terminal/profile/list" }"#));
-    assert!(typescript.contains(r#""terminal/create": { method: "terminal/create" }"#));
-    assert!(typescript.contains(r#""terminal/attach": { method: "terminal/attach" }"#));
-    assert!(typescript.contains(r#""terminal/read": { method: "terminal/read" }"#));
-    assert!(typescript.contains("export type TerminalProfile ="));
-    assert!(typescript.contains("profileId: string"));
-    assert!(typescript.contains("export type TerminalProfileSelection ="));
-    assert!(typescript.contains("export type TerminalProfileListResult ="));
-    assert!(typescript.contains("export type TerminalLifecycle ="));
-    assert!(typescript.contains("export type TerminalReconnectLease ="));
-    assert!(typescript.contains("export type TerminalAttachParams ="));
-    assert!(typescript.contains("export type TerminalAttachResult ="));
-    assert!(typescript.contains("export type TerminalCommandStatus ="));
-    assert!(typescript.contains("export type TerminalCommandStatusEvent ="));
-    assert!(typescript.contains("export type TerminalReadResult ="));
-    assert!(typescript.contains("export type ContentSearchMatch ="));
-    assert!(typescript.contains("export type CodebaseStatusResult ="));
-    assert!(typescript.contains("sourceState: CodebaseStateDto"));
-    assert!(typescript.contains("embedding: CodebaseEmbeddingStatusDto"));
-    assert!(typescript.contains("export type CodebaseSearchResult ="));
-    assert!(typescript.contains("export type CodebaseRetrievalResult ="));
-    assert!(typescript.contains("rrfScore: number"));
-    assert!(
-        typescript.contains("export type CodebaseDeploymentModeDto = \"localOnly\" | \"cloud\";")
-    );
-    assert!(!typescript.contains("CloudCodebaseModeDto"));
-    assert!(!typescript.contains("cloudManaged"));
-    assert!(typescript.contains("export type CloudCodebaseSelectionDto ="));
-    assert!(typescript.contains("export type CloudCodebaseStatusResult ="));
-    assert!(typescript.contains("syncedLocalGeneration: number | null"));
-    assert!(typescript.contains("export type TurnInteraction ="));
-    assert!(typescript.contains("export type PendingInteraction ="));
-    assert!(
-        typescript.contains("export type ToolMode = \"direct\" | \"codeMode\" | \"codeModeOnly\";")
-    );
-    assert!(typescript.contains("export const APP_SERVER_NOTIFICATIONS:"));
-    assert!(!typescript.contains("ThreadStartParams"));
 }
 
 #[test]
@@ -1070,60 +830,6 @@ fn language_server_mode_rejects_automatic() {
     assert!(
         serde_json::from_value::<LanguageServerModeDto>(serde_json::json!("automatic")).is_err()
     );
-}
-
-#[test]
-fn generated_method_maps_match_the_protocol_registries() {
-    let output = generated_typescript();
-
-    assert!(output.contains("export interface AppServerRequestMap {"));
-    assert!(output.contains("export interface AppServerNotificationMap {"));
-    assert!(output.contains("export interface AppServerServerRequestMap {"));
-    assert!(!output.contains("AppServerMethodMap"));
-    assert!(!output.contains("AppServerHostMethodMap"));
-    for method in CLIENT_METHODS {
-        assert!(output.contains(&format!(
-            "  {:?}: {{ params: {}; response: {} }};",
-            method.method,
-            method.params_type(),
-            method.result_type()
-        )));
-    }
-    for notification in SERVER_NOTIFICATIONS {
-        assert!(output.contains(&format!(
-            "  {:?}: {};",
-            notification.method,
-            notification.params_type()
-        )));
-    }
-    for request in HOST_METHODS {
-        assert!(output.contains(&format!(
-            "  {:?}: {{ params: {}; response: {} }};",
-            request.method,
-            request.params_type(),
-            request.result_type()
-        )));
-    }
-}
-
-#[test]
-fn generated_typescript_separates_types_from_protocol_entrypoints() {
-    let files = typescript_files()
-        .into_iter()
-        .collect::<std::collections::BTreeMap<_, _>>();
-
-    assert!(!files.contains_key(Path::new("types.ts")));
-    assert!(files.contains_key(Path::new("protocol.ts")));
-    assert!(files.contains_key(Path::new("types/index.ts")));
-    let model_catalog = files.get(Path::new("types/ModelCatalogEntry.ts")).unwrap();
-    assert!(model_catalog.contains("import type { ModelRef } from './ModelRef.js';"));
-    assert!(model_catalog.contains("export type ModelCatalogEntry ="));
-    let request_map = files.get(Path::new("AppServerRequestMap.ts")).unwrap();
-    assert!(request_map.contains("export interface AppServerRequestMap {"));
-    assert!(request_map.contains("from './types/InitializeParams.js';"));
-    assert!(!request_map.contains("from './types.js'"));
-    let index = files.get(Path::new("index.ts")).unwrap();
-    assert!(index.contains("export type * from './types/index.js';"));
 }
 
 #[test]

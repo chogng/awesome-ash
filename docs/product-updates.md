@@ -2,7 +2,7 @@
 
 > 状态：Target architecture 与当前实现差距。本文拥有 Desktop 与 CLI/TUI的更新责任边界、共享契约、
 > 安装交接和演进顺序；产品线定义见 [`product-lines.md`](product-lines.md)，配置系统见
-> [`config.md`](config.md)。
+> [`config.md`](config.md)。文中的 Electron 适配细节属于旧宿主，原生 Desktop 的分发与更新待接入。
 
 ## 结论
 
@@ -241,8 +241,7 @@ Remote runtime 的下载、兼容握手、安装与回滚继续由 `ash-remote-c
 
 ## 当前状态
 
-“已有代码”不代表共享架构已经完成。当前 Ash Code 和 `zui` 仍各自拥有下载与调度代码，这些逻辑
-需要继续迁到共享领域，不能被 Electron 复制为第三套实现。
+CLI 与 TUI 已使用共享的 `ash-product-update`。原生 Desktop 的安装和重启由后续分发工作接入。文中的 Electron 适配细节记录旧宿主的更新路径。 [Rust App 路线图](../TODO.md#roadmap--rust-app)
 
 ## 验证要求
 

@@ -1,10 +1,9 @@
 use crate::JsonSchema;
-use crate::TS;
 use serde::Deserialize;
 use serde::Serialize;
 
 /// Immutable renderer-captured context. Handles are meaningful only on their originating connection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostResourceRef {
     #[schemars(length(min = 1, max = 128))]
@@ -15,7 +14,7 @@ pub struct HostResourceRef {
     pub sha256: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostResourceReadParams {
     #[schemars(length(min = 1, max = 128))]
@@ -26,7 +25,7 @@ pub struct HostResourceReadParams {
     pub max_bytes: usize,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostResourceReadResult {
     #[schemars(length(min = 1, max = 128))]
@@ -40,7 +39,7 @@ pub struct HostResourceReadResult {
     pub eof: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HostResourceReleaseParams {
     #[schemars(length(min = 1, max = 128))]

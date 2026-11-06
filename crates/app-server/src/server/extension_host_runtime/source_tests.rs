@@ -160,7 +160,7 @@ fn effective_javascript_package_launches_product_host_with_exact_identity_and_re
     std::fs::create_dir_all(root.path().join("dist")).unwrap();
     std::fs::write(
         root.path().join(".ash-plugin/plugin.json"),
-        include_bytes!("../../../../../examples/extensions/inspect/.ash-plugin/plugin.json"),
+        include_bytes!("../../../../../test/fixtures/extensions/inspect/.ash-plugin/plugin.json"),
     )
     .unwrap();
     std::fs::write(
@@ -170,7 +170,7 @@ fn effective_javascript_package_launches_product_host_with_exact_identity_and_re
     .unwrap();
     std::fs::write(
         root.path().join("package.json"),
-        include_bytes!("../../../../../examples/extensions/inspect/package.json"),
+        include_bytes!("../../../../../test/fixtures/extensions/inspect/package.json"),
     )
     .unwrap();
     let package = LocalPluginPackage::load(root.path()).unwrap();
@@ -321,7 +321,7 @@ fn standard_task_and_debug_packages_wait_for_their_declared_activation_event() {
         let root = tempfile::tempdir().unwrap();
         std::fs::create_dir_all(root.path().join(".ash-plugin")).unwrap();
         let mut manifest: serde_json::Value = serde_json::from_slice(include_bytes!(
-            "../../../../../examples/extensions/inspect/.ash-plugin/plugin.json"
+            "../../../../../test/fixtures/extensions/inspect/.ash-plugin/plugin.json"
         ))
         .unwrap();
         let contribution = &mut manifest["contributions"]["editorExtensions"][0];

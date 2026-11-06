@@ -5,7 +5,7 @@ applyTo: "**"
 
 # Testing Guidelines
 
-Commands: [Rust development](../../.agents/skills/rust-development/SKILL.md#validation), [TypeScript validation](typescript-testing.instructions.md), and [TypeScript test writing](writing-tests.instructions.md).
+Use the [Rust validation commands](../../.agents/skills/rust-development/SKILL.md#validation) and [repository test entrypoints](../../test/README.md).
 
 ## 改动与配套内容同步
 
@@ -26,26 +26,26 @@ Commands: [Rust development](../../.agents/skills/rust-development/SKILL.md#vali
 
 按受影响行为及其运行边界选择下表中的最小验证；是否需要启动产品由改动决定。混合改动组合必要检查，不逐层重复验证同一结论。
 
-Desktop 功能验收使用真实 Ash Electron，涉及后端时连接 App Server；只有验证 Web 行为才选择 Web smoke／scenario。浏览器组件测试可覆盖局部契约，但不能替代桌面验收；桌面运行受阻时报告缺口，不改用浏览器页面宣称通过。`browser/` 源码目录或 Playwright 的 `page` 类型不决定产品宿主。
+桌面功能验收使用当前 checkout 构建的 Rust App。涉及后端时连接共享 App Server。
 
 | 改动类型 | 验证入口与升级条件 |
 | --- | --- |
 | 文档、注释 | 按[文档规范](documentation.instructions.md)检查；可执行示例变化时验证对应示例。 |
 | 内部逻辑、行为不变的重构、后端领域契约 | 运行所属模块及受影响消费者的定向测试和必要构建检查；涉及实际进程或产品接线时再增加对应运行场景。 |
-| 布局、主题、组件交互 | 使用源码 owner 的 [Mocha 浏览器组件测试](writing-tests.instructions.md)或已有组件 fixture；视觉变化审阅关键截图。组件隔离环境不能覆盖的产品组合行为使用下一行入口。 |
-| 完整用户流程、Desktop 启动、IPC、原生窗口、前后端接线 | 选择覆盖相应宿主和连接的定向 [smoke](../../.agents/skills/smoke-tests/SKILL.md)；一次性复现、修复验收或需要录制证据时使用 [UI scenario](../../.agents/skills/validate-ui-scenario/SKILL.md)。已有场景足以验证该结论时直接复用，不额外运行同样的场景。 |
+| 布局、主题、组件交互 | 运行所属组件的定向验证。视觉变化审阅关键截图，产品组合行为在真实窗口验收。 |
+| 完整用户流程、Desktop 启动、IPC、原生窗口、前后端接线 | 从 `just ash` 启动原生窗口并验证对应行为。涉及 IPC 时断言真实连接、失败和关闭路径。 |
 | Agent 工具、执行、取消或恢复 | 使用受控模型响应验证受影响的生产调用链；涉及客户端接线时从相应产品入口验收。真实 Provider／模型调用用于外部服务兼容性或明确的模型任务评估，不作为每次 Agent 改动的前置条件。 |
 | TUI 状态、渲染与交互 | 使用 [App／组件测试](../../.agents/skills/test-tui/SKILL.md)；行为依赖真实 CLI 进程、PTY、信号或宿主终端时增加 [PTY 场景](../../.agents/skills/test-tui-pty/SKILL.md)。 |
 | 性能、内存 | 按[性能验证流程](../../.agents/skills/auto-perf-optimize/SKILL.md)及其领域 skill 运行可比较的前后测量。 |
 
 - 测试和诊断不得触发系统密码、Touch ID 或 Developer Tools Access 授权弹窗；使用离线 fixtures，不启动需要系统授权的调试附加，也不请求用户解锁或修改安全策略。
 - 交付、提交或推送前，完成当前平台可执行且覆盖受影响行为的最小 check、test、build 或运行验证。测试通过不能代替正常构建；纯编译修复必须验证原先失败的非测试构建。
-- 本地根据改动的所属包、测试目标与受影响消费者选择验证；Rust 使用共享 `ci-test` 配置，前端过滤测试文件或场景。完整 workspace 回归和跨平台 CI 矩阵由远端工作流执行，不作为日常本地验证；用户明确要求全量复现时例外。
-- 纯前端改动使用前端定向测试或 UI project，不因产品依赖 App Server 就运行 Rust 测试、构建后端包或启动后端。只有改动协议、后端实现或前后端接线时才增加对应后端验证；前端构建消费已校验的协议产物，缺失或过期时通过显式协议准备修复。
-- 优先复用现有诊断。每个目标默认运行一次，通过后停止；代码、相关依赖、工具链及验证配置未变时复用结果。运行产物须包含当前 checkout 的相关修改，满足此前提才复用 no-compile 入口；已安装的旧版本不能验证未包含的本地修改。修复失败后先重跑失败目标，仅在变更或新证据要求时扩大范围。Web、Electron UI 与 App Server 连接是不同覆盖。
+- 本地根据改动的所属包、测试目标与受影响消费者选择验证；Rust 使用共享 `ci-test` 配置。完整 workspace 回归和跨平台 CI 矩阵由远端工作流执行，不作为日常本地验证；用户明确要求全量复现时例外。
+- 纯前端改动使用前端定向测试或 UI project，不因产品依赖 App Server 就运行 Rust 测试、构建后端包或启动后端。只有改动协议、后端实现或前后端接线时才增加对应后端验证。
+- 优先复用现有诊断。每个目标默认运行一次，通过后停止；代码、相关依赖、工具链及验证配置未变时复用结果。运行产物须包含当前 checkout 的相关修改，满足此前提才复用 no-compile 入口；已安装的旧版本不能验证未包含的本地修改。修复失败后先重跑失败目标，仅在变更或新证据要求时扩大范围。
 - 偶发失败只对具体用例或套件配置有界重试，保留首次失败诊断并报告重试结果。循环运行仅用于性能测量、偶发故障调查或用户要求。
 - 运行验证以独立于操作的结果断言判断通过，例如文件内容、退出码、持久状态或焦点；Agent 的完成报告或截图不能单独证明行为成功。日常使用 Ash 发现的问题进入对应回归测试，日常自用不能代替定向验收。
-- UI 验收优先使用仓库 Playwright 项目、smoke 或 scenario runner；只有必需的系统级交互无法由这些入口覆盖，或用户明确要求时，才使用 Computer Use。缺少现成用例时优先补充可复跑的 Playwright 场景。Web 默认 headless，调试可见窗口行为时才显示。Electron 使用真实进程与窗口；macOS 隐藏窗口不等于 headless，Linux 可用虚拟显示。
+- 优先使用现有自动化测试入口；系统交互可通过平台测试工具验证。Linux 桌面测试可以使用虚拟 X11 显示。
 - 未增改测试时说明现有覆盖为何足够。不得复制实现断言或削弱断言。
 
 ## 本地结果与 CI 覆盖

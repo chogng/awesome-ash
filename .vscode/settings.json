@@ -1,12 +1,5 @@
 {
 	"files.eol": "\n",
-	"[typescript][typescriptreact][javascript][javascriptreact]": {
-		"editor.defaultFormatter": "wdomitrz.simple-lsp-client",
-		"editor.insertSpaces": false,
-		"editor.tabSize": 4,
-		"editor.formatOnSave": true
-	},
-	"js/ts.preferences.quoteStyle": "single",
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.formatOnSave": true
@@ -14,39 +7,6 @@
 	"[python]": {
 		"editor.defaultFormatter": "charliermarsh.ruff",
 		"editor.formatOnSave": true
-	},
-	"[json][jsonc][yaml][markdown][css][html]": {
-		"editor.defaultFormatter": "wdomitrz.simple-lsp-client",
-		"editor.formatOnSave": true
-	},
-	"simpleLspClient.formatters": {
-		"typescript": {
-			"cmd": [
-				"${workspaceFolder}/node_modules/bun/bun",
-				"${workspaceFolder}/build/format.ts",
-				"--stdin-filepath",
-				"${file}"
-			],
-			"filetypes": [
-				"typescript",
-				"typescriptreact",
-				"javascript",
-				"javascriptreact"
-			]
-		},
-		"bun": {
-			"cmd": [
-				"${workspaceFolder}/node_modules/bun/bun",
-				"fmt",
-				"--ignore-path",
-				".gitignore",
-				"--ignore-path",
-				".prettierignore",
-				"--stdin-filepath",
-				"${file}"
-			],
-			"filetypes": ["json", "jsonc", "yaml", "markdown", "css", "html"]
-		}
 	},
 	"bazel.commandLine.queryExpression": "//...:*",
 	"bazel.queriesShareServer": false,

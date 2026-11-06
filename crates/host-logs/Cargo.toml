@@ -14,7 +14,7 @@ path = "src/main.rs"
 
 [features]
 json-schema = ["dep:schemars"]
-export = ["json-schema", "dep:ts-rs"]
+export = ["json-schema"]
 
 [dependencies]
 process-hardening = { workspace = true }
@@ -24,7 +24,6 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 sysinfo = { workspace = true }
 schemars = { workspace = true, optional = true }
-ts-rs = { workspace = true, optional = true }
 
 [target.'cfg(unix)'.dependencies]
 libc = { workspace = true }

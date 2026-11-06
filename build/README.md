@@ -1,8 +1,10 @@
 # Ash build tools
 
+The current desktop executable builds with `just build-ash`. References below to the retired Electron, Web, and pnpm pipeline describe historical behavior.
+
 Product entrypoints compose the shared package tools for development and release:
 
-- `prepare.py` resolves development inputs and publishes packages; `build/desktop/runtimeStore.ts` reads published selections for Electron and Web.
+- `prepare.py` resolves development inputs and publishes shared backend packages.
 - `desktop/develop.py` combines prepared resources with incremental Desktop binaries and selects a development runtime through `lib/development_store.py`; Code uses the same leased generation storage for its executables.
 - `protocol/generate.py` prepares the shared Rust-owned contract; `protocol/artifacts.py` validates portable source fingerprints and packaged artifacts for preparation and assembly.
 - `lib/cargo_inputs.py` prepares grammar, V8 and speech link inputs from the selected dependency graph for the Cargo command, Code builds and product packaging. Resource-specific modules retain download, validation and caller-override rules.

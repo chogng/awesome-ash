@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import worker from './worker.ts';
+import worker from './worker.mjs';
 
 const origin = 'https://ash-github-auth.example.workers.dev';
 const environment = {

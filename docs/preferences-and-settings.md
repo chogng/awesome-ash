@@ -1,8 +1,8 @@
 # Preferences、Settings 与 Configuration
 
-> 适用范围：Ash TypeScript Workbench 与 Sessions 的偏好入口和编辑页面。配置存储背景见 [Browser foundation](browser-foundation.md#configuration-architecture)，设置接入规则见 [Preferences README](../src/ash/workbench/contrib/preferences/README.md)。
+> 历史参考。下文描述旧 TypeScript Workbench 与 Sessions 的偏好入口和编辑页面。原生 Desktop 的界面偏好见 [Ash UI](desktop-architecture.md#kit-的第一批组件)，后端配置见 [配置](config.md)。
 
-Preferences 负责打开偏好资源，Settings 是其中一种内容。配置读写、用户设置 JSONC 和快捷键独立资源的主链已接通；用户、Workspace / Folder 目标、语言覆盖、编辑器组选项和 Policy 已完成所选行为的代码验收。真实系统与外部账号的覆盖边界见[已有验证与限制](#已有验证与限制)。本文描述当前架构，不作为全部 VS Code 契约已对齐的声明。
+Preferences 负责打开偏好资源，Settings 是其中一种内容。旧工作台的配置读写、用户设置 JSONC 和快捷键独立资源已接通。用户、Workspace / Folder 目标、语言覆盖、编辑器组选项和 Policy 的验收范围见 [已有验证与限制](#已有验证与限制)。
 
 ## 打开路径
 

@@ -7,5 +7,5 @@ ash_rust_crate(
     data = ["fixtures/conformance.json"],
     # Bazel must explicitly enable the features Cargo propagates from protocol
     # schema builds and export tests, including their optional dependencies.
-    extra_deps = ["@crates//:schemars", "@crates//:ts-rs"],
+    extra_deps = ["@crates//:schemars"],
 )

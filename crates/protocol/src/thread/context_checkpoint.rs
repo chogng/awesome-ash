@@ -8,22 +8,18 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 /// Inclusive durable Thread sequence range summarized by one checkpoint.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContextSourceRange {
-    #[ts(type = "number")]
     pub start_sequence: u64,
-    #[ts(type = "number")]
     pub end_sequence: u64,
 }
 
 /// SHA-256 digest of the canonical source facts covered by a checkpoint.
-#[derive(Clone, Debug, Eq, JsonSchema, PartialEq, TS)]
+#[derive(Clone, Debug, Eq, JsonSchema, PartialEq)]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct ContextSourceDigest(String);
 
 impl ContextSourceDigest {
@@ -75,14 +71,14 @@ impl fmt::Display for InvalidContextSourceDigest {
 
 impl std::error::Error for InvalidContextSourceDigest {}
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ContextCheckpointVerification {
     Verified,
 }
 
 /// Verified durable summary of one exact prefix of Thread history.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContextCheckpoint {
     pub checkpoint_id: ContextCheckpointId,
@@ -95,9 +91,7 @@ pub struct ContextCheckpoint {
     pub prompt_revision: String,
     pub context_policy_revision: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub generator_model: Option<ModelRef>,
-    #[ts(type = "number")]
     pub created_at_unix_ms: u64,
     pub verification: ContextCheckpointVerification,
 }

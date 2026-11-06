@@ -1,12 +1,11 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::model::ModelCatalogEntry;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
 use zeroize::Zeroize;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ProviderApiKeyPolicyDto {
     Unsupported,
@@ -14,7 +13,7 @@ pub enum ProviderApiKeyPolicyDto {
     Required,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderCatalogEntryDto {
     pub connection: String,
@@ -28,19 +27,19 @@ pub struct ProviderCatalogEntryDto {
     pub api_key_configured: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderListResult {
     pub providers: Vec<ProviderCatalogEntryDto>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderModelsListParams {
     pub connection: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ProviderModelsListFailureCodeDto {
     Authentication,
@@ -56,13 +55,13 @@ pub enum ProviderModelsListFailureCodeDto {
     Unknown,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderModelsListFailureDto {
     pub code: ProviderModelsListFailureCodeDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum ProviderModelsListResult {
     Models {
@@ -75,7 +74,7 @@ pub enum ProviderModelsListResult {
 }
 
 /// Model observation for one unchanged account or external credential scope.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderModelsUpdated {
     pub connection: String,
@@ -85,7 +84,7 @@ pub struct ProviderModelsUpdated {
 }
 
 /// A subscription account or an external credential owner must authorize every observation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum ProviderModelsAuthorityDto {
     Subscription {
@@ -101,7 +100,7 @@ pub enum ProviderModelsAuthorityDto {
 }
 
 /// Inbound-only provider API key that redacts diagnostics and clears its allocation on drop.
-#[derive(Deserialize, Eq, JsonSchema, PartialEq, TS)]
+#[derive(Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(transparent)]
 pub struct ProviderApiKeyDto(String);
 
@@ -123,28 +122,28 @@ impl Drop for ProviderApiKeyDto {
     }
 }
 
-#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq, TS)]
+#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderApiKeySetParams {
     pub connection: String,
     pub api_key: ProviderApiKeyDto,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderApiKeySetResult {
     pub connection: String,
     pub api_key_configured: bool,
 }
 
-#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq, TS)]
+#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ProviderApiKeyRemoveParams {
     pub connection: String,
 }
 
 /// Tests an unsaved connection without changing configuration or stored credentials.
-#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq, TS)]
+#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ProviderProbeParams {
     pub config: crate::protocol::config::ProviderConfigDto,
@@ -152,7 +151,7 @@ pub struct ProviderProbeParams {
     pub model: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum ProviderProbeResult {
     Passed,

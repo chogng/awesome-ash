@@ -3,7 +3,6 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 use crate::ModelId;
 use crate::ModelReasoningEffortOption;
@@ -12,7 +11,7 @@ use crate::Personality;
 use crate::ReasoningEffort;
 
 /// Evidence about support; `Unknown` means unverified, not unsupported.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CapabilitySupport {
     Supported,
@@ -20,14 +19,14 @@ pub enum CapabilitySupport {
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ContextWindow {
     Known(u32),
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelAvailability {
     Available,
@@ -35,7 +34,7 @@ pub enum ModelAvailability {
     Unverified,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelCatalogFreshness {
     Fresh,
@@ -44,7 +43,7 @@ pub enum ModelCatalogFreshness {
     StaticOnly,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelLifecycle {
     Stable,
@@ -54,7 +53,7 @@ pub enum ModelLifecycle {
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelMetadataQuality {
     ProviderLive,
@@ -67,7 +66,7 @@ pub enum ModelMetadataQuality {
 
 /// Ash-curated task recommendations, independent of provider capabilities or account access.
 #[derive(
-    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Copy, Debug, Deserialize, Eq, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(rename_all = "camelCase")]
 pub enum ModelPurpose {
@@ -82,7 +81,7 @@ pub enum ModelPurpose {
 ///
 /// This is independent of lifecycle classification and availability: legacy or preview models
 /// are not necessarily retiring, and an announcement does not revoke access or select a replacement.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ModelRetirement {
     /// Exact shutdown date in YYYY-MM-DD form; null means announced without a confirmed date.
@@ -128,7 +127,7 @@ impl ModelRetirement {
 /// [`ModelRef::provider`] identifies the model vendor. Product composition may use this access
 /// mode to choose an execution backend, but it is not proof of authentication, entitlement, or
 /// remote availability.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelAccess {
     ApiKey,
@@ -139,13 +138,12 @@ pub enum ModelAccess {
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelCapabilities {
     pub tools: CapabilitySupport,
     /// Explicit catalog declaration of Agent-loop support, independent of tool calling.
     #[serde(default = "unknown_capability_support")]
-    #[ts(as = "Option<CapabilitySupport>", optional)]
     pub agent_mode: CapabilitySupport,
     pub reasoning: CapabilitySupport,
     pub parallel_tool_calls: CapabilitySupport,
@@ -177,7 +175,7 @@ fn unknown_capability_support() -> CapabilitySupport {
 ///
 /// Capacity and parameter declarations guide request construction; this row does not prove account
 /// access or endpoint compatibility. The editable bundled row is owned by model-provider-info.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelInfo {
     pub id: ModelId,
@@ -185,13 +183,11 @@ pub struct ModelInfo {
     pub description: Option<String>,
     /// Suggested task pickers; an empty list makes no recommendation and does not forbid invocation.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    #[ts(as = "Option<Vec<ModelPurpose>>", optional)]
     pub recommended_for: Vec<ModelPurpose>,
     #[serde(default)]
     pub access: ModelAccess,
     /// Connection-sourced retirement evidence; omission means no known announcement.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub retirement: Option<ModelRetirement>,
     pub context_window: ContextWindow,
     /// Optional model-specific compaction threshold; Core determines the effective execution budget.
@@ -203,7 +199,6 @@ pub struct ModelInfo {
     pub default_reasoning_effort: Option<ReasoningEffort>,
     /// Provider reasoning value used by the model's separate Ultra mode.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub ultra_reasoning_effort: Option<ReasoningEffort>,
     pub default_personality: Option<Personality>,
     #[serde(default)]
@@ -294,7 +289,7 @@ impl ModelInfo {
 
 pub type Model = ModelInfo;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ModelPreset {
     pub id: String,
@@ -306,7 +301,7 @@ pub struct ModelPreset {
 
 /// Published reference token rates for an exact model, tier, region and input interval.
 /// Amounts are decimal currency units per million tokens, never subscription credits or invoices.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelTokenPricing {
     pub currency: String,

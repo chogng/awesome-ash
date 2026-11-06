@@ -3,10 +3,9 @@ use serde::Deserialize;
 use serde::Deserializer;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 /// Validated provider-independent name used to register and invoke a tool.
-#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
+#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct ToolName(String);
 
 impl ToolName {

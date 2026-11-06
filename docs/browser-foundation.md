@@ -1,6 +1,6 @@
 # Browser foundation
 
-> 状态：Current。本文是 Desktop Renderer 浏览器基座的职责与依赖方向说明。
+> 历史参考。下文记录已退场的浏览器工作台所用的 DOM 基座。原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
 
 `src/ash/base/browser` contains browser-runtime capabilities shared by UI,
 platform, and workbench code. It intentionally does not provide a universal

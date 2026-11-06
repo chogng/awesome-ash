@@ -1,14 +1,13 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Selects how a model may use the ordinary Tool catalog for one Turn.
 ///
 /// `Direct` is the compatibility default. `CodeMode` keeps the ordinary direct surface and adds
 /// the Code Mode entry points. `CodeModeOnly` exposes only those entry points while the projected
 /// ordinary tools remain callable from JavaScript.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolMode {
     #[default]

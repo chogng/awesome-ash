@@ -4,11 +4,10 @@ use crate::ContentDigest;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Origin allowlists declared by one MCP App resource and validated by its provider boundary.
 /// Empty lists preserve the isolated view's default denial of external access.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct McpAppResourceCsp {
     #[serde(default)]
@@ -22,7 +21,7 @@ pub struct McpAppResourceCsp {
 }
 
 /// Distinguishes a server-provided resource identity from a structured result without inventing a URI.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -37,7 +36,7 @@ pub enum ToolOutputArtifactSource {
 }
 
 /// The complete or explicitly truncated data carried by one tool artifact.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -57,7 +56,7 @@ pub enum ToolOutputArtifactData {
 }
 
 /// One inert artifact in canonical tool output. Its URI is descriptive and grants no file access.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolOutputArtifact {
     pub source: ToolOutputArtifactSource,
@@ -66,20 +65,17 @@ pub struct ToolOutputArtifact {
     pub content_digest: ContentDigest,
     pub truncated: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub app_csp: Option<McpAppResourceCsp>,
     /// Original resource metadata for interactive consumers; never included in model text.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub resource_metadata: Option<String>,
     /// Typed, view-only navigation emitted by the result producer; never an execution grant.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub presentation: Option<ToolResultPresentation>,
 }
 
 /// Exact navigation coordinates in a successful tool result, independent of its model text.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

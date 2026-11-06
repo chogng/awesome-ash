@@ -1,6 +1,6 @@
 {
   "name": "ash-github-auth",
-  "main": "worker.ts",
+  "main": "worker.mjs",
   "compatibility_date": "2026-09-26",
   "workers_dev": true,
   "preview_urls": false,

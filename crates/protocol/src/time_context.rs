@@ -2,10 +2,9 @@ use crate::UnixMillis;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Explicit model-context policy; it does not control timers or execution deadlines.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TimeContextMode {
     Off,
@@ -15,7 +14,7 @@ pub enum TimeContextMode {
 }
 
 /// Identifies whose calendar is being reported, without assuming the host is the user.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TimeZoneOrigin {
     Host,
@@ -23,7 +22,7 @@ pub enum TimeZoneOrigin {
 }
 
 /// Immutable clock facts used for an input reference or one prepared model request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TimeContext {
     pub sampled_at_unix_ms: UnixMillis,

@@ -1,7 +1,0 @@
-.stanza-editor-inlay-hint {
-	color: var(
-		--ash-editor-inlayHintForeground,
-		var(--ash-editor-descriptionForeground)
-	);
-	opacity: 0.85;
-}

@@ -4,13 +4,11 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
-use ts_rs::TS;
 
 const MAX_MEMORY_ID_BYTES: usize = 128;
 
-#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, TS)]
+#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd)]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct MemoryId(
     #[schemars(length(min = 1, max = 128), regex(pattern = r"^[A-Za-z0-9._:-]+$"))] String,
 );
@@ -72,18 +70,13 @@ impl fmt::Display for InvalidMemoryId {
 impl std::error::Error for InvalidMemoryId {}
 
 #[derive(
-    Clone, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
     deny_unknown_fields
-)]
-#[ts(
-    tag = "type",
-    rename_all = "camelCase",
-    rename_all_fields = "camelCase"
 )]
 pub enum MemoryScope {
     Profile,
@@ -103,9 +96,8 @@ impl MemoryScope {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
-#[ts(rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum MemorySource {
     User,
     Model {
@@ -115,19 +107,16 @@ pub enum MemorySource {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Memory {
     pub memory_id: MemoryId,
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub revision: u64,
     pub title: String,
     pub body: String,
     pub source: MemorySource,
-    #[ts(type = "number")]
     pub created_at_unix_ms: u64,
-    #[ts(type = "number")]
     pub updated_at_unix_ms: u64,
 }
 
@@ -145,78 +134,68 @@ impl Memory {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemorySummary {
     pub memory_id: MemoryId,
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub revision: u64,
     pub title: String,
     pub source: MemorySource,
-    #[ts(type = "number")]
     pub created_at_unix_ms: u64,
-    #[ts(type = "number")]
     pub updated_at_unix_ms: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryListPage {
-    #[ts(type = "number")]
     pub catalog_revision: u64,
     pub memories: Vec<MemorySummary>,
     pub next_cursor: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemorySearchMatch {
     pub source: MemorySource,
     pub citation: crate::MemoryCitation,
     pub memory_id: MemoryId,
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub revision: u64,
     pub title: String,
     pub excerpt: String,
-    #[ts(type = "number")]
     pub updated_at_unix_ms: u64,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemorySearchPage {
-    #[ts(type = "number")]
     pub catalog_revision: u64,
     pub matches: Vec<MemorySearchMatch>,
     pub next_cursor: Option<String>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum MemoryMutationDisposition {
     Committed,
     Replayed,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryMutationResult {
     pub disposition: MemoryMutationDisposition,
-    #[ts(type = "number")]
     pub catalog_revision: u64,
     pub memory: Memory,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryDeleteResult {
     pub disposition: MemoryMutationDisposition,
-    #[ts(type = "number")]
     pub catalog_revision: u64,
     pub memory_id: MemoryId,
     pub scope: MemoryScope,
-    #[ts(type = "number")]
     pub deleted_revision: u64,
 }

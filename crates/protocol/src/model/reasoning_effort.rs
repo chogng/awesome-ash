@@ -3,11 +3,10 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 use std::fmt;
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ReasoningEffort {
     None,
@@ -54,7 +53,7 @@ impl fmt::Display for ReasoningEffort {
 
 /// A selectable effort and its catalog explanation. Missing copy is unknown metadata;
 /// the effort remains a request value and never implies a fixed token budget.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct ModelReasoningEffortOption {
     pub effort: ReasoningEffort,

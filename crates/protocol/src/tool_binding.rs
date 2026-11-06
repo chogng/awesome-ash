@@ -2,13 +2,12 @@ use crate::ToolCallId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// One stable, secret-free hop in the source chain of a durable Tool Call binding.
 ///
 /// Hosts append hops in distribution-to-execution order. Mutable process identities, credentials,
 /// session handles, and filesystem paths must never be stored here.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -27,9 +26,7 @@ pub enum ToolSourceProvenance {
     Mcp {
         server_id: String,
         remote_name: String,
-        #[ts(type = "number")]
         catalog_generation: u64,
-        #[ts(type = "number")]
         connection_generation: u64,
     },
     Dynamic {
@@ -44,7 +41,7 @@ pub enum ToolSourceProvenance {
 }
 
 /// Identifies how the model-visible Tool Call reached the ordinary tool scheduler.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -63,7 +60,7 @@ pub enum ToolCallCaller {
 ///
 /// This describes transcript presentation. Authorization and side-effect policy remain owned by
 /// the action review path; a command may still change files.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -90,9 +87,7 @@ pub enum ToolActivity {
     /// File coordinates come from the bound tool's input, not a client-side tool-name table.
     FileRead {
         path: String,
-        #[ts(type = "number")]
         offset: u64,
-        #[ts(type = "number")]
         limit: u64,
     },
     FileSearch {
@@ -116,7 +111,7 @@ pub enum ToolActivity {
 }
 
 /// Read-only evidence displayed before deciding an ordinary policy approval.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -142,12 +137,11 @@ pub enum ToolConfirmationPresentation {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ToolModifiedFile {
     pub path: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub original: Option<String>,
     pub modified: String,
 }
@@ -156,12 +150,11 @@ pub struct ToolModifiedFile {
 ///
 /// Runtime keys are intentionally absent. Recovery must compare this value with an available
 /// immutable source snapshot and fail closed when the exact binding can no longer be restored.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolCallBinding {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub registry_incarnation: Option<String>,
-    #[ts(type = "number")]
     pub registry_generation: u64,
     pub definition_digest: String,
     pub source_chain: Vec<ToolSourceProvenance>,

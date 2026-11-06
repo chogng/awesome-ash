@@ -8,7 +8,6 @@ publish.workspace = true
 [dependencies]
 serde = { workspace = true }
 schemars = { workspace = true }
-ts-rs = { workspace = true }
 
 [dev-dependencies]
 [lints]

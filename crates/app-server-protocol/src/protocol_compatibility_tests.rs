@@ -355,7 +355,6 @@ fn directory_grants_use_canonical_contract_names_and_exact_permissions() {
     use crate::protocol::config::DirectoryGrantsReadResult;
     use crate::protocol::config::DirectoryGrantsSetParams;
     use crate::protocol::registry::ClientMethod;
-    use ts_rs::TS;
 
     assert_eq!(
         ClientMethod::DirectoryGrantsRead.as_str(),
@@ -372,10 +371,6 @@ fn directory_grants_use_canonical_contract_names_and_exact_permissions() {
     assert_eq!(
         ClientMethod::DirectoryGrantsForget.as_str(),
         "config/directoryGrants/forget"
-    );
-    assert_eq!(
-        DirectoryGrantsSetParams::name(&ts_rs::Config::default()),
-        "DirectoryGrantsSetParams"
     );
     let request = serde_json::json!({"commandId":"directory-grant", "expectedRevision":7, "path":"/tmp/project", "permissions":["readFiles", "useLanguageServices"]});
     let decoded: DirectoryGrantsSetParams = serde_json::from_value(request.clone()).unwrap();
@@ -399,7 +394,6 @@ fn directory_grants_host_has_one_wire_name_and_old_methods_are_unregistered() {
     use crate::protocol::common::DirectoryGrantsHostCapability;
     use crate::protocol::registry::client_method;
     use crate::protocol::registry::client_method_definition;
-    use ts_rs::TS;
 
     let capabilities = ClientCapabilities {
         directory_grants_host: Some(DirectoryGrantsHostCapability { version: 1 }),
@@ -414,10 +408,6 @@ fn directory_grants_host_has_one_wire_name_and_old_methods_are_unregistered() {
     assert_eq!(
         serde_json::from_value::<ClientCapabilities>(encoded).unwrap(),
         capabilities
-    );
-    assert_eq!(
-        DirectoryGrantsHostCapability::name(&ts_rs::Config::default()),
-        "DirectoryGrantsHostCapability"
     );
     assert!(client_method("session/dirs/permissions/set").is_none());
     assert!(client_method_definition("session/dirs/permissions/set").is_none());

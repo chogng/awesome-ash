@@ -15,7 +15,6 @@ base64 = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 thiserror = { workspace = true }
-ts-rs = { workspace = true, features = ["serde-compat"] }
 url = { workspace = true }
 urlencoding = { workspace = true }
 ash-utils-absolute-path = { workspace = true }

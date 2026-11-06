@@ -19,7 +19,6 @@ ash-utils-absolute-path = { workspace = true }
 thiserror = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true }
-ts-rs = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]
 winapi-util = { workspace = true }

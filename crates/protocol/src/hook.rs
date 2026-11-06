@@ -1,10 +1,9 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Compatibility contract for a Claude PreToolUse command.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClaudePreToolUseHook {
     #[schemars(range(min = 1, max = 600))]
@@ -12,7 +11,7 @@ pub struct ClaudePreToolUseHook {
 }
 
 /// Executed Hook state retained in the owning Thread's history.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -27,16 +26,14 @@ pub enum HookRunStatus {
 }
 
 /// One invocation; identity is stable across live delivery and history replay.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct HookRunRecord {
     pub run_id: String,
     pub hook_id: String,
     pub event: HookEvent,
     pub status: HookRunStatus,
-    #[ts(type = "number")]
     pub started_at_unix_ms: u64,
-    #[ts(type = "number")]
     pub duration_ms: u64,
     pub turn_id: Option<crate::TurnId>,
     pub tool_call_id: Option<crate::ToolCallId>,
@@ -44,7 +41,7 @@ pub struct HookRunRecord {
 }
 
 /// Safe-point event that may request a Hook execution.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum HookEvent {
     PreToolUse,          // 工具：执行前

@@ -4,16 +4,14 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::str::FromStr;
-use ts_rs::TS;
 
 const LOCAL_ENV_ID: &str = "local";
 
 /// Stable host-selected identity for one execution and filesystem environment.
 #[derive(
-    Clone, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS,
+    Clone, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
 )]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct EnvId(String);
 
 impl EnvId {

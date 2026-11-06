@@ -29,7 +29,7 @@
 - App Server、client、transport；
 - Rust、TypeScript 与 JSON Schema contract tests。
 
-Desktop UI、Electron IPC、`ash-code` 的 TUI 宿主和第三方网页 UI 不属于共享后端。
+原生 Desktop、`ash-code` 的 TUI 与网页客户端各自持有界面和宿主状态。
 
 共享后端需要区分核心机制与可选 Rust 能力。核心拥有 Agent 状态、执行契约、最终授权和通用存储/秘密/资源机制；GitHub OAuth 与 Enterprise 认证已由根目录独立 Rust 扩展提供；托管平台 API 的拆分仍是后续工作。Rust 扩展通过公开的版本化能力契约注册 Provider，不链接进共享核心，不依赖 Node/V8；App Server 负责发现、授权和路由，App 与 TUI 按需消费。App 预装登录扩展不使 TUI 默认加载它；模型认证等实际共享需求仍保留其独立契约。
 

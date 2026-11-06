@@ -11,10 +11,9 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// How the backend established the model identity or service tier used for pricing.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelBillingEvidence {
     ResponseField,
@@ -24,7 +23,7 @@ pub enum ModelBillingEvidence {
 }
 
 /// Billing surface selected by the immutable model runtime.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelBillingScope {
     PublicApi,
@@ -34,13 +33,12 @@ pub enum ModelBillingScope {
 }
 
 /// Auditable pricing dimensions frozen for one completed provider request.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelBillingRecord {
     pub billing_platform: String,
     pub operation: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub requested_service_tier: Option<String>,
     pub applied_service_tier: String,
     pub service_tier_evidence: ModelBillingEvidence,
@@ -50,7 +48,7 @@ pub struct ModelBillingRecord {
 }
 
 /// Exact monetary amount encoded as a decimal integer to remain lossless in JSON clients.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelMoneyAmount {
     pub currency: String,
@@ -61,7 +59,7 @@ pub struct ModelMoneyAmount {
 ///
 /// `known_amounts` is sorted by currency. `complete` is false when at least one invocation could
 /// not be fully priced, while the known amounts remain useful lower bounds.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelReferenceCostSummary {
     pub known_amounts: Vec<ModelMoneyAmount>,
@@ -78,18 +76,17 @@ impl Default for ModelReferenceCostSummary {
 }
 
 /// One reproducible token-cost contribution.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelCostLineItem {
     pub dimension: String,
-    #[ts(type = "number")]
     pub quantity: u64,
     pub rate_pico_units_per_token: String,
     pub amount: ModelMoneyAmount,
 }
 
 /// A complete or known-minimum reference cost from one immutable rate card.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RatedModelCost {
     pub amount: ModelMoneyAmount,
@@ -98,7 +95,7 @@ pub struct RatedModelCost {
 }
 
 /// Why a reference cost is incomplete or unavailable.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type")]
 pub enum ModelReferenceCostReason {
     MissingTokenQuantities {
@@ -119,7 +116,7 @@ pub enum ModelReferenceCostReason {
 }
 
 /// Lossless persisted result of reference-cost calculation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type")]
 pub enum ModelReferenceCostRecord {
     Complete {
@@ -135,7 +132,7 @@ pub enum ModelReferenceCostRecord {
 }
 
 /// Terminal state of one provider request.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelInvocationOutcome {
     Completed,
@@ -148,57 +145,43 @@ pub enum ModelInvocationOutcome {
 /// First text means a nonempty body delta, excluding reasoning, metadata and completed snapshots.
 /// The interval from first text to completion includes transport and local stream processing;
 /// it is not a server decode-time measurement. Absent first text also covers unary responses.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelInvocationTiming {
-    #[ts(type = "number")]
     pub total_us: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable, type = "number")]
     pub first_text_us: Option<u64>,
-    #[ts(type = "number")]
     pub text_delta_count: u64,
     /// Tool arguments contribute output tokens, so mixed calls cannot estimate body-text TPS.
-    #[ts(type = "number")]
     pub tool_call_count: u64,
 }
 
 /// Durable facts for one provider request, independent from its containing Turn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelInvocationRecord {
     /// Exact immutable time facts included in this request; absent when disabled.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub time_context: Option<crate::TimeContext>,
     pub invocation_id: ModelInvocationId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub tool_call_id: Option<crate::ToolCallId>,
     pub thread_id: ThreadId,
     pub turn_id: TurnId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub requested_model: Option<ModelRef>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub resolved_model: Option<ModelId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub billing: Option<ModelBillingRecord>,
-    #[ts(type = "number")]
     pub started_at_unix_ms: u64,
-    #[ts(type = "number")]
     pub completed_at_unix_ms: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub timing: Option<ModelInvocationTiming>,
     pub outcome: ModelInvocationOutcome,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub usage: Option<ModelUsage>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub input_estimate: Option<ModelInputEstimate>,
     pub reference_cost: ModelReferenceCostRecord,
 }

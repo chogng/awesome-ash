@@ -2,10 +2,9 @@ use crate::ContentDigest;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Canonical encoded media type of one durable image attachment.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ImageMediaType {
     Png,
@@ -30,19 +29,18 @@ impl ImageMediaType {
 ///
 /// The digest identifies the exact encoded bytes. Stores must verify every other field when the
 /// bytes are admitted and again when an untrusted reference is resolved.
-#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImageAttachmentRef {
     pub content_digest: ContentDigest,
     pub media_type: ImageMediaType,
-    #[ts(type = "number")]
     pub encoded_bytes: u64,
     pub width: u32,
     pub height: u32,
 }
 
 /// Encoded audio formats accepted by the durable attachment service.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AudioMediaType {
     Wav,
@@ -65,19 +63,17 @@ impl AudioMediaType {
 }
 
 /// Identifies immutable audio bytes and their verified playback duration.
-#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AudioAttachmentRef {
     pub content_digest: ContentDigest,
     pub media_type: AudioMediaType,
-    #[ts(type = "number")]
     pub encoded_bytes: u64,
-    #[ts(type = "number")]
     pub duration_ms: u64,
 }
 
 /// A durable attachment returned by the shared upload pipeline.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum AttachmentRef {
     Image(ImageAttachmentRef),

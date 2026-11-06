@@ -5,7 +5,6 @@ cargo_build_script(
     name = "build_script",
     srcs = ["build.rs"],
     crate_root = "build.rs",
-    data = glob(["browser/**/*.ts", "browser/**/*.css", "common/**/*.ts"]),
     deps = ["//crates/utils/editor-client-build"],
     edition = "2024",
 )

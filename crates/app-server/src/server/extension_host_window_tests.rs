@@ -257,30 +257,27 @@ fn ash_sdk_commands_use_rust_workspace_grants_and_retire_on_cancellation_and_dis
         std::fs::write(package.join("package.json"), json!({
             "publisher": "acme", "name": "ash-sdk", "version": "1.0.0", "main": "./extension.mjs",
             "contributes": {"commands": [
-                {"command": "test.node", "title": "Read with Ash SDK"},
-                {"command": "ash.example.inspect", "title": "Run actual TypeScript example"}
+                {"command": "test.node", "title": "Read with Ash SDK"}
             ]}
         }).to_string()).unwrap();
         std::fs::write(
-            package.join("extension.ts"),
+            package.join("extension.mjs"),
             r#"
 import * as ash from '@ash/sdk';
-import { activate as activateExample } from './inspect.mjs';
-let release: (() => void) | undefined;
-let resumed: unknown;
-export function activate(context: ash.ExtensionContext): void {
- activateExample(context);
- context.subscriptions.push(ash.commands.register('test.node', async (path: unknown) => {
+let release;
+let resumed;
+export function activate(context) {
+ context.subscriptions.push(ash.commands.register('test.node', async (path) => {
   if (path === ':status') return { waiting: !!release, resumed };
-  if (path === ':release') { release!(); release = undefined; return {}; }
+  if (path === ':release') { release(); release = undefined; return {}; }
   if (typeof path !== 'string') throw new TypeError('Expected a file path');
   const waiting = path === ':wait';
-  if (waiting) { await new Promise<void>(resolve => { release = resolve; }); path = 'data.txt'; }
+  if (waiting) { await new Promise(resolve => { release = resolve; }); path = 'data.txt'; }
   try {
    const text = await ash.files.readTextFile(path);
    if (waiting) resumed = 'unexpected-read';
    return { text, pid: process.pid };
-  } catch (error: any) {
+  } catch (error) {
    if (waiting) { resumed = error.code; throw error; }
    return { code: error.code, message: error.message };
   }
@@ -289,34 +286,6 @@ export function activate(context: ash.ExtensionContext): void {
 "#,
         )
         .unwrap();
-        std::fs::write(
-            package.join("inspect.ts"),
-            include_str!("../../../../examples/extensions/inspect/extension.ts"),
-        )
-        .unwrap();
-        // Exercise the actual TS example without asking extension authors to install Rust.
-        // Type stripping is the Node build step; the product host executes its ESM output.
-        for entry in ["inspect", "extension"] {
-            let output = std::process::Command::new("node")
-                .args([
-                    "--input-type=commonjs",
-                    "-e",
-                    r#"
-const fs = require('node:fs');
-const { stripTypeScriptTypes } = require('node:module');
-fs.writeFileSync(process.argv[2], stripTypeScriptTypes(fs.readFileSync(process.argv[1], 'utf8')));
-"#,
-                ])
-                .arg(package.join(format!("{entry}.ts")))
-                .arg(package.join(format!("{entry}.mjs")))
-                .output()
-                .expect("Node with TypeScript stripping is required for the Ash SDK test");
-            assert!(
-                output.status.success(),
-                "{}",
-                String::from_utf8_lossy(&output.stderr)
-            );
-        }
         let local = LocalPluginPackage::load(&package).unwrap();
         let store = tempfile::tempdir().unwrap();
         let authority =
@@ -459,12 +428,6 @@ fs.writeFileSync(process.argv[2], stripTypeScriptTypes(fs.readFileSync(process.a
         };
         let first = invoke("data.txt");
         if package_read {
-            let mut example = request("data.txt");
-            example.registration_id = "ash.example.inspect".into();
-            let example_id = runtime
-                .start_invocation(11, example, Ok(files.clone()))
-                .unwrap();
-            assert_eq!(wait(&example_id), "Rust-owned workspace text");
             assert_eq!(first["text"], "Rust-owned workspace text");
             assert_ne!(
                 first["pid"].as_u64().unwrap(),

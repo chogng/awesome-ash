@@ -1,5 +1,7 @@
 # 用户主题文件
 
+> 下文 Desktop 示例、迁移和验证命令属于旧 Electron 工作台。原生 Desktop 的主题归属见 [Design Token 与主题归属](design-tokens.md)，现有 TUI 格式见本文的 [TUI](#tui)。
+
 Desktop 用户主题与根部 [extensions/theme-defaults](../extensions/theme-defaults/package.json) 使用同一种 VS Code 主题 JSON 格式。解析和校验归 [themes/common](../src/ash/workbench/services/themes/common/colorThemeData.ts)，加载、保存与旧文件转换归 [themes/browser](../src/ash/workbench/services/themes/browser/workbenchThemeService.ts)。不再维护 resources/theme 中的独立 Schema 和模板。
 
 ## Desktop 主题

@@ -40,7 +40,6 @@ use ash_glm::GlmProvider;
 use ash_http_client::NetworkAccess;
 use ash_http_client::OutboundNetworkPolicy;
 use ash_install_context::InstallContext;
-use ash_install_context::InstallMethod;
 use ash_kimi::KimiCli;
 use ash_kimi::KimiDesktop;
 use ash_kimi::KimiOAuth;
@@ -1770,12 +1769,11 @@ pub fn open_app_server_with_codebase_providers(
     });
     let built_in_skill_root = resolve_built_in_skill_root(options.built_in_skills);
     let installation = InstallContext::current();
-    let (extension_roots, prepared_extension_root) = resolve_extension_sources(
-        &options.profile_root,
-        installation.method(),
-        installation.bundled_resource_directory("extensions"),
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../.build/builtin"),
-    );
+    let mut extension_roots = Vec::new();
+    if let Some(root) = installation.bundled_resource_directory("extensions") {
+        extension_roots.push(ExtensionRoot::built_in(root));
+    }
+    extension_roots.push(ExtensionRoot::user(options.profile_root.join("extensions")));
     if let Some(config) = github_account {
         github_browser_configurations.push(github::GitHubBrowserConfig {
             host: "github.com".into(),
@@ -1999,9 +1997,6 @@ pub fn open_app_server_with_codebase_providers(
     .with_cloud_codebase_storage_root(cloud_codebase_root)
     .with_cloud_codebase_providers(providers.cloud)
     .with_extension_roots(extension_roots);
-    if let Some(root) = prepared_extension_root {
-        server = server.with_prepared_extension_sources(root);
-    }
     if let Some(runtime) = github_extension {
         server = server.with_built_in_extension_runtime(runtime);
     }
@@ -2269,15 +2264,11 @@ pub fn open_app_server_with_codebase_providers(
                 .ok_or_else(|| {
                     OpenAppServerError("missing Node extension host bootstrap".into())
                 })?;
-            let mut environment: BTreeMap<std::ffi::OsString, std::ffi::OsString> =
+            let environment: BTreeMap<std::ffi::OsString, std::ffi::OsString> =
                 exec_server::terminal::safe_process_environment()
                     .into_iter()
                     .map(|(key, value)| (key.into(), value.into()))
                     .collect();
-            if node.source() == ash_lsp_server_provider::ManagedNodeRuntimeSource::ElectronRunAsNode
-            {
-                environment.insert("ELECTRON_RUN_AS_NODE".into(), "1".into());
-            }
             launcher = ash_external_ext::ProductNodeLauncher::new(
                 node.executable().to_path_buf(),
                 bootstrap,
@@ -2716,28 +2707,6 @@ fn resolve_built_in_skill_root(selection: BuiltInSkillRoot) -> BuiltInSkillSourc
             .map(BuiltInSkillSource::Root)
             .unwrap_or(BuiltInSkillSource::Missing),
     }
-}
-
-fn resolve_extension_sources(
-    profile_root: &std::path::Path,
-    installation: InstallMethod,
-    bundled_extensions: Option<PathBuf>,
-    prepared_extensions: PathBuf,
-) -> (Vec<ExtensionRoot>, Option<PathBuf>) {
-    let mut roots = Vec::new();
-    let prepared = match installation {
-        InstallMethod::Package => {
-            if let Some(root) = bundled_extensions {
-                roots.push(ExtensionRoot::built_in(root));
-            }
-            None
-        }
-        // Development runtimes also bundle resources, but those immutable copies do not
-        // follow Vite's package publication. Binding both would let stale built-ins win.
-        InstallMethod::Development | InstallMethod::Other => Some(prepared_extensions),
-    };
-    roots.push(ExtensionRoot::user(profile_root.join("extensions")));
-    (roots, prepared)
 }
 
 fn development_built_in_skill_root() -> Option<PathBuf> {

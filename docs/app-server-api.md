@@ -91,9 +91,7 @@ flowchart LR
 ```
 
 进程内 App Server、stdio/JSONL 和未来的远程 App Server 只是不同传输方式。它们必须保持相同的
-请求、结果、错误和通知语义。`app` 当前的直接 Rust 终端/PTY 组合只覆盖
-终端宿主；一旦该宿主承载 Agent 的 Session/Thread/Turn/Item 能力，也必须接入同一 App Server
-门禁，不能新增 Core 旁路。
+请求、结果、错误和通知语义。原生 Desktop 通过同一门禁接入 Agent 能力。 [原生桌面接入边界](frontend-app-server-boundary.md)
 
 ## 1. 产品模型
 

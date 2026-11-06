@@ -25,4 +25,4 @@ skip =
     src/ash/base/common/productIcons.ts,crates/app-server-protocol/schema/*,schemas/*,
     crates/utils/pty/src/win/psuedocon.rs
 # Keep dependency localization keys, code identifiers, and partial test inputs intact.
-ignore-regex = \bafterAll\b|/cofig\b|(?<=contains )contraint(?=\.)|\b(?:searchIn|listIn|atLeast|lockIn|currentY|editor\.fo)\b
+ignore-regex = \bafterAll\b|/cofig\b|(?<=contains )contraint(?=\.)|\b(?:searchIn|listIn|atLeast|lockIn|currentY|editor\.fo|chat\.plugins\.upToDate)\b

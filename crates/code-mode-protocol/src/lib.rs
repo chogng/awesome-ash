@@ -12,7 +12,6 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::io::{self, Read, Write};
-use ts_rs::TS;
 
 mod output;
 pub use output::limit_output;
@@ -91,17 +90,7 @@ macro_rules! identifier {
     ($name:ident, $doc:literal) => {
         #[doc = $doc]
         #[derive(
-            Clone,
-            Debug,
-            Deserialize,
-            Eq,
-            Hash,
-            JsonSchema,
-            Ord,
-            PartialEq,
-            PartialOrd,
-            Serialize,
-            TS,
+            Clone, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
         )]
         #[serde(transparent)]
         pub struct $name(String);
@@ -184,7 +173,7 @@ impl From<io::Error> for ProtocolError {
 }
 
 /// Kind of an ordinary tool projected into JavaScript.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CodeModeToolKind {
     #[default]
@@ -193,7 +182,7 @@ pub enum CodeModeToolKind {
 }
 
 /// One ordinary tool exposed to a Code Mode cell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EnabledTool {
     pub global_name: String,
@@ -201,12 +190,11 @@ pub struct EnabledTool {
     pub description: String,
     pub kind: CodeModeToolKind,
     #[serde(default)]
-    #[ts(type = "unknown")]
     pub input_schema: serde_json::Value,
 }
 
 /// Bounded resource policy for one Code Mode session.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeModeLimits {
     #[serde(default = "default_max_execution_time_ms")]
@@ -240,7 +228,7 @@ impl Default for CodeModeLimits {
 }
 
 /// Request to start one JavaScript cell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecuteRequest {
     pub session_id: CodeModeSessionId,
@@ -265,7 +253,7 @@ pub enum WaitAction {
 }
 
 /// Request to observe or terminate one cell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WaitRequest {
     pub cell_id: CellId,
@@ -289,7 +277,7 @@ impl WaitRequest {
 }
 
 /// Text or image produced by a cell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum OutputItem {
     Text {
@@ -303,7 +291,7 @@ pub enum OutputItem {
 }
 
 /// Final state recorded for one cell.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CellOutcome {
     Completed,
@@ -313,7 +301,7 @@ pub enum CellOutcome {
 }
 
 /// Current observable phase of one cell.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CellState {
     Running,
@@ -325,7 +313,7 @@ pub enum CellState {
 }
 
 /// Runtime response returned by `exec`, `wait`, or `terminate`.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum RuntimeResponse {
     Running {
@@ -354,7 +342,7 @@ pub enum RuntimeResponse {
 }
 
 /// Result of observing a cell that may already have disappeared after restart.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum WaitOutcome {
     LiveCell { response: RuntimeResponse },
@@ -362,14 +350,14 @@ pub enum WaitOutcome {
 }
 
 /// Handle returned immediately after a cell is created.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StartedCell {
     pub cell_id: CellId,
 }
 
 /// A nested ordinary Tool request emitted by the runtime.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NestedToolCall {
     pub cell_id: CellId,
@@ -379,12 +367,11 @@ pub struct NestedToolCall {
     pub tool_name: ToolName,
     pub kind: CodeModeToolKind,
     #[serde(default)]
-    #[ts(type = "unknown")]
     pub input: serde_json::Value,
 }
 
 /// A notification emitted by `notify`.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RuntimeNotification {
     pub cell_id: CellId,
@@ -402,7 +389,7 @@ pub struct HostFrame<T> {
 }
 
 /// Messages sent from a standalone client to the Code Mode Host.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum ClientToHost {
     Hello {
@@ -412,7 +399,6 @@ pub enum ClientToHost {
         session_id: CodeModeSessionId,
         limits: CodeModeLimits,
         #[serde(default)]
-        #[ts(type = "Record<string, unknown>")]
         stored_values: BTreeMap<String, serde_json::Value>,
     },
     CloseSession {
@@ -426,7 +412,6 @@ pub enum ClientToHost {
     CompleteToolCall {
         cell_id: CellId,
         runtime_tool_call_id: String,
-        #[ts(type = "unknown")]
         result: serde_json::Value,
         #[serde(default)]
         error_text: Option<String>,
@@ -434,7 +419,7 @@ pub enum ClientToHost {
 }
 
 /// Messages sent by a standalone Code Mode Host.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum HostToClient {
     Hello {
@@ -452,7 +437,6 @@ pub enum HostToClient {
     Notification(RuntimeNotification),
     StoreSnapshot {
         session_id: CodeModeSessionId,
-        #[ts(type = "Record<string, unknown>")]
         values: BTreeMap<String, serde_json::Value>,
     },
     Response {

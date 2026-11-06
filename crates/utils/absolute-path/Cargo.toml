@@ -15,7 +15,6 @@ dirs = { workspace = true }
 dunce = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
-ts-rs = { workspace = true }
 
 [dev-dependencies]
 pretty_assertions = { workspace = true }

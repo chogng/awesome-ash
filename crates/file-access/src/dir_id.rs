@@ -13,9 +13,8 @@ const SHA256_HEX_LENGTH: usize = 64;
 /// Hosts persist this value instead of the filesystem path itself. It intentionally identifies
 /// the environment, canonical path, and physical directory object. Aliases resolve to the same
 /// key; replacing or moving the directory produces a different identity.
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, schemars::JsonSchema, ts_rs::TS)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, schemars::JsonSchema)]
 #[schemars(transparent)]
-#[ts(type = "string")]
 pub struct DirId(String);
 
 impl DirId {

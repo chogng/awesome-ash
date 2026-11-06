@@ -390,30 +390,23 @@ fn validate_operation(
 /// Identity and execution options are interpreted by the owning editor window.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionDebugSessionOptions {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub parent_session_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub lifecycle_managed_by_parent: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub console_mode: Option<u8>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub no_debug: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub suppress_save_before_start: Option<bool>,
 }
 
 /// Optional foreground progress; its lifetime belongs to the initiating window.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionProgressOptions {
     pub title: String,
@@ -423,7 +416,6 @@ pub struct ExtensionProgressOptions {
 /// Editor operations available to executable extensions. Documents, undo and UI remain client-owned.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -437,13 +429,12 @@ pub enum ExtensionClientOperation {
         env: std::collections::BTreeMap<String, Option<String>>,
         /// Append after resolving the shell and explicit env, preserving inherited runtime flags.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "export", ts(optional))]
         append_env: Option<std::collections::BTreeMap<String, String>>,
         command: Option<String>,
     },
     ReadTerminal {
         terminal_id: String,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         after_sequence: u64,
     },
     DisposeTerminal {
@@ -455,16 +446,14 @@ pub enum ExtensionClientOperation {
         method: String,
         params: Value,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "export", ts(optional))]
         progress: Option<ExtensionProgressOptions>,
     },
     BackendState {
         capability: String,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         after: u64,
         /// Wait briefly for an admitted notification rather than polling on a fixed delay.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "export", ts(optional))]
         wait_for_change: Option<bool>,
     },
     /// Editor-owned interactions, including dirty buffers, are resolved by the initiating window.
@@ -473,13 +462,12 @@ pub enum ExtensionClientOperation {
     },
     ScmUpdate {
         registration_id: String,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         revision: u64,
         providers: Vec<Value>,
     },
     /// Granted only by profile hosts, never forwarded to a window.
     #[cfg_attr(feature = "json-schema", schemars(skip))]
-    #[cfg_attr(feature = "export", ts(skip))]
     CoreService {
         request: crate::services::CoreServiceRequest,
     },
@@ -489,7 +477,7 @@ pub enum ExtensionClientOperation {
     },
     SetStatusBarEntries {
         registration_id: String,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         revision: u64,
         entries: Vec<crate::ExtensionStatusBarEntry>,
     },
@@ -527,7 +515,6 @@ pub enum ExtensionClientOperation {
         folder: Option<String>,
         configuration: Value,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "export", ts(optional))]
         options: Option<ExtensionDebugSessionOptions>,
     },
     StopDebugging {
@@ -562,7 +549,6 @@ pub enum ExtensionClientOperation {
         collection: String,
         entries: Vec<ExtensionDiagnosticEntry>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "export", ts(optional))]
         merge: Option<bool>,
     },
     ApplyEdit {
@@ -601,29 +587,23 @@ pub enum ExtensionClientOperation {
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionQuickPickItem {
     pub label: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub detail: Option<String>,
     /// Starts a labeled group before this selectable item, retaining its selection index.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub separator: Option<String>,
     /// Keeps an action available while the user filters reference names.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "export", ts(optional))]
     pub always_show: Option<bool>,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionConfigurationTarget {
     User,
@@ -632,7 +612,6 @@ pub enum ExtensionConfigurationTarget {
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionMessageSeverity {
     Information,
@@ -643,7 +622,6 @@ pub enum ExtensionMessageSeverity {
 /// Zero-based UTF-16 edit coordinates.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionTextPosition {
     pub line: u32,
@@ -652,7 +630,6 @@ pub struct ExtensionTextPosition {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionTextEdit {
     pub start: ExtensionTextPosition,
@@ -663,7 +640,6 @@ pub struct ExtensionTextEdit {
 /// The version is mandatory: an extension cannot overwrite edits made since its snapshot.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionDocumentEdit {
     pub uri: String,
@@ -673,7 +649,6 @@ pub struct ExtensionDocumentEdit {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionDocumentSnapshot {
     pub uri: String,
@@ -685,7 +660,6 @@ pub struct ExtensionDocumentSnapshot {
 /// Diagnostics carry the observed document version so old callbacks cannot mark newer text.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionDiagnosticEntry {
     pub uri: String,
@@ -695,7 +669,6 @@ pub struct ExtensionDiagnosticEntry {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExtensionDiagnostic {
     pub start: ExtensionTextPosition,
@@ -708,7 +681,6 @@ pub struct ExtensionDiagnostic {
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
 pub enum ExtensionDiagnosticSeverity {
     Error,
@@ -719,7 +691,6 @@ pub enum ExtensionDiagnosticSeverity {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "export", derive(ts_rs::TS))]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -731,7 +702,6 @@ pub enum ExtensionClientResult {
         value: Value,
     },
     #[cfg_attr(feature = "json-schema", schemars(skip))]
-    #[cfg_attr(feature = "export", ts(skip))]
     CoreService {
         response: crate::services::CoreServiceResponse,
     },
@@ -742,18 +712,15 @@ pub enum ExtensionClientResult {
         has_value: bool,
     },
     Tasks {
-        #[cfg_attr(feature = "export", ts(type = "number"))]
         sequence: u64,
         tasks: Vec<Value>,
         executions: Vec<Value>,
     },
     TaskExecution {
-        #[cfg_attr(feature = "export", ts(type = "number"))]
         sequence: u64,
         execution: Value,
     },
     DebugSessions {
-        #[cfg_attr(feature = "export", ts(type = "number"))]
         sequence: u64,
         sessions: Vec<Value>,
         active_session: Option<String>,
@@ -777,9 +744,9 @@ pub enum ExtensionClientResult {
     },
     ResourceStat {
         file_type: u8,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         size: u64,
-        #[cfg_attr(feature = "export", ts(type = "number"))]
+
         mtime: u64,
     },
     ResourceDirectory {

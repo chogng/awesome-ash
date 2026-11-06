@@ -12,7 +12,6 @@ use std::io;
 use std::ops::Deref;
 use std::path::Path;
 use std::path::PathBuf;
-use ts_rs::TS;
 
 /// A path that is absolute and free of `.` and `..` segments.
 ///
@@ -22,8 +21,7 @@ use ts_rs::TS;
 /// once a real host path is required.
 ///
 /// Ordering and hashing compare the normalized spelling, not the filesystem object.
-#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize, TS)]
-#[ts(type = "string")]
+#[derive(Clone, Debug, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AbsolutePathBuf(PathBuf);
 
 impl AbsolutePathBuf {

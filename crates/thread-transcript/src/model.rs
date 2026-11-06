@@ -11,10 +11,9 @@ use ash_protocol::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// One complete, render-neutral entry in a Thread transcript.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -91,14 +90,12 @@ impl ThreadTranscriptEntry {
 }
 
 /// Initial or resynchronized transcript derived from one canonical Thread snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadTranscriptSnapshot {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
-    #[ts(type = "number")]
     pub durable_sequence: u64,
-    #[ts(type = "number")]
     pub revision: u64,
     pub entries: Vec<ThreadTranscriptEntry>,
 }
@@ -176,7 +173,7 @@ impl ThreadTranscriptSnapshot {
 }
 
 /// Mechanical list mutation applied by transcript consumers before rendering.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -189,17 +186,14 @@ pub enum ThreadTranscriptChange {
 }
 
 /// One backend-assembled transcript update delivered through App Server.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadTranscriptUpdateEnvelope {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
-    #[ts(type = "number")]
     pub durable_sequence: u64,
-    #[ts(type = "number")]
     pub revision: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub stream_cursor: Option<StreamCursor>,
     pub changes: Vec<ThreadTranscriptChange>,
 }

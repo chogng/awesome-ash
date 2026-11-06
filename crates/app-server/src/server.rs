@@ -213,7 +213,6 @@ mod plugin_extension_sources;
 mod plugin_operations;
 mod plugin_runtime;
 mod plugin_skill_sources;
-mod prepared_extension_sources;
 #[path = "server/request_processors/projects.rs"]
 mod project_operations;
 #[cfg(test)]
@@ -369,8 +368,6 @@ pub struct AppServer {
     extension_packages_skill_sources:
         Option<Arc<dyn ash_skills_extension::DynamicSkillSourceProvider>>,
     plugin_extension_sources:
-        Option<Arc<dyn ash_external_ext::packages::DynamicExtensionSourceProvider>>,
-    prepared_extension_sources:
         Option<Arc<dyn ash_external_ext::packages::DynamicExtensionSourceProvider>>,
     extension_packages_extension_sources:
         Option<Arc<dyn ash_external_ext::packages::DynamicExtensionSourceProvider>>,
@@ -1376,7 +1373,6 @@ impl AppServer {
             plugin_skill_sources: None,
             extension_packages_skill_sources: None,
             plugin_extension_sources: None,
-            prepared_extension_sources: None,
             extension_packages_extension_sources: None,
             mcp_runtime_intents: McpRuntimeIntents::default(),
             mcp_status: Arc::new(RwLock::new(
@@ -2238,7 +2234,6 @@ impl AppServer {
         &self,
     ) -> Option<Arc<dyn ash_external_ext::packages::DynamicExtensionSourceProvider>> {
         let providers = [
-            self.prepared_extension_sources.clone(),
             self.plugin_extension_sources.clone(),
             self.extension_packages_extension_sources.clone(),
         ]
@@ -2521,14 +2516,6 @@ impl AppServer {
             catalog.bind_dynamic_sources(provider);
         }
         self.extensions = Mutex::new(catalog);
-        self
-    }
-
-    pub(crate) fn with_prepared_extension_sources(mut self, root: std::path::PathBuf) -> Self {
-        self.prepared_extension_sources = Some(Arc::new(
-            prepared_extension_sources::PreparedExtensionSourceProvider::new(root),
-        ));
-        self.rebind_dynamic_extension_sources();
         self
     }
 

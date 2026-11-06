@@ -38,8 +38,6 @@ struct PackageFiles {
 #[derive(Deserialize)]
 struct JavaScriptRuntime {
     kind: String,
-    #[serde(rename = "electronVersion")]
-    electron_version: Option<String>,
 }
 
 pub(crate) fn selected_backend(
@@ -48,7 +46,9 @@ pub(crate) fn selected_backend(
 ) -> Result<PathBuf, String> {
     let store_root = profile_root.join(STORE_DIRECTORY);
     let store = PackageStore::open(&store_root).map_err(|error| error.to_string())?;
-    if let Some(selected) = store.current().map_err(|error| error.to_string())? {
+    if let Some(selected) = store.current().map_err(|error| error.to_string())?
+        && selected.installation.is_none()
+    {
         return Ok(backend_in(&selected.package_root));
     }
     install_from_client(profile_root, caller_backend, ClientSelection::Initial)
@@ -74,16 +74,6 @@ pub(crate) fn install_from_client(
     profile_root: &Path,
     caller_backend: &Path,
     selection: ClientSelection,
-) -> Result<PathBuf, String> {
-    let electron = std::env::var_os(crate::runtime::ELECTRON_PATH_ENV).map(PathBuf::from);
-    install_from_client_with_electron(profile_root, caller_backend, selection, electron.as_deref())
-}
-
-fn install_from_client_with_electron(
-    profile_root: &Path,
-    caller_backend: &Path,
-    selection: ClientSelection,
-    electron: Option<&Path>,
 ) -> Result<PathBuf, String> {
     let source = caller_backend
         .parent()
@@ -113,28 +103,17 @@ fn install_from_client_with_electron(
     }
     let files: PackageFiles =
         serde_json::from_slice(&metadata).map_err(|error| error.to_string())?;
-    let runtime_binding = match files.javascript_runtime.kind.as_str() {
-        "packagedNode" if files.javascript_runtime.electron_version.is_none() => None,
-        "hostProvidedNode" => match &files.javascript_runtime.electron_version {
-            Some(version) => Some(crate::runtime::ElectronRuntimeBinding::capture(
-                electron.ok_or("Desktop package requires its Electron runtime")?,
-                version,
-            )?),
-            None if files.build_profile == "dev-small" => return Ok(caller_backend.to_path_buf()),
-            None => return Err("App Server installation requires a self-contained package".into()),
-        },
-        _ => return Err("App Server JavaScript runtime contract is invalid".into()),
-    };
-
+    match files.javascript_runtime.kind.as_str() {
+        "packagedNode" => {}
+        "hostProvidedNode" if files.build_profile == "dev-small" => {
+            return Ok(caller_backend.to_path_buf());
+        }
+        _ => return Err("App Server installation requires a self-contained package".into()),
+    }
     let store_root = profile_root.join(STORE_DIRECTORY);
     let store = PackageStore::open(&store_root).map_err(|error| error.to_string())?;
-    let installation = runtime_binding
-        .as_ref()
-        .map(serde_json::to_value)
-        .transpose()
-        .map_err(|error| error.to_string())?;
     if let Some(current) = store.current().map_err(|error| error.to_string())?
-        && current.installation == installation
+        && current.installation.is_none()
     {
         // A different selection still goes through the normal installation path, so
         // updating can replace a damaged old package without trying to execute it.
@@ -203,14 +182,7 @@ fn install_from_client_with_electron(
                 .permissions();
             fs::set_permissions(target, permissions).map_err(|error| error.to_string())?;
         }
-        let selected = match &runtime_binding {
-            Some(binding) => store.publish_with_installation(
-                &staging,
-                serde_json::to_value(binding).map_err(|error| error.to_string())?,
-            ),
-            None => store.publish(&staging),
-        }
-        .map_err(|error| error.to_string())?;
+        let selected = store.publish(&staging).map_err(|error| error.to_string())?;
         if selection == ClientSelection::Explicit {
             // A rejected package must leave the previously selected build pinned.
             write_pin(&store_root, &files.build_id)?;

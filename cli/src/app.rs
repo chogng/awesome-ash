@@ -35,7 +35,6 @@ pub(crate) fn run(options: Options) -> Result<(), CliError> {
             .ok_or_else(|| CliError::failure(nls::text(Message::AppMissing)))?,
     };
     let mut command = launch_command(&app, &workspace)?;
-    command.env_remove("ELECTRON_RUN_AS_NODE");
     command.stdin(Stdio::null());
     command.stdout(Stdio::null());
     command.stderr(Stdio::null());
@@ -43,7 +42,7 @@ pub(crate) fn run(options: Options) -> Result<(), CliError> {
     #[cfg(target_os = "macos")]
     if app.extension().is_some_and(|extension| extension == "app") {
         // LaunchServices reports launch failure before returning; -n forwards arguments even
-        // when Ash is already open, and Ash's existing instance handler selects the window.
+        // when Ash is already open, and macOS owns the new instance's lifetime.
         let status = command.status().map_err(launch_error)?;
         return if status.success() {
             Ok(())
@@ -74,7 +73,7 @@ fn resolve_existing_path(path: &Path) -> std::io::Result<PathBuf> {
     #[cfg(windows)]
     {
         // canonicalize adds a verbatim \\?\ prefix. Keep ordinary Windows paths at the
-        // Electron argument boundary while still rejecting missing targets before launch.
+        // application argument boundary while still rejecting missing targets before launch.
         std::fs::metadata(path)?;
         std::path::absolute(path)
     }
@@ -95,13 +94,14 @@ fn installed_application() -> Option<PathBuf> {
     );
     #[cfg(target_os = "windows")]
     let mut candidates = std::env::var_os("LOCALAPPDATA")
-        .map(|root| PathBuf::from(root).join("Programs/Ash/Ash.exe"))
+        .map(|root| PathBuf::from(root).join("Programs/Ash/ash-native-desktop.exe"))
         .into_iter()
         .chain(
             ["ProgramW6432", "ProgramFiles", "ProgramFiles(x86)"]
                 .into_iter()
                 .filter_map(|key| {
-                    std::env::var_os(key).map(|root| PathBuf::from(root).join("Ash/Ash.exe"))
+                    std::env::var_os(key)
+                        .map(|root| PathBuf::from(root).join("Ash/ash-native-desktop.exe"))
                 }),
         );
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
@@ -112,7 +112,7 @@ fn installed_application() -> Option<PathBuf> {
 fn application_executable(app: &Path) -> PathBuf {
     #[cfg(target_os = "macos")]
     if app.extension().is_some_and(|extension| extension == "app") {
-        return app.join("Contents/MacOS/Ash");
+        return app.join("Contents/MacOS/ash-native-desktop");
     }
     app.to_owned()
 }

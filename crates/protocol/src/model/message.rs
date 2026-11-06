@@ -15,8 +15,6 @@ use serde::Deserializer;
 use serde::Serialize;
 use serde::Serializer;
 use serde_json::Value;
-use ts_rs::TS;
-use ts_rs::TypeVisitor;
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(
@@ -32,26 +30,23 @@ pub enum InputItem {
 
 /// An encrypted Responses reasoning item, replayable only in its original credential/model scope.
 /// The wire item is retained unchanged, including provider extensions and summary blocks.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReasoningState {
     pub scope: String,
-    #[ts(type = "unknown")]
     pub item: Value,
     /// Generation usage attributed to this replay item, not an exact input-token measurement.
     /// This estimate is used only when counting an assembled request locally; it must never be
     /// added to provider-reported input usage or a full-request preflight count.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable, type = "number | null")]
     pub token_estimate: Option<u64>,
     /// Effective replay mode reported by the producing response. Missing means unknown, including
     /// older persisted items and compatible endpoints that do not report this contract.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub context: Option<ReasoningReplayContext>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ReasoningReplayContext {
     CurrentTurn,
@@ -80,7 +75,7 @@ impl Message {
 }
 
 /// The purpose of one assistant message, independent from generation or Turn completion.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum MessagePhase {
     Commentary,
@@ -260,47 +255,7 @@ impl JsonSchema for ContentPart {
     }
 }
 
-impl TS for ContentPart {
-    type WithoutGenerics = Self;
-    type OptionInnerType = Self;
-
-    const IS_ENUM: bool = true;
-
-    fn name(_: &ts_rs::Config) -> String {
-        "ContentPart".into()
-    }
-
-    fn inline(cfg: &ts_rs::Config) -> String {
-        format!(
-            "{{ \"type\": \"text\", text: string, }} | {{ \"type\": \"imageAttachment\", attachment: {}, detail: {}, }} | {{ \"type\": \"imageUrl\", url: string, detail: {}, }} | {{ \"type\": \"audioAttachment\", attachment: {}, }} | {{ \"type\": \"audioUrl\", url: string, }} | {{ \"type\": \"artifact\", artifact: {}, }}",
-            ImageAttachmentRef::name(cfg),
-            ImageDetail::name(cfg),
-            ImageDetail::name(cfg),
-            AudioAttachmentRef::name(cfg),
-            ToolOutputArtifact::name(cfg),
-        )
-    }
-
-    fn decl(cfg: &ts_rs::Config) -> String {
-        format!("type {} = {};", Self::name(cfg), Self::inline(cfg))
-    }
-
-    fn decl_concrete(cfg: &ts_rs::Config) -> String {
-        Self::decl(cfg)
-    }
-
-    fn visit_dependencies(visitor: &mut impl TypeVisitor)
-    where
-        Self: 'static,
-    {
-        visitor.visit::<ImageAttachmentRef>();
-        visitor.visit::<AudioAttachmentRef>();
-        visitor.visit::<ImageDetail>();
-        visitor.visit::<ToolOutputArtifact>();
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ImageDetail {
     Auto,
@@ -318,12 +273,11 @@ pub struct ToolDefinition {
     pub strict: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolCall {
     pub id: ToolCallId,
     pub name: ToolName,
-    #[ts(type = "unknown")]
     pub arguments: Value,
 }
 

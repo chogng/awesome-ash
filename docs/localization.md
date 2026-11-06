@@ -1,4 +1,6 @@
-# Ash UI localization
+# Electron Workbench localization
+
+> Historical reference for the retired Electron and Web Workbench. See the [Ash UI proposal](desktop-architecture.md#ash-ui) for native Desktop localization ownership.
 
 Ash treats UI localization as a data catalog capability, separate from programming-language
 packages. The product owns the catalog contract it consumes; the remote Extensions only validates,

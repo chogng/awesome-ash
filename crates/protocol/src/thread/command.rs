@@ -16,9 +16,8 @@ use crate::UserInput;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -36,7 +35,6 @@ pub enum ThreadCommand {
     },
     MoveHistory {
         direction: crate::HistoryDirection,
-        #[ts(type = "number")]
         expected_sequence: u64,
     },
     MoveToSession {
@@ -52,7 +50,6 @@ pub enum ThreadCommand {
             default,
             skip_serializing_if = "crate::ContextCompactionPolicy::is_default"
         )]
-        #[ts(as = "Option<crate::ContextCompactionPolicy>", optional)]
         context_policy: crate::ContextCompactionPolicy,
         #[serde(default)]
         kind: TurnKind,
@@ -62,31 +59,25 @@ pub enum ThreadCommand {
         ///
         /// `None` exists only so journals written before instruction snapshots remain readable.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         instructions: Option<TurnInstructions>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         model: Option<ModelRef>,
         /// Frozen with the Turn so retries and restored executions use the same effort.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         reasoning_effort: Option<crate::ReasoningEffort>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         advisor: Option<crate::AdvisorConfig>,
         #[serde(default)]
         activated_skills: Vec<FrozenSkillActivation>,
         /// Activations supplied by the caller before extension contributors run.
         /// `None` identifies a legacy command whose host activations must be inferred.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         host_activated_skills: Option<Vec<FrozenSkillActivation>>,
         #[serde(default)]
         approval_mode: ApprovalMode,
         #[serde(default)]
         tool_mode: ToolMode,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         tool_profile: Option<Box<ToolProfileSnapshot>>,
         input: Vec<UserInput>,
     },
@@ -107,10 +98,8 @@ pub enum ThreadCommand {
     },
     CompactContext {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         model: Option<ModelRef>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         retention_prompt: Option<String>,
     },
     InterruptTurn {

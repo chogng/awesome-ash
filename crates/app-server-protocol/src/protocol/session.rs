@@ -1,5 +1,4 @@
 use crate::JsonSchema;
-use crate::TS;
 use crate::protocol::common::CommandId;
 use crate::protocol::common::RequestId;
 use crate::protocol::common::SessionId;
@@ -25,17 +24,16 @@ use serde::Deserializer;
 use serde::Serialize;
 
 /// Selects an Agent and the immutable source history for an isolated comparison fork.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ComparisonForkParams {
-    #[ts(type = "number")]
     pub source_sequence: u64,
     pub agent: ash_protocol::AgentRoleSelection,
     pub branch_name: String,
 }
 
 /// Selects an admitted runtime Provider, never an executable supplied by the client.
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionRuntimeParams {
     pub operation_id: String,
@@ -43,21 +41,19 @@ pub struct SessionRuntimeParams {
     pub request: ash_protocol::SessionRuntimeRequest,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionRuntimeCancelParams {
     pub operation_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionCreateParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub surface: Option<ash_protocol::SessionSurface>,
     /// Reuse an existing Agent identity in a new task; omission allocates a new identity.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub agent_id: Option<ash_protocol::AgentId>,
     #[serde(default)]
     pub agent: ash_protocol::AgentRoleSelection,
@@ -69,19 +65,16 @@ pub struct SessionCreateParams {
     pub execution_target: Option<SessionExecutionTarget>,
     /// Creates the new session's linked worktree on a new local Git branch.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub branch_name: Option<String>,
     /// Pins the linked worktree to a remote ref instead of the current checkout.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub worktree_start: Option<SessionWorktreeStart>,
     /// Environment overrides supplied by the user for processes in this Session.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub environment_variables: Option<SessionEnvironmentVariables>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionWorktreeStart {
     pub remote: String,
@@ -90,7 +83,7 @@ pub struct SessionWorktreeStart {
     pub commit: String,
 }
 
-#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(transparent)]
 pub struct SessionEnvironmentVariables(pub std::collections::BTreeMap<String, String>);
 
@@ -100,19 +93,19 @@ impl std::fmt::Debug for SessionEnvironmentVariables {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionEnvironmentProfileReadParams {
     pub environment_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionEnvironmentProfileReadResult {
     pub variables: Option<SessionEnvironmentVariables>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionEnvironmentProfileSaveParams {
     pub environment_id: String,
@@ -132,55 +125,51 @@ where
 #[path = "session_tests.rs"]
 mod tests;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionReadParams {
     pub session_id: SessionId,
 }
 
 /// Per-Thread cursors preserve local ordering without inventing a global Session sequence.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionTraceReadParams {
     pub session_id: SessionId,
     #[serde(default)]
-    #[ts(type = "Record<string, number>")]
     pub after: std::collections::BTreeMap<ThreadId, u64>,
     pub limit: u32,
 }
 
 /// The versioned rollout artifact retains the original durable envelopes and history prefixes.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionTraceReadResult {
     pub trace: serde_json::Value,
-    #[ts(type = "Record<string, number>")]
     pub cursors: std::collections::BTreeMap<ThreadId, u64>,
     pub has_more: bool,
 }
 
 /// Diagnostic order is independent from durable Thread cursors. Recording is local and opt-in.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionTraceDiagnosticsReadParams {
     pub session_id: SessionId,
     #[serde(default)]
-    #[ts(type = "number")]
     pub after: u64,
     pub limit: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionTraceDiagnosticsReadResult {
     pub diagnostics: serde_json::Value,
-    #[ts(type = "number")]
     pub cursor: u64,
     pub has_more: bool,
 }
 
 /// Payload identities must belong to this Session and capture; filesystem paths are never accepted.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SessionTracePayloadReadParams {
     pub session_id: SessionId,
@@ -188,39 +177,39 @@ pub struct SessionTracePayloadReadParams {
     pub payload_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionTracePayloadReadResult {
     pub payload: serde_json::Value,
 }
 
 /// Derived navigation is rebuilt only when requested, outside incremental history reads.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionTraceGraphReadResult {
     pub graph: serde_json::Value,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionCatalogReadResult {
     pub session: Option<Session>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionSubscribeParams {
     pub session_id: SessionId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionUnsubscribeParams {
     pub session_id: SessionId,
 }
 
 /// Non-durable invalidation for a Session tree derived from Thread state.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionChanged {
     pub session_id: SessionId,
@@ -228,14 +217,14 @@ pub struct SessionChanged {
 }
 
 /// Notification that one Session and all of its Threads were permanently removed.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionDeleted {
     pub session_id: SessionId,
 }
 
 /// A typed request routed through one `session_id` grouping boundary.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -267,7 +256,6 @@ pub enum SessionRequest {
     Stop,
     CreateThread {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         agent_id: Option<ash_protocol::AgentId>,
         title: String,
     },
@@ -283,7 +271,6 @@ pub enum SessionRequest {
     },
     MoveThreadHistory {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         direction: ash_protocol::HistoryDirection,
     },
@@ -313,7 +300,6 @@ pub enum SessionRequest {
         source_turn_id: TurnId,
         title: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         selection: Option<String>,
     },
     RewindThread {
@@ -326,7 +312,6 @@ pub enum SessionRequest {
         before_turn_id: TurnId,
         title: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         tool_mode: Option<ToolMode>,
         #[schemars(length(min = 1))]
         input: Vec<InputItem>,
@@ -334,42 +319,33 @@ pub enum SessionRequest {
     StartTurn {
         /// Literal messages do not enter Code's product-command interpretation.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         command_interpretation: Option<CommandInterpretation>,
         /// Pins the editor used to capture this submission; a changed selection rejects admission.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         ide_window_id: Option<String>,
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         #[serde(default)]
         mode: CollaborationMode,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         approval_mode: Option<ash_protocol::ApprovalMode>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         model: Option<ash_protocol::ModelRef>,
         /// Applies only to the accepted Turn; it does not update user model configuration.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         reasoning_effort: Option<ash_protocol::ReasoningEffort>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         tool_mode: Option<ToolMode>,
         #[schemars(length(min = 1))]
         input: Vec<InputItem>,
     },
     StartReview {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         target: ReviewTarget,
     },
     StartShellTurn {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         #[serde(default)]
         approval_mode: ash_protocol::ApprovalMode,
@@ -378,27 +354,22 @@ pub enum SessionRequest {
     },
     ConfigureAdvisor {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         selection: ash_protocol::AdvisorSelection,
     },
     ConsultAdvisor {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         question: String,
     },
     CompactContext {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         retention_prompt: Option<String>,
     },
     SteerTurn {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         turn_id: TurnId,
         #[schemars(length(min = 1))]
@@ -406,7 +377,6 @@ pub enum SessionRequest {
     },
     InterruptTurn {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         turn_id: TurnId,
     },
@@ -417,7 +387,6 @@ pub enum SessionRequest {
     },
     ResolveInteraction {
         thread_id: ThreadId,
-        #[ts(type = "number")]
         expected_sequence: u64,
         turn_id: TurnId,
         request_id: RequestId,
@@ -426,7 +395,7 @@ pub enum SessionRequest {
 }
 
 /// A request associated with one Session tree.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionRequestParams {
     pub command_id: CommandId,
@@ -434,24 +403,23 @@ pub struct SessionRequestParams {
     pub request: SessionRequest,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadReadParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub history: Option<ThreadSnapshotHistory>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageCheckpointsParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageCheckpointsResult {
     pub checkpoints: Vec<ash_protocol::MessageCheckpoint>,
@@ -461,7 +429,7 @@ pub struct MessageCheckpointsResult {
 pub const MAX_THREAD_SNAPSHOT_TURNS: u32 = 100_000;
 
 /// Selects how much durable Turn history is included in a Thread snapshot.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -482,69 +450,63 @@ pub enum ThreadSnapshotHistory {
 }
 
 /// Describes whether a bounded Thread snapshot has older durable Turns available.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadHistoryBoundary {
     pub has_older_turns: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub oldest_turn_id: Option<TurnId>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadSubscribeParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
-    #[ts(type = "number")]
     pub after_sequence: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub history: Option<ThreadSnapshotHistory>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadUnsubscribeParams {
     pub session_id: SessionId,
     pub thread_id: ThreadId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionResult {
     /// Acknowledges that the execution host persisted the requested overrides.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub environment_applied: Option<bool>,
     /// Confirms the requested pinned worktree was applied.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub worktree_start_applied: Option<bool>,
     pub session: Session,
     pub agent_tree: AgentTreeProjection,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionListResult {
     pub sessions: Vec<Session>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 /// A child Thread snapshot and its committed gap carried by the Session subscription.
 pub struct SessionThreadProjection {
     pub thread: Thread,
     /// Effective directory of this Thread, independent of the Session's creation directory.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub directory: Option<ash_protocol::SessionExecutionTarget>,
     pub transcript: ThreadTranscriptSnapshot,
     pub updates: Vec<ThreadUpdateEnvelope>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 /// The Session tree view returned to product hosts.
 pub struct SessionSubscribeResult {
@@ -553,14 +515,14 @@ pub struct SessionSubscribeResult {
     pub agent_tree: AgentTreeProjection,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadResult {
     pub session: Session,
     pub thread_id: ThreadId,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionRewriteResult {
     pub session: Session,
@@ -568,43 +530,38 @@ pub struct SessionRewriteResult {
     pub turn: TurnStartResult,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadReadResult {
     pub thread: Thread,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub directory: Option<ash_protocol::SessionExecutionTarget>,
     pub transcript: ThreadTranscriptSnapshot,
     /// Present whenever the request selected bounded history.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub history: Option<ThreadHistoryBoundary>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThreadSubscribeResult {
     pub thread: Thread,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub directory: Option<ash_protocol::SessionExecutionTarget>,
     pub transcript: ThreadTranscriptSnapshot,
     pub updates: Vec<ThreadUpdateEnvelope>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub history: Option<ThreadHistoryBoundary>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AdvisorConfigureResult {
-    #[ts(type = "number")]
     pub sequence: u64,
 }
 
 /// Typed result returned by the Session request endpoint.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", content = "value", rename_all = "camelCase")]
 pub enum SessionRequestResult {
     RecapPresenceUpdated,

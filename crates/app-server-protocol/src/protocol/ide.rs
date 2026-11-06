@@ -1,12 +1,11 @@
 //! Connection-scoped discovery and explicit attachment to an Ash editor window.
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::SessionId;
 use ash_protocol::ThreadId;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct IdeWindow {
     pub id: String,
@@ -14,7 +13,7 @@ pub struct IdeWindow {
     pub roots: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -27,7 +26,6 @@ pub enum IdeRequest {
         roots: Vec<String>,
         /// Window-lifetime key inherited by this window's integrated terminals.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         window_key: Option<String>,
     },
     Attach {
@@ -50,7 +48,7 @@ pub enum IdeRequest {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -69,7 +67,6 @@ pub enum IdeResult {
         selected: Option<IdeWindow>,
         /// The terminal's originating window, retained while context sharing is disabled.
         #[serde(default)]
-        #[ts(optional = nullable)]
         preferred: Option<IdeOrigin>,
     },
     Connected {
@@ -82,7 +79,7 @@ pub enum IdeResult {
 }
 
 /// First-party terminal provenance is retained even when the originating window is unavailable.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub enum IdeOrigin {
     Available { window: IdeWindow },
@@ -90,7 +87,7 @@ pub enum IdeOrigin {
 }
 
 /// A bounded, versioned snapshot. It supplies context, never editor write authority.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct IdeContext {
     pub active_file: Option<IdeActiveFile>,
@@ -98,7 +95,7 @@ pub struct IdeContext {
     pub dirty_files: Vec<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct IdeActiveFile {
     pub path: String,
@@ -106,7 +103,7 @@ pub struct IdeActiveFile {
     pub selections: Vec<IdeSelection>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct IdeSelection {
     pub start_line: u32,
@@ -119,7 +116,7 @@ pub struct IdeSelection {
     pub truncated: bool,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -145,7 +142,7 @@ pub enum IdeHostRequest {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

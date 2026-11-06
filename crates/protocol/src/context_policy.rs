@@ -1,11 +1,10 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// How a Thread preserves working state when ordinary input reaches its pressure boundary.
 /// Both strategies keep the durable source history; a checkpoint only changes model input.
-#[derive(Clone, Debug, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "mode",
     rename_all = "camelCase",

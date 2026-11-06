@@ -6,10 +6,9 @@ use crate::TurnId;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// How a Thread entered a product Session.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -21,31 +20,25 @@ pub enum ThreadOrigin {
     /// A fresh execution replacing an archived branch while retaining its Agent identity.
     Replacement {
         source_thread_id: ThreadId,
-        #[ts(type = "number")]
         source_sequence: u64,
     },
     Fork {
         parent_thread_id: ThreadId,
-        #[ts(type = "number")]
         parent_sequence: u64,
     },
     /// A separate Session and Agent using the same immutable source history and code checkpoint.
     Comparison {
         parent_thread_id: ThreadId,
-        #[ts(type = "number")]
         parent_sequence: u64,
     },
     /// A user side question, with a visible source and an immutable inherited context.
     SideChat {
         parent_thread_id: ThreadId,
-        #[ts(type = "number")]
         parent_sequence: u64,
         source_turn_id: TurnId,
         context_thread_id: ThreadId,
-        #[ts(type = "number")]
         context_sequence: u64,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         selection: Option<String>,
     },
     Rewind {
@@ -54,7 +47,6 @@ pub enum ThreadOrigin {
     },
     Message {
         parent_thread_id: ThreadId,
-        #[ts(type = "number")]
         parent_sequence: u64,
         item_id: crate::ItemId,
         boundary: crate::MessageBoundary,
@@ -62,7 +54,6 @@ pub enum ThreadOrigin {
     },
     AgentSpawn {
         parent_thread_id: ThreadId,
-        #[ts(type = "number")]
         parent_sequence: u64,
         delegation_id: DelegationId,
     },

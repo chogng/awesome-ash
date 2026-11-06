@@ -7,7 +7,6 @@ publish.workspace = true
 
 [dependencies]
 schemars = { workspace = true }
-ts-rs = { workspace = true }
 serde = { workspace = true }
 sha2 = { workspace = true }
 [dev-dependencies]

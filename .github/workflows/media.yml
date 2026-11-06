@@ -33,7 +33,7 @@ jobs:
           workspaces: ". -> .build/cargo"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version-file: .nvmrc
+          node-version: "24.21.0"
       - name: Prepare the locked LiveKit Server
         run: |
           python -B build/lib/livekit.py "${{ matrix.target }}" > "$RUNNER_TEMP/livekit.json"
@@ -95,7 +95,7 @@ jobs:
           cache: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version-file: .nvmrc
+          node-version: "24.21.0"
       - name: Prepare and run the server
         shell: bash
         run: |

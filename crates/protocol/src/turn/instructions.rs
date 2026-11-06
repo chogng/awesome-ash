@@ -6,10 +6,9 @@ use serde::Serialize;
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fmt;
-use ts_rs::TS;
 
 /// Immutable instructions selected before one Agent Turn is durably accepted.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TurnInstructions {
     owner: String,
@@ -19,10 +18,8 @@ pub struct TurnInstructions {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     shared: Vec<InstructionText>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     model_guidance: Option<ModelInstructionSelection>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     mode_instructions: Option<InstructionText>,
 }
 
@@ -177,7 +174,7 @@ impl fmt::Display for InvalidTurnInstructions {
 impl Error for InvalidTurnInstructions {}
 
 /// One immutable asset in an instruction composition; it cannot contain nested compositions.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct InstructionText {
     pub owner: String,
@@ -200,7 +197,7 @@ impl InstructionText {
 }
 
 /// The model guidance chosen for an invocation. Generic is an explicit supported choice.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -215,7 +212,6 @@ pub enum ModelInstructionSelection {
         instructions: InstructionText,
         digest: crate::ContentDigest,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional = nullable)]
         messages: Option<ModelInstructionMessages>,
     },
 }
@@ -238,7 +234,7 @@ impl ModelInstructionSelection {
 }
 
 /// Model-owned guidance frozen at selection; Core chooses only the active mode, identity and available tools.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelInstructionMessages {
     pub tools: BTreeMap<crate::ToolName, InstructionText>,

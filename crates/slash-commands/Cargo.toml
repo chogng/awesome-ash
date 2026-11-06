@@ -12,13 +12,12 @@ path = "src/lib.rs"
 
 [features]
 json-schema = ["dep:schemars"]
-export = ["json-schema", "dep:ts-rs"]
+export = ["json-schema"]
 
 [dependencies]
 fuzzy-match = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 schemars = { workspace = true, optional = true }
-ts-rs = { workspace = true, features = ["no-serde-warnings"], optional = true }
 
 [dev-dependencies]
 serde_json = { workspace = true }

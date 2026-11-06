@@ -4,10 +4,9 @@ use base64::Engine;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// Selected upstream correlation and authentication facts. Never contains a response body.
-#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResponseDebugContext {
     pub request_id: Option<String>,
@@ -69,7 +68,7 @@ fn token(value: &str) -> Option<String> {
 }
 
 /// Only names of recognized authentication headers are retained, never their values.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AuthHeader {
     Authorization,
@@ -90,7 +89,7 @@ impl AuthHeader {
     }
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "kind")]
 pub enum RequestOutcome {
     Http { status: u16 },
@@ -106,7 +105,7 @@ impl RequestOutcome {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RequestAttempt {
     pub auth_headers: Vec<AuthHeader>,
@@ -114,7 +113,7 @@ pub struct RequestAttempt {
     pub response: ResponseDebugContext,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ResponseOperation {
     Model,
@@ -123,7 +122,7 @@ pub enum ResponseOperation {
     InputTokenCount,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DiagnosticOutcome {
     Succeeded,
@@ -133,7 +132,7 @@ pub enum DiagnosticOutcome {
 }
 
 /// Credential recovery result; a recovered credential does not imply a successful follow-up.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum AuthRecovery {
     #[default]
@@ -144,7 +143,7 @@ pub enum AuthRecovery {
 }
 
 /// One logical operation, including its explicitly authorized authentication follow-up.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResponseDiagnostic {
     pub operation: ResponseOperation,

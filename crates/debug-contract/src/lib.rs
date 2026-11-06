@@ -4,20 +4,17 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
-use ts_rs::TS;
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DebugSourceAddress {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub path: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional, type = "number")]
     pub source_reference: Option<u64>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -29,7 +26,6 @@ pub enum DebugBreakpointLocation {
         source: DebugSourceAddress,
         line: u32,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         column: Option<u32>,
     },
     Function {
@@ -41,19 +37,17 @@ pub enum DebugBreakpointLocation {
         adapter_type: String,
         can_persist: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         session_id: Option<String>,
     },
     Instruction {
         instruction_reference: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional, type = "number")]
         offset: Option<i64>,
         session_id: String,
     },
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DebugDataAccess {
     Read,
@@ -61,24 +55,21 @@ pub enum DebugDataAccess {
     ReadWrite,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DebugBreakpointIntent {
     pub id: String,
     pub enabled: bool,
     pub location: DebugBreakpointLocation,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub condition: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub hit_condition: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub log_message: Option<String>,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DebugBreakpointUnsupported {
     Conditional,
@@ -89,7 +80,7 @@ pub enum DebugBreakpointUnsupported {
     Instruction,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DebugBreakpointBinding {
     pub intent: DebugBreakpointIntent,
@@ -100,18 +91,14 @@ pub struct DebugBreakpointBinding {
     pub created: bool,
     pub unsupported: Option<DebugBreakpointUnsupported>,
     pub message: Option<String>,
-    #[ts(type = "unknown")]
     pub protocol: Option<Value>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DebugBreakpointsSnapshot {
-    #[ts(type = "number")]
     pub revision: u64,
-    #[ts(type = "number")]
     pub version: u64,
-    #[ts(type = "number")]
     pub applied_version: u64,
     pub bindings: Vec<DebugBreakpointBinding>,
     pub error: Option<String>,
@@ -119,7 +106,7 @@ pub struct DebugBreakpointsSnapshot {
 
 /// Selection is explicit per operation; a backend session has no globally
 /// selected thread/frame. Each query is fenced to its captured inspection epoch.
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -129,47 +116,40 @@ pub struct DebugBreakpointsSnapshot {
 pub enum DebugInspection {
     Stack {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional, type = "number")]
         thread_id: Option<i64>,
     },
     Frame {
-        #[ts(type = "number")]
         frame_id: i64,
     },
     Variables {
-        #[ts(type = "number")]
         variables_reference: u64,
     },
     Watch {
         expressions: Vec<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional, type = "number")]
         frame_id: Option<i64>,
     },
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DebugWatchValue {
     pub expression: String,
-    #[ts(type = "unknown")]
     pub result: Option<Value>,
     pub error: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DebugScopeVariables {
-    #[ts(type = "unknown")]
     pub scope: Value,
-    #[ts(type = "unknown[]")]
     pub variables: Vec<Value>,
     /// Other scopes remain descriptors until explicitly expanded by a consumer.
     pub variables_loaded: bool,
     pub error: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -177,18 +157,14 @@ pub struct DebugScopeVariables {
 )]
 pub enum DebugInspectionValue {
     Stack {
-        #[ts(type = "unknown[]")]
         threads: Vec<Value>,
-        #[ts(type = "unknown[]")]
         frames: Vec<Value>,
-        #[ts(type = "number | null")]
         thread_id: Option<i64>,
     },
     Frame {
         scopes: Vec<DebugScopeVariables>,
     },
     Variables {
-        #[ts(type = "unknown[]")]
         variables: Vec<Value>,
     },
     Watch {
@@ -196,7 +172,7 @@ pub enum DebugInspectionValue {
     },
 }
 
-#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(
     rename_all = "camelCase",
     rename_all_fields = "camelCase",
@@ -217,12 +193,10 @@ pub use workspace::*;
 mod tests;
 
 /// The desired live exception selection and the last completed DAP application.
-#[derive(Clone, Debug, Default, Deserialize, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Default, Deserialize, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DebugExceptionsSnapshot {
-    #[ts(type = "number")]
     pub version: u64,
-    #[ts(type = "number")]
     pub applied_version: u64,
     /// Latest normalized preference. noDebug suppresses its wire application,
     /// without erasing the choice saved for a later debugging launch.

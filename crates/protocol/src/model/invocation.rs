@@ -3,7 +3,6 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 use crate::InputItem;
 use crate::Message;
@@ -20,7 +19,7 @@ use crate::ToolDefinition;
 ///
 /// This describes the immutable adapter path, not whether a remote request is entitled or will
 /// succeed. Unary runtimes return the completed result without synthesizing incremental deltas.
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelOutputTransport {
     NativeStreaming,
@@ -29,7 +28,7 @@ pub enum ModelOutputTransport {
 }
 
 /// Inference speed is independent of provider scheduling and billing service tiers.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ModelSpeed {
     Fast,
@@ -105,14 +104,12 @@ pub struct ModelResponse {
 }
 
 /// Provider-returned facts that can change how one response is billed.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ModelResponseBilling {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub resolved_model: Option<ModelId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub applied_service_tier: Option<String>,
 }
 
@@ -183,7 +180,7 @@ pub enum ModelStreamEvent {
     MessageCompleted(AssistantMessage),
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", content = "detail", rename_all = "camelCase")]
 pub enum StopReason {
     Completed,

@@ -1,13 +1,12 @@
 use std::fmt;
 
 use crate::JsonSchema;
-use crate::TS;
 use ash_protocol::SessionId;
 use serde::Deserialize;
 use serde::Serialize;
 
 /// Literal argv, or a pre-escaped Windows command-line tail.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum TerminalArguments {
     Argv(#[schemars(length(max = 1024))] Vec<String>),
@@ -15,7 +14,7 @@ pub enum TerminalArguments {
 }
 
 /// One server-owned shell profile available to interactive terminal clients.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProfile {
     pub profile_id: String,
@@ -24,48 +23,44 @@ pub struct TerminalProfile {
 }
 
 /// Selects the authorized execution directory for shell profile discovery.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalProfileListParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
 }
 
 /// Authorized terminal profiles discovered by the local App Server composition.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProfileListResult {
     pub profiles: Vec<TerminalProfile>,
 }
 
 /// Reads named values or the filtered execution environment without spawning a process.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalEnvironmentReadParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(max = 128))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub names: Option<Vec<String>>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalEnvironmentReadResult {
     pub values: std::collections::BTreeMap<String, String>,
 }
 
 /// Selects the server default, a discovered profile, or an execution-host-validated custom shell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", deny_unknown_fields)]
 pub enum TerminalProfileSelection {
     Default,
     Profile {
         #[serde(rename = "profileId")]
-        #[ts(rename = "profileId")]
         profile_id: String,
     },
     Custom {
@@ -78,17 +73,16 @@ pub enum TerminalProfileSelection {
 }
 
 /// Validates the selected shell on the authorized execution host without spawning it.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalProfileResolveParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     pub profile: TerminalProfileSelection,
 }
 
 /// Execution-host resolution, including the actual executable and literal arguments.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProfileResolveResult {
     pub profile: TerminalProfile,
@@ -97,7 +91,7 @@ pub struct TerminalProfileResolveResult {
 }
 
 /// Selects whether a terminal dies with its creating connection or may be reattached briefly.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", tag = "type", deny_unknown_fields)]
 pub enum TerminalLifecycle {
     ConnectionOwned,
@@ -105,7 +99,7 @@ pub enum TerminalLifecycle {
 }
 
 /// Selects a one-shot execution instead of an interactive shell.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub enum TerminalExecution {
     Process {
@@ -119,20 +113,17 @@ pub enum TerminalExecution {
 }
 
 /// Starts one terminal process in the server's authorized directory.
-#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalCreateParams {
     /// Window-lifetime credential registered independently of the replaceable App Server.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(min = 64, max = 64))]
     pub lifetime_token: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(max = 32))]
     pub auto_replies: Option<Vec<TerminalAutoReply>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(range(min = 1, max = 512))]
     pub rows: u16,
@@ -141,26 +132,21 @@ pub struct TerminalCreateParams {
     pub profile: TerminalProfileSelection,
     pub lifecycle: TerminalLifecycle,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub env: Option<std::collections::BTreeMap<String, Option<String>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub strict_env: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub cwd: Option<std::path::PathBuf>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub execution: Option<TerminalExecution>,
 }
 
 /// Starts one interactive terminal in a session-authorized directory.
-#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalCreateInSessionDirectoryParams {
     /// Window-lifetime credential registered independently of the replaceable App Server.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(min = 64, max = 64))]
     pub lifetime_token: Option<String>,
     pub session_id: SessionId,
@@ -174,12 +160,11 @@ pub struct TerminalCreateInSessionDirectoryParams {
 }
 
 /// A rotating bearer lease used to reattach a disconnected or detached terminal.
-#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalReconnectLease {
     #[schemars(length(min = 64, max = 64))]
     pub reconnect_token: String,
-    #[ts(type = "number")]
     /// Zero retains the process until explicit close or exit; positive values bound a handoff.
     pub reconnect_grace_period_millis: u64,
 }
@@ -198,7 +183,7 @@ impl fmt::Debug for TerminalReconnectLease {
 }
 
 /// OS identity and the directory actually passed to the shell at spawn.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProcessReady {
     #[schemars(range(min = 1))]
@@ -206,15 +191,13 @@ pub struct TerminalProcessReady {
     pub cwd: String,
     /// Shell identified by the execution owner; absent for unrecognized executables.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub shell_type: Option<TerminalShellType>,
     /// Actual process argv and injection attempt, including after reconnect.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub launch: Option<TerminalProcessLaunch>,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProcessLaunch {
     pub executable: String,
@@ -223,7 +206,7 @@ pub struct TerminalProcessLaunch {
 }
 
 /// Backend-owned properties. Shell-reported cwd survives exit; cwd is absent when unavailable.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalProcessInfo {
     pub ready: TerminalProcessReady,
@@ -231,23 +214,21 @@ pub struct TerminalProcessInfo {
     pub rows: u16,
     pub cols: u16,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub has_child_processes: Option<bool>,
 }
 
 /// Queries process properties without confusing the launch directory with current cwd.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalProcessInfoParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
 }
 
 /// A process-control signal supported by the PTY backend, independent of input encoding.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TerminalSignal {
     Interrupt,
@@ -256,11 +237,10 @@ pub enum TerminalSignal {
     Hangup,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalSendSignalParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -268,7 +248,7 @@ pub struct TerminalSendSignalParams {
 }
 
 /// One exact raw-output match and its bounded process input.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalAutoReply {
     #[schemars(length(min = 1, max = 4096))]
@@ -278,11 +258,10 @@ pub struct TerminalAutoReply {
 }
 
 /// Replaces all automatic replies for the caller's current terminal lease.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalSetAutoRepliesParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -291,7 +270,7 @@ pub struct TerminalSetAutoRepliesParams {
 }
 
 /// Identity allocated for one interactive terminal.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalCreateResult {
     pub ready: TerminalProcessReady,
@@ -301,16 +280,14 @@ pub struct TerminalCreateResult {
 }
 
 /// Reclaims one reconnectable terminal after its previous connection closed.
-#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalAttachParams {
     /// Window-lifetime credential registered independently of the replaceable App Server.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     #[schemars(length(min = 64, max = 64))]
     pub lifetime_token: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -336,7 +313,7 @@ impl fmt::Debug for TerminalAttachParams {
 }
 
 /// Confirms attachment and rotates the bearer token for the next disconnect.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalAttachResult {
     pub ready: TerminalProcessReady,
@@ -345,11 +322,10 @@ pub struct TerminalAttachResult {
 }
 
 /// Writes one bounded UTF-8 input batch to an interactive terminal.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalWriteParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -358,11 +334,10 @@ pub struct TerminalWriteParams {
 }
 
 /// Writes raw bytes such as xterm's legacy mouse reports, with a 64 KiB decoded limit.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalWriteBinaryParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -371,11 +346,10 @@ pub struct TerminalWriteBinaryParams {
 }
 
 /// Changes the PTY character-cell dimensions.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalResizeParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
@@ -386,24 +360,21 @@ pub struct TerminalResizeParams {
 }
 
 /// Reads output after the last sequence observed by this client.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalReadParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,
-    #[ts(type = "number")]
     pub after_sequence: u64,
-    #[ts(type = "number")]
     pub after_command_sequence: u64,
     #[schemars(range(min = 1, max = 128))]
     pub max_chunks: usize,
 }
 
 /// Shells with an integrated display protocol, selected by the execution host.
-#[derive(Serialize, Deserialize, Clone, Copy, Debug, Eq, PartialEq, JsonSchema, TS)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Eq, PartialEq, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum TerminalShellType {
     Bash,
@@ -413,7 +384,7 @@ pub enum TerminalShellType {
 }
 
 /// Shell display boundaries verified and decoded by the PTY owner, in output order.
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, JsonSchema, TS)]
+#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, JsonSchema)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -423,7 +394,6 @@ pub enum TerminalShellIntegrationEvent {
     ProcessReady {
         is_windows_pty: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        #[ts(optional)]
         shell_type: Option<TerminalShellType>,
     },
     PromptStart,
@@ -435,12 +405,10 @@ pub enum TerminalShellIntegrationEvent {
         #[serde(default)]
         command_storage_disabled: bool,
         cwd: Option<String>,
-        #[ts(type = "number")]
         timestamp_millis: u64,
     },
     CommandFinished {
         exit_code: Option<i32>,
-        #[ts(type = "number | null")]
         duration_millis: Option<u64>,
     },
     CommandLine {
@@ -486,19 +454,17 @@ pub enum TerminalShellIntegrationEvent {
 }
 
 /// One ordered raw PTY output chunk encoded for JSON transport.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalOutputChunk {
-    #[ts(type = "number")]
     pub sequence: u64,
     pub data_base64: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub shell_integration: Option<TerminalShellIntegrationEvent>,
 }
 
 /// Renderer-independent lifecycle state for one shell command.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TerminalCommandStatus {
     Running,
@@ -509,42 +475,35 @@ pub enum TerminalCommandStatus {
 }
 
 /// Last shell-reported directory, ordered against the retained output stream.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalCwd {
     pub value: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub is_trusted: Option<bool>,
-    #[ts(type = "number")]
     pub after_output_sequence: u64,
 }
 
 /// One ordered command lifecycle transition associated with PTY output.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalCommandStatusEvent {
-    #[ts(type = "number")]
     pub sequence: u64,
     pub command_id: String,
     pub status: TerminalCommandStatus,
     pub exit_code: Option<i32>,
-    #[ts(type = "number")]
     pub after_output_sequence: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub cwd: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub command: Option<String>,
     /// Only command-text provenance; this grants no execution or path authority.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub is_trusted: Option<bool>,
 }
 
 /// Detected protocol support and bounded completed commands owned by this PTY.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalShellIntegration {
     pub command_detection: bool,
@@ -553,42 +512,35 @@ pub struct TerminalShellIntegration {
     pub command_storage_disabled: bool,
     /// Prompt framework identity reported by the shell; carries no execution trust.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub prompt_type: Option<String>,
     pub commands: Vec<TerminalCommandStatusEvent>,
-    #[ts(type = "number")]
     pub after_output_sequence: u64,
 }
 
 /// Bounded output and process state for one interactive terminal.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TerminalReadResult {
     pub terminal_id: String,
     pub chunks: Vec<TerminalOutputChunk>,
-    #[ts(type = "number")]
     pub next_sequence: u64,
     pub output_gap: bool,
     pub command_events: Vec<TerminalCommandStatusEvent>,
-    #[ts(type = "number")]
     pub next_command_sequence: u64,
     pub command_event_gap: bool,
     pub exited: bool,
     pub exit_code: Option<i32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub cwd: Option<TerminalCwd>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub shell_integration: Option<TerminalShellIntegration>,
 }
 
 /// Terminates and releases one terminal attached to the calling connection.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TerminalCloseParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub dir_id: Option<String>,
     #[schemars(length(min = 1))]
     pub terminal_id: String,

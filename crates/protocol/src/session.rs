@@ -9,7 +9,6 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 use std::path::PathBuf;
-use ts_rs::TS;
 
 mod runtime;
 mod status;
@@ -29,26 +28,22 @@ pub use thread_origin::ThreadOrigin;
 ///
 /// Session has no independent event stream, sequence, or mutable runtime state. Thread remains the
 /// persistence, ordering, and execution boundary.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Session {
     pub session_id: SessionId,
     /// Product surface that owns this conversation. Legacy Sessions have no recorded surface.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub surface: Option<SessionSurface>,
     pub title: String,
     pub status: SessionStatus,
     /// How this Session was created, when it has a non-interactive source.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional)]
     pub source: Option<SessionSource>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub execution_target: Option<SessionExecutionTarget>,
     /// Current model selected on the Session root Thread; child and fork models are excluded.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub model: Option<crate::ModelRef>,
     #[serde(default)]
     pub manager: SessionManagerInfo,
@@ -56,7 +51,7 @@ pub struct Session {
 }
 
 /// Product surface that owns the conversation rooted at this Session.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SessionSurface {
     Chat,
@@ -64,7 +59,7 @@ pub enum SessionSurface {
 }
 
 /// Durable provenance for Sessions created outside the interactive workflow.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SessionSource {
     Automation,
@@ -92,7 +87,7 @@ impl SessionSource {
 }
 
 /// The execution authority selected for a Session, independent of the editor's open Workspace.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -115,42 +110,34 @@ pub enum SessionExecutionTarget {
 }
 
 /// One Thread grouped into a Session tree by `session_id`.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionThread {
     pub thread_id: ThreadId,
     pub title: String,
     /// Latest saved conversation recap on this branch.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub recap: Option<String>,
-    #[ts(type = "number")]
     pub created_at_unix_ms: u64,
     /// Latest Turn activity or Thread creation. Renaming, configuration and archive do not advance it.
     /// Absent only in older catalog rows, which Core repairs from durable history.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable, type = "number")]
     pub last_activity_at_unix_ms: Option<u64>,
     /// Sum of durations for terminal Turns that started in this Thread.
     #[serde(default)]
-    #[ts(type = "number")]
     pub completed_turn_duration_ms: u64,
     /// Start time of the current non-terminal Turn, when it has begun running.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable, type = "number")]
     pub active_turn_started_at_unix_ms: Option<u64>,
     /// Provider-reported token usage accumulated by this execution branch.
     #[serde(default)]
     pub usage: ModelUsageSummary,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub parent_thread_id: Option<ThreadId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub forked_from_id: Option<ThreadId>,
     pub status: ThreadStatus,
     /// Coarse management facts from the owning Thread catalog; absent in older stored metadata.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[ts(optional = nullable)]
     pub manager: Option<SessionManagerInfo>,
 }

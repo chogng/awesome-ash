@@ -6,10 +6,9 @@ use crate::ToolName;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
-use ts_rs::TS;
 
 /// A terminal result withheld from model context until the user decides to share it.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ToolResultReview {
     pub reason: String,
@@ -20,7 +19,7 @@ pub struct ToolResultReview {
 }
 
 /// Core supplies the executed call identity; a tool cannot select another invocation.
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ToolResultReviewRequest {
     pub tool_call_id: ToolCallId,
@@ -29,14 +28,14 @@ pub struct ToolResultReviewRequest {
 }
 
 /// Sharing is a disclosure decision, never an execution grant or a request to undo effects.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ToolResultReviewDecision {
     Share,
     Skip,
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize, TS)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ToolResultReviewResponse {
     pub decision: ToolResultReviewDecision,
