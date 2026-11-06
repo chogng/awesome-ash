@@ -1,6 +1,6 @@
 # Workbench 装配与文档贡献
 
-> 历史参考。下文描述旧 Electron 工作台的装配。文档工作区与 Code IDE 的产品方向见 [目标设计](design/work-code-workbench.md)。原生工作台见 [Ash UI](desktop-architecture.md#ash-ui)。
+> 历史参考。下文描述旧 Electron 工作台的装配。文档工作区与 Code IDE 的产品方向见 [目标设计](design/work-code-workbench.md)。原生工作台见 [Ash GPUI](desktop-architecture.md#ash-gpui)。
 
 Ash Desktop 当前只有 Code 工作台。Academy 是独立安装的文档编辑扩展，可在同一窗口打开文档与论文；用户不需要切换工作台或重载窗口。工作台拥有编辑器宿主和后端连接；Academy 的实现由扩展包独立提供。
 

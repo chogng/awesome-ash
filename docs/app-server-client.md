@@ -1,7 +1,7 @@
 # App Server 客户端架构与演进方案
 
 > 物理位置：`crates/app-server-client/`
-> 主要消费者：`ash-exec` 非交互执行宿主、`ash-tui`、`app`
+> 主要消费者：`ash-exec` 非交互执行宿主、`ash-tui`。原生 Desktop 接入待实现。
 > Wire contract：[`app-server-api.md`](app-server-api.md)
 > Canonical 产品模型：[`protocol.md`](protocol.md)
 > Headless 与远程调度：[`exec.md`](exec.md)
@@ -44,9 +44,8 @@ ash-exec / ash-tui / app
 ash-app-server-client ── JSONL/stdio ──► ash-app-server 程序
 ```
 
-普通客户端依赖图不包含 App Server 实现。`AppServerSession::start_stdio` 连接产品选定的子进程，
-`app` 也用它承载 SSH Remote App Server；客户端只负责 App Server contract，不负责 scheduler
-或远程进程执行。Desktop 的 JSONL/stdio client 仍不要求复用这个 Rust crate。
+普通客户端依赖图包含协议和传输客户端。`AppServerSession::start_stdio` 连接产品选定的子进程。
+调度和远程进程执行由各自的宿主负责。原生 Desktop 计划复用该客户端。 [桌面接入边界](frontend-app-server-boundary.md)
 
 `ash-exec` 是无交互界面的 Agent 执行宿主。它与交互式 TUI 均通过 stdio 连接独立 App Server，
 并把初始 `cwd` 作为执行位置交给服务端。

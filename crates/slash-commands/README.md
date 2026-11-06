@@ -6,7 +6,7 @@
 > 分别拥有自己的渲染适配器。通用斜杠启动面板的多列表组合由
 > [`ash-slash-launcher`](../slash-launcher/README.md) 拥有。
 
-`ash-slash-commands` 为 App Server、TUI 和 ash-ui/native 提供同一套 catalog 校验、输入语法、
+`ash-slash-commands` 提供 App Server、TUI 和原生桌面可复用的 catalog 校验、输入语法、
 匹配、选择、补全与提交解析。它不渲染 UI、不执行命令，也不拥有 App Server composition。
 这里的选择状态只针对真实 Slash Command catalog；它不负责把 Skills、命令和其他产品列表组合成
 通用斜杠面板。

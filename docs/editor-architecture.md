@@ -1,6 +1,6 @@
 # Stanza：单一文本内核、可装配能力与产品边界
 
-> 历史参考。下文的 Stanza 实现、源码路径和 Workbench 装配对应旧工作台。编辑器目标见 [编辑器设计](design/editor-roadmap.md)，原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
+> 历史参考。下文的 Stanza 实现、源码路径和 Workbench 装配对应旧工作台。编辑器目标见 [编辑器设计](design/editor-roadmap.md)，原生前端见 [Ash GPUI](desktop-architecture.md#ash-gpui)。
 
 ## 核心模型与产品装配
 

@@ -1,6 +1,6 @@
 # 桌面与 Ash Code 的快捷键
 
-Ash Code 已接入共享 `ash-keybinding`。Ash Desktop 的快捷键由后续工作台接入同一 Rust 规则库。快捷键在端侧解析，产品分别持有命令目录、焦点上下文和用户设置。 [Ash UI](desktop-architecture.md#ash-ui) · [规则库](../crates/keybinding/README.md)
+Ash Code 已接入共享 `ash-keybinding`。Ash Desktop 的快捷键由后续工作台接入同一 Rust 规则库。快捷键在端侧解析，产品分别持有命令目录、焦点上下文和用户设置。 [Ash GPUI](desktop-architecture.md#ash-gpui) · [规则库](../crates/keybinding/README.md)
 
 ## 输入与命令
 

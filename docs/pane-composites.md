@@ -1,6 +1,6 @@
 # Workbench Pane Composite
 
-> 历史参考。下文记录旧工作台面板的结构、槽位、命名和状态投影。原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
+> 历史参考。下文记录旧工作台面板的结构、槽位、命名和状态投影。原生前端见 [Ash GPUI](desktop-architecture.md#ash-gpui)。
 
 ## 快速理解
 

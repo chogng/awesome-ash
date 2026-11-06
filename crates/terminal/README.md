@@ -36,8 +36,7 @@ app
 └─ ash-utils-pty
 ```
 
-`ash-terminal` 不得反向依赖 `app`、`ash-ui`、`ash-wgpu` 或 PTY backend。Renderer
-从 public projection 读取 state；不能把 UI `Color`、`Rect` 或 process handles 放进 model。
+`ash-terminal` 的模型独立于桌面宿主、Ash GPUI、Ash UI Kit 和 PTY 后端。桌面从公开投影读取状态，模型只持有终端数据。
 
 ## 公共契约
 

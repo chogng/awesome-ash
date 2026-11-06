@@ -1,6 +1,6 @@
 # Preferences、Settings 与 Configuration
 
-> 历史参考。下文描述旧 TypeScript Workbench 与 Sessions 的偏好入口和编辑页面。原生 Desktop 的界面偏好见 [Ash UI](desktop-architecture.md#kit-的第一批组件)，后端配置见 [配置](config.md)。
+> 历史参考。下文描述旧 TypeScript Workbench 与 Sessions 的偏好入口和编辑页面。原生 Desktop 的界面偏好见 [Ash GPUI](desktop-architecture.md#kit-的第一批组件)，后端配置见 [配置](config.md)。
 
 Preferences 负责打开偏好资源，Settings 是其中一种内容。旧工作台的配置读写、用户设置 JSONC 和快捷键独立资源已接通。用户、Workspace / Folder 目标、语言覆盖、编辑器组选项和 Policy 的验收范围见 [已有验证与限制](#已有验证与限制)。
 

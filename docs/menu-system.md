@@ -1,6 +1,6 @@
 # MenuId 与 UI Action 组合系统
 
-> 历史参考。下文记录旧工作台的 Command、MenuId、Context Key、MenuService 与菜单型 Toolbar。原生前端见 [Ash UI](desktop-architecture.md#ash-ui)。
+> 历史参考。下文记录旧工作台的 Command、MenuId、Context Key、MenuService 与菜单型 Toolbar。原生前端见 [Ash GPUI](desktop-architecture.md#ash-gpui)。
 
 ## 快速理解
 

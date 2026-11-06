@@ -24,7 +24,7 @@
 
 ## 理解系统
 
-- **界面与宿主：** [Desktop 架构与 Ash UI](desktop-architecture.md)、[前后端连接](frontend-app-server-boundary.md)、[远程开发](remote-development.md)。
+- **界面与宿主：** [Desktop 架构与 Ash GPUI](desktop-architecture.md)、[前后端连接](frontend-app-server-boundary.md)、[远程开发](remote-development.md)。
 - **后端与执行：** [Rust 架构](rust-architecture.md)、[Agent 运行时](agent-runtime.md)、[Core](core.md)、[上下文管理](core-context.md)、[多 Agent](core-multi-agent.md)、[进程执行](exec.md)。
 - **协议与接口：** [领域身份](domain-model.md)、[协议](protocol.md)、[App Server API](app-server-api.md)、[客户端](app-server-client.md)、[工具契约](agent-tools-spec.md)、[工具系统](tools/tools.md)、[完整工具目录](tools/tool-catalog.md)。
 - **模型调用：** [模型 API](model-api.md)、[模型调用客户端](model-client.md)、[Provider](model-provider.md)、[模型目录](models-manager.md)。

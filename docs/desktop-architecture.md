@@ -4,9 +4,9 @@
 
 后续桌面界面拥有窗口、输入和视图状态。Session、Thread、Turn、审批和持久化归共享 Rust 后端，桌面通过 [App Server 契约](app-server-api.md) 访问。桌面安装包和新的工作台见 [Rust App 路线图](../TODO.md#roadmap--rust-app)。
 
-## Ash UI
+## Ash GPUI
 
-以下是原生桌面前端提案。**Ash UI** 是 Rust GPU 界面框架，**Ash UI Kit** 是它的基础组件库。可以借鉴 GPUI 用 Rust 组合视图、由框架统一布局和绘制的开发体验。Ash UI 自己定义视图和输入契约，窗口及 GPU 后端交给 `winit` 和 `wgpu`。 [Zed GPUI](https://github.com/zed-industries/zed/blob/main/crates/gpui/README.md)
+以下是原生桌面前端提案。**Ash GPUI** 是 Rust GPU 界面框架，**Ash UI Kit** 是它的基础组件库。可以借鉴 GPUI 用 Rust 组合视图、由框架统一布局和绘制的开发体验。Ash GPUI 自己定义视图和输入契约，窗口及 GPU 后端交给 `winit` 和 `wgpu`。 [Zed GPUI](https://github.com/zed-industries/zed/blob/main/crates/gpui/README.md)
 
 ### 层与所有权
 
@@ -14,18 +14,16 @@
 | --- | --- | --- |
 | Ash Desktop | `app/` | 装配窗口和工作台，注册产品命令，管理本地配置、App Server 连接及工作流。 |
 | Ash UI Kit | `app/ui-kit/`（`ash-ui-kit`） | 提供有 Ash 默认样式和交互语义的组件。接收数据、主题和动作回调，供工作台与组件预览复用。 |
-| Ash UI | `app/ui/`（`ash-ui`） | 管理视图身份、布局、滚动、命中测试、焦点、输入分发、无障碍语义、重绘调度和绘制指令。 |
-| 平台与绘制适配 | `ash-ui` 内部模块 | 通过 `winit` 接收窗口及输入事件，通过 `wgpu` 提交绘制，通过 AccessKit 发布系统无障碍树。 |
+| Ash GPUI | `app/gpui/`（`ash-gpui`） | 管理视图身份、布局、滚动、命中测试、焦点、输入分发、无障碍语义、重绘调度和绘制指令。 |
+| 平台与绘制适配 | `ash-gpui` 内部模块 | 通过 `winit` 接收窗口及输入事件，`ash_gpui::renderer` 通过 `wgpu` 提交绘制，通过 AccessKit 发布系统无障碍树。 |
 
 ```text
-Ash Desktop ──→ Ash UI Kit ──→ Ash UI
-     │                          ├──→ winit（窗口与事件循环）
-     │                          ├──→ wgpu（GPU 绘制与呈现）
-     │                          └──→ AccessKit（系统无障碍）
-     └──→ 产品领域客户端 ──→ App Server
+Ash Desktop
+├── Ash UI Kit → Ash GPUI → winit / wgpu / AccessKit
+└── 产品领域客户端 → App Server
 ```
 
-Ash UI 和 Kit 作为独立 crate 放在现有 `app/` Cargo 工作区，随实际调用方引入。目录按职责组织。`app/` 承载图形前端及其依赖和验收，根工作区的 `crates/` 承载共享领域与基础设施，例如 App Server 客户端和快捷键规则。依赖从桌面宿主指向这些共享库。若出现第二个独立图形宿主并实际复用 UI，再评估将共用部分提取到独立的前端工作区。
+Ash GPUI 和 Kit 作为独立 crate 放在现有 `app/` Cargo 工作区，随实际调用方引入，运行在桌面窗口所属的进程中。根工作区的 `crates/` 承载共享领域与基础设施，例如 App Server 客户端和快捷键规则。依赖从桌面宿主指向这些共享库。若出现第二个独立图形宿主并实际复用 UI，再评估将共用部分提取到独立的前端工作区。
 
 平台差异优先由上游库吸收。系统菜单、剪贴板、文件选择器等能力通过桌面宿主的窄接口接入，确有缺口时再在对应适配层补平台实现。`wgpu` 提供跨平台图形接口，原生窗口的输入、缩放和读屏体验仍需分平台验证。 [winit 窗口 API](https://docs.rs/winit/latest/winit/window/struct.Window.html) · [wgpu 后端](https://docs.rs/wgpu/latest/wgpu/#backends) · [AccessKit 平台适配](https://github.com/AccessKit/accesskit)
 

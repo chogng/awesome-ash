@@ -6,7 +6,7 @@
 
 ## 2. 所有权
 
-Ash UI 的图标接入随组件库实现。产品功能选择语义图标，Kit 负责图标与文字的布局以及图标按钮的交互，Ash UI 负责绘制。GPU 资源留在绘制适配层。 [Ash UI](desktop-architecture.md#ash-ui)
+Ash GPUI 的图标接入随组件库实现。产品功能选择语义图标，Kit 负责图标与文字的布局以及图标按钮的交互，Ash GPUI 负责绘制。GPU 资源留在绘制适配层。 [Ash GPUI](desktop-architecture.md#ash-gpui)
 
 ## 3. 身份与图稿
 

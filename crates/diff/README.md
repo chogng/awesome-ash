@@ -62,7 +62,7 @@ bytes API 拒绝 NUL、无效 UTF-8，并分别返回 `BinaryInput`、`InvalidUt
 - `ash-editor` 用 `DiffDocument` 驱动 side-by-side DiffEditor，`app` 只负责宿主接入；
 - `ash-tui` 用同一 document 驱动 Ratatui 行渲染、左右导航和折叠；
 - `ash-git` 继续拥有 Git patch check/apply、仓库进程和路径解析；
-- `ash-ui` 继续拥有 TabList、文字和矩形 primitive，不依赖本 crate。
+- 原生界面的组件归 `ash-ui-kit`，文字和矩形等绘制原语归 `ash-gpui`。Diff 由编辑器消费。
 
 ## 测试、修改影响与限制
 

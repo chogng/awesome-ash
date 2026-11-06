@@ -1,6 +1,6 @@
 # Renderer UI 样式所有权规范
 
-> 历史参考。下文记录已退场的 Electron Renderer 中组件、组合控件与 Workbench Part 的样式归属。原生组件职责见 [Ash UI](desktop-architecture.md#ash-ui)。
+> 历史参考。下文记录已退场的 Electron Renderer 中组件、组合控件与 Workbench Part 的样式归属。原生组件职责见 [Ash GPUI](desktop-architecture.md#ash-gpui)。
 
 ## 快速理解
 
